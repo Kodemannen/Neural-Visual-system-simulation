@@ -18,9 +18,9 @@ def Set_parameters(save_dir):
     sim_output_dir = sim_dir + "/.." + "/sim_output"
 
     PS = ps.ParameterSet(dict(
-        ##########
-        # Paths: #
-        ##########
+        #################
+        # Folder paths: #
+        #################
         sim_dir = sim_dir,
         sim_output_dir = sim_output_dir,
         
@@ -62,8 +62,6 @@ def Set_parameters(save_dir):
         ###############
         kernel_path = sim_output_dir + "/kernels.h5",        # meaning this folder
         kernel_plot = sim_output_dir + "/kernels.png",
-
-
 
         ###########################
         # Independent parameters: #
@@ -111,7 +109,7 @@ def Set_parameters(save_dir):
 
         n_channels = 6, # number of LFP recording channels
 
-        order=25,     # network scaling factor
+        order=5,     # network scaling factor
     ))
 
     ################################################
@@ -286,32 +284,6 @@ def Set_parameters(save_dir):
     # Creating matrix with synapse weights for hybridLFPy: #
     ########################################################
 
-    # #############
-    # # JANERIIKS#
-    # J_unit = ComputePSPnorm(PS['tauMem'], 250., PS['tauSyn_nest'])
-    # print(J_unit)
-    # J_ex = PS['J_EX'] / J_unit  # amplitude of excitatory postsynaptic current
-    #
-    # PS.update(dict(
-    #     J_ex = J_ex
-    # ))
-    #
-    # # calculate J_in for given g
-    # J_in = -PS['g'] * PS['J_ex']  # amplitude of inhibitory postsynaptic current
-    # PS.update({'J_in': J_in}),
-    #
-    #
-    # #set up table of synapse weights from each possible presynaptic population
-    # PS.update(dict(J_yX = dict(
-    #                  EX = [(PS['J_ex']*1E-3)/10., (PS['J_in']*1E-3)/10., PS["J_LGN"]*1E-3/10.],
-    #                  IN = [(PS['J_ex']*1E-3)/10., (PS['J_in']*1E-3)/10., PS["J_LGN"]*1E-3/10.],
-    #                  )))
-    #  # JANEIRIKS #
-    #  ##############
-
-    ########################
-    # Setting up matrices: #
-    ########################
     PS.update(dict(J_yX = dict(
                      EX = [PS['J_EX']*1E-3, PS['J_IN']*1E-3, PS["J_LGN"]*1E-3],
                      IN = [PS['J_EX']*1E-3, PS['J_IN']*1E-3, PS["J_LGN"]*1E-3],
