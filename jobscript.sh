@@ -13,8 +13,8 @@
 #SBATCH --mem-per-cpu=10M
 
 
-#SBATCH -o utputt.txt
-#SBATCH -e feilfil.txt
+#SBATCH -o terminal_output.txt
+#SBATCH -e errors.txt
 
 
 ## Set up job environment:
@@ -24,11 +24,11 @@ set -o errexit # exit on errors
 
 
 ## Copy input files to the work directory:
-cp testsim -r $SCRATCH
+cp Brunel-with-optical-input/simulation -r $SCRATCH
 
 # ## Make sure the results are copied back to the submit directory (see Work Directory below):
-chkfile testsim/output
+chkfile sim_output
 
 # ## Do some work:
-cd $SCRATCH
-python testsim/Prog/hello.py
+cd $SCRATCH/simulation
+python main.py
