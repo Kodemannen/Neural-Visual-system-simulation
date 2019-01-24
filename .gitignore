@@ -1,3 +1,4 @@
 sim_output
 .vscode
 simulation/__pycache__
+simulation/x86_64
