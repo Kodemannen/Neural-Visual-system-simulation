@@ -13,8 +13,8 @@
 #SBATCH --mem-per-cpu=8G
 
 
-#SBATCH -o terminal_output.txt
-#SBATCH -e errors.txt
+#SBATCH -o sim_output/terminal_output.txt
+#SBATCH -e sim_output/errors.txt
 
 
 ## Set up job environment:
