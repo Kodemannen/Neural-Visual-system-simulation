@@ -60,8 +60,11 @@ def Set_parameters(save_dir):
         ###############
         # File paths: #
         ###############
-        kernel_path = sim_output_dir + "/kernels.h5",        # meaning this folder
-        kernel_plot = sim_output_dir + "/kernels.png",
+        #kernel_path = sim_output_dir + "/kernels.h5",        # meaning this folder
+        #kernel_plot = sim_output_dir + "/kernels.png",
+
+        kernel_path = sim_dir + "/kernels.h5",        # meaning this folder
+        kernel_plot = sim_dir + "/kernels.png",
 
         ###########################
         # Independent parameters: #
@@ -109,7 +112,7 @@ def Set_parameters(save_dir):
 
         n_channels = 6, # number of LFP recording channels
 
-        order=5,     # network scaling factor
+        order=2500,     # network scaling factor
     ))
 
     ################################################
