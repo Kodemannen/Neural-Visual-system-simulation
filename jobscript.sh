@@ -7,10 +7,10 @@
 #SBATCH --account=nn9565k
 #
 # Wall clock limit:
-#SBATCH --time=00:00:01
+#SBATCH --time=00:05:01     
 #
 # Max memory usage:
-#SBATCH --mem-per-cpu=10M
+#SBATCH --mem-per-cpu=8G
 
 
 #SBATCH -o terminal_output.txt
@@ -32,3 +32,5 @@ chkfile sim_output
 # ## Do some work:
 cd $SCRATCH/simulation
 python main.py
+
+# Run this file by: sbatch jobscript.sh
