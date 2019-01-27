@@ -2,4 +2,5 @@ sim_output
 .vscode
 simulation/__pycache__
 simulation/kernel_creation/__pycache__
+simulation/kernel_creation/fake_spikes
 simulation/x86_64
