@@ -31,6 +31,7 @@ chkfile sim_output
 
 # ## Do some work:
 cd $SCRATCH/simulation
-python main.py
+bash run_simulation.sh
+#python main.py
 
 # Run this file by: sbatch jobscript.sh
