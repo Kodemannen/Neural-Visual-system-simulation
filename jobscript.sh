@@ -24,7 +24,7 @@ set -o errexit # exit on errors
 
 
 ## Copy input files to the work directory:
-cp Brunel-with-optical-input/simulation -r $SCRATCH
+cp simulation -r $SCRATCH
 
 # ## Make sure the results are copied back to the submit directory (see Work Directory below):
 chkfile sim_output
