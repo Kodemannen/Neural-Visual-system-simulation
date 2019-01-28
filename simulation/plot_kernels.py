@@ -51,7 +51,7 @@ def Plot_kernels(network_parameters, ax=0):
     if scalebar:
         posx = time[-1]
         posy = 3.5*space
-        barlength = 0.01  # uV
+        barlength = 0.005  # uV
         line = barlength/scale * 1/1000. # barlength uV
 
         ax.plot([posx,posx],[posy-line/2, posy+line/2], color="k", linewidth=2)
