@@ -21,8 +21,8 @@ def Set_parameters():
         sim_dir = sim_dir[:-1]  # removing "/" at the end
     
     
-    #sim_output_dir = sim_dir + "/../output"            # on my computer
-    sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel 
+    sim_output_dir = sim_dir + "/../output/sim"            # on my computer
+    #sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel 
 
     PS = ps.ParameterSet(dict(
         #################
@@ -56,7 +56,12 @@ def Set_parameters():
     #         exit("Aborting..")
     #     #exit("ERROR: Exiting. Please delete old output folder and then retry.")
     if os.path.isdir(PS.sim_output_dir):
-        exit("Please delete existing output folder. Exiting..")
+        original_name = PS.sim_output_dir
+        index=0
+        while os.path.isdir(PS.sim_output_dir)==True:
+            PS.sim_output_dir = original_name + str(index)
+            index+=1
+        #exit("Please delete existing output folder. Exiting..")
     
     os.makedirs(PS.sim_output_dir)
     for key in PS:
