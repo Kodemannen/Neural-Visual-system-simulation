@@ -21,8 +21,8 @@ def Set_parameters():
         sim_dir = sim_dir[:-1]  # removing "/" at the end
     
     
-    sim_output_dir = sim_dir + "/../output/sim"            # on my computer
-    #sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel 
+    #sim_output_dir = sim_dir + "/../output/sim"            # on my computer
+    sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel 
 
     PS = ps.ParameterSet(dict(
         #################
