@@ -19,8 +19,9 @@ def Set_parameters():
     sim_dir = os.path.join(os.getcwd(),os.path.dirname(os.path.relpath(__file__)))
     if sim_dir[-1] == "/":
         sim_dir = sim_dir[:-1]  # removing "/" at the end
-    #sim_output_dir = sim_dir + "/../output"# + f"/{timestamp}"
     
+    
+    #sim_output_dir = sim_dir + "/../output"            # on my computer
     sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel 
 
     PS = ps.ParameterSet(dict(
