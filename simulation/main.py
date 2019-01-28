@@ -29,7 +29,7 @@ network_parameters = ps.ParameterSet(params_path)
 ################################################################
 # Creating kernels for mapping population firing rates to LFP: #
 ################################################################
-make_kernels = True
+make_kernels = False
 network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
 if make_kernels:
     Create_kernels(network_parameters)
