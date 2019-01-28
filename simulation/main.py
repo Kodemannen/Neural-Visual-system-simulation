@@ -6,7 +6,7 @@ import parameters as ps
 import matplotlib.pyplot as plt
 import time
 
-
+print("ballemos1")
 ############################
 # Importing local scripts: #
 ############################
@@ -18,7 +18,7 @@ from calculate_LFP import Calculate_LFP
 from plot_LFP import Plot_LFP
 from save_LFP import Save_LFP
 
-
+print("ballemos2")
 ##################################
 # Getting simulation parameters: #
 ##################################
@@ -26,6 +26,7 @@ params_path = "../sim_output/params"
 Set_parameters(params_path)     # updating parameters file
 network_parameters = ps.ParameterSet(params_path)
 
+print("ballemos3")
 ################################################################
 # Creating kernels for mapping population firing rates to LFP: #
 ################################################################
@@ -36,6 +37,7 @@ if make_kernels:
 Plot_kernels(network_parameters)
 #Run_simulation([1.], [0.], network_parameters, 1)  # single run, no input
 
+print("ballemos4")
 ##############################
 # Sinisoidal input from LGN: #
 ##############################
@@ -59,7 +61,7 @@ b = 15.  # mean rate
 matr = np.outer(frequencies, rate_times)
 rates = A*np.sin(2*np.pi*matr) + b      # each row is a time series
 
-
+print("ballemos5")
 ############################################
 # Running point neuron simulation in Nest: #
 ############################################
