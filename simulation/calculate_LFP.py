@@ -15,6 +15,7 @@ def Calculate_LFP(events, network_parameters):
     ####################
     # Fetching kernel: #
     ####################
+    # Kernels are in mV:
     kernel_path = PS.kernel_path
     with h5py.File(kernel_path, "r") as file:
         EX_kernel = file["EX"][:]     
@@ -41,4 +42,4 @@ def Calculate_LFP(events, network_parameters):
         LFP[i] =   np.convolve(rates_EX, EX_kernel[i], mode="same") \
                  + np.convolve(rates_IN, IN_kernel[i], mode="same") \
                  + np.convolve(rates_LGN, LGN_kernel[i], mode="same")
-    return LFP
+    return LFP # unit mV

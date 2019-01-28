@@ -19,11 +19,11 @@ def Plot_kernels(network_parameters, ax=0):
     PS = network_parameters
     n_channels = PS.n_channels
     kernel_path = PS.kernel_path
-
+    print(kernel_path)
     with h5py.File(kernel_path, "r") as file:
-        EX_kernel = file["EX"][:]     # / 1000. to get it in uV
-        IN_kernel = file["IN"][:]
-        LGN_kernel = file["LGN"][:]
+        EX_kernel = file["EX"][:]   *1000
+        IN_kernel = file["IN"][:]   *1000
+        LGN_kernel = file["LGN"][:] *1000
 
     #ax = plt.axes() ## remove later
     unit = 1    # mV
@@ -50,12 +50,15 @@ def Plot_kernels(network_parameters, ax=0):
     ####################
     if scalebar:
         posx = time[-1]
-        posy = 3.5*space
-        barlength = 0.005  # uV
+        posy = 3*space
+        barlength = 5  # uV
         line = barlength/scale * 1/1000. # barlength uV
 
-        ax.plot([posx,posx],[posy-line/2, posy+line/2], color="k", linewidth=2)
-        ax.text(posx + 2,posy-0.1, "$%s \mu V$" % barlength)
+        #ax.plot([posx,posx],[posy-line/2, posy+line/2], color="k", linewidth=2)
+        #ax.text(posx + 2,posy-0.1, "$%s \mu V$" % barlength)
+
+        ax.plot([posx,posx],[posy, posy+line], color="k", linewidth=2)
+        ax.text(posx + 2,posy+line/2-0.1, "$%s \mu V$" % barlength)
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)

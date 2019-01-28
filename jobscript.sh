@@ -19,7 +19,7 @@
 
 ## Set up job environment:
 source /cluster/bin/jobsetup
-module purge   # clear any inherited modules
+#module purge   # clear any inherited modules
 set -o errexit # exit on errors
 
 
@@ -27,10 +27,11 @@ set -o errexit # exit on errors
 cp simulation -r $SCRATCH
 
 # ## Make sure the results are copied back to the submit directory (see Work Directory below):
-chkfile sim_output
+#chkfile sim_output
 
 # ## Do some work:
 cd $SCRATCH/simulation
 python main.py
+
 
 # Run this file by: sbatch jobscript.sh

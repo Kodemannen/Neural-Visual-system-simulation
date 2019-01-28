@@ -67,6 +67,7 @@ def Create_kernels(network_parameters):
     """
     Creating the kernels used for mapping population firing rates to
     LFP signals.
+    The kernels have units mV.
     """
 
     Create_fake_spikes(network_parameters)
@@ -88,6 +89,7 @@ def Create_kernels(network_parameters):
     ############################################################################
     # Scaling the kernel so it represents the ratio  of LFP per firing neuron: #
     ############################################################################
+    
     EX_kernel = (EX_LFP[:,0:200] + IN_LFP[:,0:200])/PS.NE
     IN_kernel = (EX_LFP[:,200:400] + IN_LFP[:,200:400])/PS.NI
     LGN_kernel = (EX_LFP[:,400:600] + IN_LFP[:,400:600])/PS.N_LGN

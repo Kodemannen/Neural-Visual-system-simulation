@@ -6,8 +6,12 @@ import os
 import sys
 import parameters as ps
 import numpy as np
+import datetime
 
-def Set_parameters(save_dir):
+time = datetime.datetime.now()
+timestamp = time.strftime("%c")#+"/"+time.strftime("%X")
+
+def Set_parameters():
 
     ###########################################
     # Setting paths (sim_dir = absolute path) #
@@ -15,7 +19,9 @@ def Set_parameters(save_dir):
     sim_dir = os.path.join(os.getcwd(),os.path.dirname(os.path.relpath(__file__)))
     if sim_dir[-1] == "/":
         sim_dir = sim_dir[:-1]  # removing "/" at the end
-    sim_output_dir = sim_dir + "/.." + "/sim_output"
+    #sim_output_dir = sim_dir + "/../output"# + f"/{timestamp}"
+    
+    sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel 
 
     PS = ps.ParameterSet(dict(
         #################
@@ -35,24 +41,26 @@ def Set_parameters(save_dir):
     #####################
     # Creating folders: #
     #####################
+    # if os.path.isdir(PS.sim_output_dir):
+    #     print("There is an existing sim_output directory.")
+    #     print("Delete? y/n")
+    #     inp = input()
+    #     if inp.lower() == "y":
+    #         import subprocess
+    #         command = f"rm {sim_dir}/../sim_output -r"
+    #         subprocess.check_call(command.split())
+    #     elif inp.lower() == "n":
+    #         exit("Aborting..")
+    #     else:
+    #         exit("Aborting..")
+    #     #exit("ERROR: Exiting. Please delete old output folder and then retry.")
     if os.path.isdir(PS.sim_output_dir):
-        print("There is an existing sim_output directory.")
-        print("Delete? y/n")
-        inp = input()
-        if inp.lower() == "y":
-            import subprocess
-            command = f"rm {sim_dir}/../sim_output -r"
-            subprocess.check_call(command.split())
-        elif inp.lower() == "n":
-            exit("Aborting..")
-        else:
-            exit("Aborting..")
-        #exit("ERROR: Exiting. Please delete old output folder and then retry.")
-    os.mkdir(PS.sim_output_dir)
+        exit("Please delete existing output folder. Exiting..")
+    
+    os.makedirs(PS.sim_output_dir)
     for key in PS:
         if not os.path.isdir(PS[key]):
-            os.mkdir(PS[key])
-
+            os.makedirs(PS[key] )
 
 
 
@@ -65,6 +73,7 @@ def Set_parameters(save_dir):
 
         kernel_path = sim_dir + "/kernels.h5",        # meaning this folder
         kernel_plot = sim_dir + "/kernels.png",
+        params_path = sim_output_dir + "/params",
 
         ###########################
         # Independent parameters: #
@@ -355,5 +364,5 @@ def Set_parameters(save_dir):
         mapping_Yy = list(zip(PS.X, PS.X))      # DENNE??
     ))
 
-    PS.save(save_dir)
-    #os.mkdir()
+    PS.save(PS.params_path)
+    return PS

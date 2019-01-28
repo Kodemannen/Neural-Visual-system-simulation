@@ -1,4 +1,4 @@
-sim_output
+output
 .vscode
 simulation/__pycache__
 simulation/kernel_creation/__pycache__
