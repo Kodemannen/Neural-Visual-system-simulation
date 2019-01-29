@@ -16,7 +16,7 @@ def Set_parameters():
     ###############################################################
     # Deciding if kernel will be created or if its already there: #
     ###############################################################
-    create_kernel = False   
+    create_kernel = True   
 
     ###########################################
     # Setting paths (sim_dir = absolute path) #
@@ -31,6 +31,18 @@ def Set_parameters():
         sim_dir = sim_dir[:-1]  # removing "/" at the end
     sim_output_dir = sim_dir + "/../output/sim"            # on my computer
     
+
+    ##########################################################
+    # Adding index to output/sim folder if it already exist: #
+    ##########################################################
+    original_name = sim_output_dir
+    index=0
+    if os.path.isdir(sim_output_dir):
+
+        while os.path.isdir(sim_output_dir)==True:
+            sim_output_dir = original_name + str(index)
+            index+=1
+
 
     ########################
     # For running on Abel: #
@@ -56,31 +68,11 @@ def Set_parameters():
     #####################
     # Creating folders: #
     #####################
-    # if os.path.isdir(PS.sim_output_dir):
-    #     print("There is an existing sim_output directory.")
-    #     print("Delete? y/n")
-    #     inp = input()
-    #     if inp.lower() == "y":
-    #         import subprocess
-    #         command = f"rm {sim_dir}/../sim_output -r"
-    #         subprocess.check_call(command.split())
-    #     elif inp.lower() == "n":
-    #         exit("Aborting..")
-    #     else:
-    #         exit("Aborting..")
-    #     #exit("ERROR: Exiting. Please delete old output folder and then retry.")
-    if os.path.isdir(PS.sim_output_dir):
-        original_name = PS.sim_output_dir
-        index=0
-        while os.path.isdir(PS.sim_output_dir)==True:
-            PS.sim_output_dir = original_name + str(index)
-            index+=1
-        #exit("Please delete existing output folder. Exiting..")
-    
+    print(PS.sim_output_dir)
     os.makedirs(PS.sim_output_dir)
     for key in PS:
         if not os.path.isdir(PS[key]):
-            os.makedirs(PS[key] )
+            os.makedirs(PS[key])
 
 
 
@@ -92,10 +84,6 @@ def Set_parameters():
         ###############
         #kernel_path = sim_output_dir + "/kernels.h5",        # meaning this folder
         #kernel_plot = sim_output_dir + "/kernels.png",
-
-        # kernel_path = sim_dir + "/kernels.h5" ,        # meaning this folder
-        # kernel_plot = sim_dir + "/kernels.png",
-        # params_path = sim_output_dir + "/params",
 
         kernel_path = sim_output_dir + "/kernels.h5"  if create_kernel else sim_dir + "/kernels.h5" ,        # meaning this folder
         kernel_plot = sim_output_dir + "/kernels.png" if create_kernel else sim_dir + "/kernels.png",

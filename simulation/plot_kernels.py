@@ -19,7 +19,6 @@ def Plot_kernels(network_parameters, ax=0):
     PS = network_parameters
     n_channels = PS.n_channels
     kernel_path = PS.kernel_path
-    print(kernel_path)
     with h5py.File(kernel_path, "r") as file:
         EX_kernel = file["EX"][:]   *1000
         IN_kernel = file["IN"][:]   *1000
