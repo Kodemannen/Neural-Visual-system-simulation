@@ -27,13 +27,13 @@ network_parameters = Set_parameters()     # updating parameters file
 ################################################################
 # Creating kernels for mapping population firing rates to LFP: #
 ################################################################
-make_kernels = False
+
 network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
-if make_kernels:
+if network_parameters.create_kernel:
     Create_kernels(network_parameters)
 Plot_kernels(network_parameters)
 #Run_simulation([1.], [0.], network_parameters, 1)  # single run, no input
-
+exit("balemos")
 ##############################
 # Sinisoidal input from LGN: #
 ##############################

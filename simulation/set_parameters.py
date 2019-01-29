@@ -13,16 +13,30 @@ timestamp = time.strftime("%c")#+"/"+time.strftime("%X")
 
 def Set_parameters():
 
+    ###############################################################
+    # Deciding if kernel will be created or if its already there: #
+    ###############################################################
+    create_kernel = False   
+
     ###########################################
     # Setting paths (sim_dir = absolute path) #
     ###########################################
+    
+    ##############################
+    # For running on local comp: #
+    ##############################
     sim_dir = os.path.join(os.getcwd(),os.path.dirname(os.path.relpath(__file__)))
+    
     if sim_dir[-1] == "/":
         sim_dir = sim_dir[:-1]  # removing "/" at the end
+    sim_output_dir = sim_dir + "/../output/sim"            # on my computer
     
+
+    ########################
+    # For running on Abel: #
+    ########################
     
-    #sim_output_dir = sim_dir + "/../output/sim"            # on my computer
-    sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel 
+    #sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel 
 
     PS = ps.ParameterSet(dict(
         #################
@@ -36,7 +50,7 @@ def Set_parameters():
         LFP_path = sim_output_dir + "/LFP_files",                # where the LFP signals are kept
         LFP_plot_path = sim_output_dir + "/LFP_plots/",
         
-        fake_spikes_path = sim_dir + "/kernel_creation/fake_spikes",      # folder where the fake spikes are stored
+        fake_spikes_path = sim_output_dir + "/kernel_creation/fake_spikes",      # folder where the fake spikes are stored
     ))
 
     #####################
@@ -71,15 +85,23 @@ def Set_parameters():
 
 
     PS.update(dict(
+        create_kernel = create_kernel,
+
         ###############
         # File paths: #
         ###############
         #kernel_path = sim_output_dir + "/kernels.h5",        # meaning this folder
         #kernel_plot = sim_output_dir + "/kernels.png",
 
-        kernel_path = sim_dir + "/kernels.h5",        # meaning this folder
-        kernel_plot = sim_dir + "/kernels.png",
+        # kernel_path = sim_dir + "/kernels.h5" ,        # meaning this folder
+        # kernel_plot = sim_dir + "/kernels.png",
+        # params_path = sim_output_dir + "/params",
+
+        kernel_path = sim_output_dir + "/kernels.h5"  if create_kernel else sim_dir + "/kernels.h5" ,        # meaning this folder
+        kernel_plot = sim_output_dir + "/kernels.png" if create_kernel else sim_dir + "/kernels.png",
         params_path = sim_output_dir + "/params",
+
+
 
         ###########################
         # Independent parameters: #
@@ -127,7 +149,7 @@ def Set_parameters():
 
         n_channels = 6, # number of LFP recording channels
 
-        order=2500,     # network scaling factor
+        order=5,     # network scaling factor
     ))
 
     ################################################
