@@ -33,5 +33,6 @@ cp simulation -r $SCRATCH
 cd $SCRATCH/simulation
 python main.py
 
+# output will be found at /work/users/samuelkk
 
 # Run this file by: sbatch jobscript.sh

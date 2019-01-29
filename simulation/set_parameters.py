@@ -16,22 +16,26 @@ def Set_parameters():
     ###############################################################
     # Deciding if kernel will be created or if its already there: #
     ###############################################################
-    create_kernel = False   
+    create_kernel = True       # whether to create kernel or not
+    abelrun = True              # whether to run on Abel or not
+
 
     ###########################################
     # Setting paths (sim_dir = absolute path) #
     ###########################################
-    
-    ##############################
-    # For running on local comp: #
-    ##############################
-    sim_dir = os.path.join(os.getcwd(),os.path.dirname(os.path.relpath(__file__)))
-    
-    if sim_dir[-1] == "/":
-        sim_dir = sim_dir[:-1]  # removing "/" at the end
-    sim_output_dir = sim_dir + "/../output/out"            # on my computer
-    
+    if abelrun:
+        # Running on Abel: 
+        sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel 
+    else:
+        # Running on local comp: 
+        sim_dir = os.path.join(os.getcwd(),os.path.dirname(os.path.relpath(__file__)))
+        
+        if sim_dir[-1] == "/":  
+            sim_dir = sim_dir[:-1]  # removing "/" at the end
+        sim_output_dir = sim_dir + "/../output/out"            # on my computer
 
+    
+    
     ##########################################################
     # Adding index to output/sim folder if it already exist: #
     ##########################################################
@@ -43,12 +47,6 @@ def Set_parameters():
             sim_output_dir = original_name + str(index)
             index+=1
 
-
-    ########################
-    # For running on Abel: #
-    ########################
-    
-    #sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel 
 
     PS = ps.ParameterSet(dict(
         #################
