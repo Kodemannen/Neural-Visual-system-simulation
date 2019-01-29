@@ -25,7 +25,11 @@ def Set_parameters():
     ###########################################
     if abelrun:
         # Running on Abel: 
-        sim_dir = "$SCRATCH/simulation"
+        #sim_dir = "$SCRATCH/simulation"
+        #sim_dir="/work/users/samuelkk/"
+        sim_dir = os.path.join(os.getcwd(),os.path.dirname(os.path.relpath(__file__)))
+        if sim_dir[-1] == "/":  
+            sim_dir = sim_dir[:-1]  # removing "/" at the end
         sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel
     else:
         # Running on local comp: 
