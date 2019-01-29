@@ -31,7 +31,7 @@ network_parameters = Set_parameters()     # updating parameters file
 network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
 if network_parameters.create_kernel:
     Create_kernels(network_parameters)
-Plot_kernels(network_parameters)
+#Plot_kernels(network_parameters)
 #Run_simulation([1.], [0.], network_parameters, 1)  # single run, no input
 
 ##############################
