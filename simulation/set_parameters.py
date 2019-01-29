@@ -86,7 +86,7 @@ def Set_parameters():
         #kernel_plot = sim_output_dir + "/kernels.png",
 
         kernel_path = sim_output_dir + "/kernels.h5"  if create_kernel else sim_dir + "/kernels.h5" ,        # meaning this folder
-        kernel_plot = sim_output_dir + "/kernels.png" if create_kernel else sim_dir + "/kernels.png",
+        kernel_plot = sim_output_dir + "/kernels.png",# if create_kernel else sim_dir + "/kernels.png",
         params_path = sim_output_dir + "/params",
 
 
