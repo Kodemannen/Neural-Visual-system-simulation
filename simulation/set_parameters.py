@@ -16,7 +16,7 @@ def Set_parameters():
     ###############################################################
     # Deciding if kernel will be created or if its already there: #
     ###############################################################
-    create_kernel = True   
+    create_kernel = False   
 
     ###########################################
     # Setting paths (sim_dir = absolute path) #
@@ -29,7 +29,7 @@ def Set_parameters():
     
     if sim_dir[-1] == "/":
         sim_dir = sim_dir[:-1]  # removing "/" at the end
-    sim_output_dir = sim_dir + "/../output/sim"            # on my computer
+    sim_output_dir = sim_dir + "/../output/out"            # on my computer
     
 
     ##########################################################
