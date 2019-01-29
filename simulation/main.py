@@ -33,7 +33,7 @@ if network_parameters.create_kernel:
     Create_kernels(network_parameters)
 Plot_kernels(network_parameters)
 #Run_simulation([1.], [0.], network_parameters, 1)  # single run, no input
-exit("balemos")
+
 ##############################
 # Sinisoidal input from LGN: #
 ##############################

@@ -19,7 +19,7 @@ def Set_parameters():
     create_kernel = True       # whether to create kernel or not
     abelrun = True              # whether to run on Abel or not
 
-
+    print("dusete")
     ###########################################
     # Setting paths (sim_dir = absolute path) #
     ###########################################
@@ -39,7 +39,7 @@ def Set_parameters():
             sim_dir = sim_dir[:-1]  # removing "/" at the end
         sim_output_dir = sim_dir + "/../output/out"            # on my computer
 
-    
+    print("busemann")
     
     ##########################################################
     # Adding index to output/sim folder if it already exist: #
