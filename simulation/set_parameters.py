@@ -16,7 +16,7 @@ def Set_parameters():
     ###############################################################
     # Deciding if kernel will be created or if its already there: #
     ###############################################################
-    create_kernel = True       # whether to create kernel or not
+    create_kernel = False       # whether to create kernel or not
     abelrun = True              # whether to run on Abel or not
 
     print("dusete")
