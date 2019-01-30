@@ -16,7 +16,7 @@ def Plot_LFP(LFP, network_parameters, sim_index, class_label, ax=0):
         single_plot = False
 
     PS = network_parameters
-    filename = PS.LFP_plot_path + f"LFP-{sim_index}-{class_label}"
+    filename = PS.LFP_plot_path + f"LFP-{sim_index}-{class_label}.png"
     time = np.linspace(0, PS.simtime, LFP.shape[1])
 
     scalebar=True
