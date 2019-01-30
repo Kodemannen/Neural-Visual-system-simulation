@@ -70,11 +70,11 @@ for i in range(len(frequencies)):
                         rates[i],
                         network_parameters,
                         simulation_index=sim_index)
-        LFP = Calculate_LFP(events, network_parameters)
-        Save_LFP(LFP, network_parameters, sim_index, frequencies_Hz[i])
+        #LFP = Calculate_LFP(events, network_parameters)
+        #Save_LFP(LFP, network_parameters, sim_index, frequencies_Hz[i])
         #Plot_LFP(LFP, network_parameters, sim_index, class_label=frequencies[i])
         sim_index += 1
 t_stop = time.time() - t_start
-print(f"Run time = {t_stop/(60**2)} h")
+print(t_stop / 3600.)
+#print(f"Run time = {t_stop/(60**2)} h")
 #Run_simulation(rate_times, rates, network_parameters, sim_index)
-
