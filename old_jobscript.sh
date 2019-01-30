@@ -10,10 +10,7 @@
 #SBATCH --time=00:05:01     
 #
 # Max memory usage:
-#SBATCH --mem-per-cpu=2G
-
-
-#SBATCH --ntasks=8
+#SBATCH --mem-per-cpu=8G
 
 
 #SBATCH -o terminal_output.txt
@@ -22,9 +19,20 @@
 
 ## Set up job environment:
 source /cluster/bin/jobsetup
+#module purge   # clear any inherited modules
 set -o errexit # exit on errors
 
+
+## Copy input files to the work directory:
+#cp simulation -r $SCRATCH
+
+# ## Make sure the results are copied back to the submit directory (see Work Directory below):
+#chkfile sim_output
+
+#unset $DISPLAY
+
 # ## Do some work:
+#cd $SCRATCH/simulation
 cd simulation
 python main.py
 

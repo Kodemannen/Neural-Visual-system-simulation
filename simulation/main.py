@@ -7,7 +7,7 @@ import numpy as np
 import parameters as ps
 import matplotlib.pyplot as plt
 import time
-print("STARTING THIS SHIT")
+
 ############################
 # Importing local scripts: #
 ############################
@@ -63,7 +63,7 @@ rates = A*np.sin(2*np.pi*matr) + b      # each row is a time series
 # Running point neuron simulation in Nest: #
 ############################################
 t_start = time.time()
-training_data_per_freq = 1             # number of simulations that are run per frequency
+training_data_per_freq = 50             # number of simulations that are run per frequency
 sim_index = 0
 for i in range(len(frequencies)):
     for j in range(training_data_per_freq):
@@ -74,9 +74,8 @@ for i in range(len(frequencies)):
                         simulation_index=sim_index)
         LFP = Calculate_LFP(events, network_parameters)
         Save_LFP(LFP, network_parameters, sim_index, frequencies_Hz[i])
-        Plot_LFP(LFP, network_parameters, sim_index, class_label=frequencies[i])
+        #Plot_LFP(LFP, network_parameters, sim_index, class_label=frequencies[i])
         sim_index += 1
 t_stop = time.time() - t_start
-print(t_stop / 3600.)
-#print(f"Run time = {t_stop/(60**2)} h")
-#Run_simulation(rate_times, rates, network_parameters, sim_index)
+
+print(f"Run time = {t_stop/(60**2)} h")
