@@ -5,7 +5,7 @@ import numpy as np
 import parameters as ps
 import matplotlib.pyplot as plt
 import time
-
+print("STARTING THIS SHIT")
 ############################
 # Importing local scripts: #
 ############################
@@ -77,6 +77,4 @@ for i in range(len(frequencies)):
 t_stop = time.time() - t_start
 print(f"Run time = {t_stop/(60**2)} h")
 #Run_simulation(rate_times, rates, network_parameters, sim_index)
-
-
 
