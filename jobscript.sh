@@ -29,7 +29,7 @@ cp simulation -r $SCRATCH
 # ## Make sure the results are copied back to the submit directory (see Work Directory below):
 #chkfile sim_output
 
-unset $DISPLAY
+#unset $DISPLAY
 
 # ## Do some work:
 cd $SCRATCH/simulation

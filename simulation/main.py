@@ -1,6 +1,8 @@
 """
                         Simulation mainframe
 """
+import matplotlib 
+matplotlib.use("Agg")
 import numpy as np
 import parameters as ps
 import matplotlib.pyplot as plt
