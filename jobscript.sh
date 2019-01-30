@@ -24,7 +24,7 @@ set -o errexit # exit on errors
 
 
 ## Copy input files to the work directory:
-cp simulation -r $SCRATCH
+#cp simulation -r $SCRATCH
 
 # ## Make sure the results are copied back to the submit directory (see Work Directory below):
 #chkfile sim_output
@@ -32,7 +32,8 @@ cp simulation -r $SCRATCH
 #unset $DISPLAY
 
 # ## Do some work:
-cd $SCRATCH/simulation
+#cd $SCRATCH/simulation
+cd simulation
 python main.py
 
 # output will be found at /work/users/samuelkk
