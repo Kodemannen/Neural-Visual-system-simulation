@@ -30,7 +30,7 @@ def Set_parameters():
         sim_dir = os.path.join(os.getcwd(),os.path.dirname(os.path.relpath(__file__)))
         if sim_dir[-1] == "/":  
             sim_dir = sim_dir[:-1]  # removing "/" at the end
-        sim_output_dir ="/work/users/samuelkk/output"     # work dir on Abel
+        sim_output_dir ="/work/users/samuelkk/output/out"     # work dir on Abel
         print(sim_dir)
     else:
         # Running on local comp: 

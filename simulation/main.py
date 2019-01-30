@@ -33,7 +33,7 @@ network_parameters = Set_parameters()     # updating parameters file
 network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
 if network_parameters.create_kernel:
     Create_kernels(network_parameters)
-#Plot_kernels(network_parameters)
+Plot_kernels(network_parameters)
 #Run_simulation([1.], [0.], network_parameters, 1)  # single run, no input
 
 ##############################
@@ -72,9 +72,9 @@ for i in range(len(frequencies)):
                         rates[i],
                         network_parameters,
                         simulation_index=sim_index)
-        #LFP = Calculate_LFP(events, network_parameters)
-        #Save_LFP(LFP, network_parameters, sim_index, frequencies_Hz[i])
-        #Plot_LFP(LFP, network_parameters, sim_index, class_label=frequencies[i])
+        LFP = Calculate_LFP(events, network_parameters)
+        Save_LFP(LFP, network_parameters, sim_index, frequencies_Hz[i])
+        Plot_LFP(LFP, network_parameters, sim_index, class_label=frequencies[i])
         sim_index += 1
 t_stop = time.time() - t_start
 print(t_stop / 3600.)
