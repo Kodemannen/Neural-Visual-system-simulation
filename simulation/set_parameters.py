@@ -138,7 +138,7 @@ def Set_parameters():
 
         n_channels = 6, # number of LFP recording channels
 
-        order=5,     # network scaling factor
+        order=2500,     # network scaling factor
     ))
 
     ################################################

@@ -36,8 +36,7 @@ def Calculate_LFP(events, network_parameters):
     rates_LGN = np.histogram(times_LGN, bins)[0]
 
     LFP = np.zeros(shape=(PS.n_channels, len(rates_EX)))
-    print(rates_EX.shape)
-    print(EX_kernel.shape)
+
     for i in range(PS.n_channels):
         LFP[i] =   np.convolve(rates_EX, EX_kernel[i], mode="same") \
                  + np.convolve(rates_IN, IN_kernel[i], mode="same") \

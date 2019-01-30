@@ -63,7 +63,7 @@ rates = A*np.sin(2*np.pi*matr) + b      # each row is a time series
 # Running point neuron simulation in Nest: #
 ############################################
 t_start = time.time()
-training_data_per_freq = 50             # number of simulations that are run per frequency
+training_data_per_freq = 10             # number of simulations that are run per frequency
 sim_index = 0
 for i in range(len(frequencies)):
     for j in range(training_data_per_freq):
