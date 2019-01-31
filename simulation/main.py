@@ -7,7 +7,7 @@ import numpy as np
 import parameters as ps
 import matplotlib.pyplot as plt
 import time
-from mpi4py import MPI
+
 import sys
 
 ############################
@@ -21,7 +21,7 @@ from calculate_LFP import Calculate_LFP
 from plot_LFP import Plot_LFP
 from save_LFP import Save_LFP
 
-
+from mpi4py import MPI
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 size = comm.Get_size()
