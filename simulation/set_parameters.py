@@ -11,13 +11,13 @@ import datetime
 time = datetime.datetime.now()
 timestamp = time.strftime("%c")#+"/"+time.strftime("%X")
 
-def Set_parameters():
+def Set_parameters(abelrun):
 
     ###############################################################
     # Deciding if kernel will be created or if its already there: #
     ###############################################################
     create_kernel = False       # whether to create kernel or not
-    abelrun = False              # whether to run on Abel or not
+     #= False              # whether to run on Abel or not
 
     
     ###########################################
@@ -138,7 +138,7 @@ def Set_parameters():
 
         n_channels = 6, # number of LFP recording channels
 
-        order=2500,     # network scaling factor
+        order=25,     # network scaling factor
     ))
 
     ################################################
