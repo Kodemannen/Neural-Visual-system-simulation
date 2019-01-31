@@ -17,8 +17,6 @@ def Set_parameters(abelrun):
     # Deciding if kernel will be created or if its already there: #
     ###############################################################
     create_kernel = False       # whether to create kernel or not
-     #= False              # whether to run on Abel or not
-
     
     ###########################################
     # Setting paths (sim_dir = absolute path) #
@@ -138,7 +136,7 @@ def Set_parameters(abelrun):
 
         n_channels = 6, # number of LFP recording channels
 
-        order=25,     # network scaling factor
+        order=5,     # network scaling factor
     ))
 
     ################################################
