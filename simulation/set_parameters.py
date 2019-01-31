@@ -17,7 +17,7 @@ def Set_parameters():
     # Deciding if kernel will be created or if its already there: #
     ###############################################################
     create_kernel = False       # whether to create kernel or not
-    abelrun = True              # whether to run on Abel or not
+    abelrun = False              # whether to run on Abel or not
 
     
     ###########################################
@@ -106,7 +106,7 @@ def Set_parameters():
 
         #nest_seed=int(time.time()), # base for seeds, will be updated for each individual parameterset
         #numpy_seed_nest=int(time.time()/2),
-        threads=8,          # number of parallel threads in Nest
+        threads=4,          # number of parallel threads in Nest
         nest_seed = 1,
         #hybrid_seed=int(time.time()/3),
         #numpy_seed_hybrid=int(time.time()/4),

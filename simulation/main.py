@@ -7,6 +7,14 @@ import numpy as np
 import parameters as ps
 import matplotlib.pyplot as plt
 import time
+from mpi4py import MPI
+
+# run using: mpiexec -n 4 python script.py  for 4 nodes
+
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
+size = comm.Get_size()
+
 
 ############################
 # Importing local scripts: #
@@ -46,7 +54,7 @@ dt = network_parameters.dt
 # frequencies = oscillations/simtime      # kHz
 # rate_times = np.arange(dt, simtime+dt, dt*10) # *10 because 10*dt is the resolution
                                                 # of the LFP calculation
-frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 64])
+frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 64, 128])
 frequencies_Hz = np.array([4, 8])
 frequencies = frequencies_Hz/1000.          # Hz
 #frequencies /= 1000.                            # dividing by 1000 since Nest
@@ -59,11 +67,12 @@ b = 15.  # mean rate
 matr = np.outer(frequencies, rate_times)
 rates = A*np.sin(2*np.pi*matr) + b      # each row is a time series
 
+
 ############################################
 # Running point neuron simulation in Nest: #
 ############################################
 t_start = time.time()
-training_data_per_freq = 10             # number of simulations that are run per frequency
+training_data_per_freq = 1             # number of simulations that are run per frequency
 sim_index = 0
 for i in range(len(frequencies)):
     for j in range(training_data_per_freq):
@@ -79,3 +88,4 @@ for i in range(len(frequencies)):
 t_stop = time.time() - t_start
 
 print(f"Run time = {t_stop/(60**2)} h")
+print(f"Run time = {t_stop/(60)} min")
