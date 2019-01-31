@@ -21,12 +21,12 @@ from calculate_LFP import Calculate_LFP
 from plot_LFP import Plot_LFP
 from save_LFP import Save_LFP
 
-from mpi4py import MPI
-comm = MPI.COMM_WORLD
-rank = comm.Get_rank()
-size = comm.Get_size()
-# run using: mpiexec -n 4 python script.py  for 4 nodes
-
+# from mpi4py import MPI
+# comm = MPI.COMM_WORLD
+# rank = comm.Get_rank()
+# size = comm.Get_size()
+# # run using: mpiexec -n 4 python script.py  for 4 nodes
+rank=0
 
 ##################################
 # Getting simulation parameters: #
@@ -44,7 +44,7 @@ else:
 
 if rank == 0:
     Set_parameters(abelrun)     # updating parameters file
-comm.barrier()
+#comm.barrier()
 network_parameters = ps.ParameterSet(params_path)
 
 ################################################################

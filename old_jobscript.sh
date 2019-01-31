@@ -26,11 +26,6 @@ set -o errexit # exit on errors
 
 # ## Do some work:
 cd simulation
-
-# Run this file by: 
-# sbatch --array=0-7 jobscript.sh
-
-
-#mpiexec -n 8 python main.py abel
+mpiexec -n 8 python main.py abel
 
 # output will be found at /work/users/samuelkk
