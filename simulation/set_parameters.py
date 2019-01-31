@@ -136,7 +136,7 @@ def Set_parameters(abelrun):
 
         n_channels = 6, # number of LFP recording channels
 
-        order=5,     # network scaling factor
+        order=250,     # network scaling factor
     ))
 
     ################################################
