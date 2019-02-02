@@ -25,11 +25,12 @@ source /cluster/bin/jobsetup
 set -o errexit # exit on errors
 
 # ## Do some work:
-cd simulation
-if [$SLURM_ARRAY_TASK_ID = 0]; then
-    python set_parameters.py abel 
-    echo "setting parameters"
-fi
+#cd simulation
+# if [$SLURM_ARRAY_TASK_ID = 0]; then
+#     python set_parameters.py abel 
+#     echo "setting parameters"
+# fi
+
 python main.py $SLURM_ARRAY_TASK_ID abel
 
 # Run this file by: 
