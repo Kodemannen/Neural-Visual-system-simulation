@@ -26,11 +26,9 @@ set -o errexit # exit on errors
 
 # ## Do some work:
 cd simulation
+python main.py $SLURM_ARRAY_TASK_ID abel
 
 # Run this file by: 
-# sbatch --array=0-7 jobscript.sh
-
-
-#mpiexec -n 8 python main.py abel
+# sbatch --array=0-7 jobscript.sh 
 
 # output will be found at /work/users/samuelkk

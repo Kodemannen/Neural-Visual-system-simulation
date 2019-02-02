@@ -21,19 +21,22 @@ from calculate_LFP import Calculate_LFP
 from plot_LFP import Plot_LFP
 from save_LFP import Save_LFP
 
+###########
+### MPI ###
 # from mpi4py import MPI
 # comm = MPI.COMM_WORLD
 # rank = comm.Get_rank()
 # size = comm.Get_size()
 # # run using: mpiexec -n 4 python script.py  for 4 nodes
-rank=0
+
 
 ##################################
 # Getting simulation parameters: #
 ##################################
+rank=int(sys.argv[1])
 try:
-    abel = sys.argv[1]
-    if abel == "abel":
+    abel = sys.argv[2]
+    if abel.lower() == "abel":
         abelrun = True
 except IndexError:
     abelrun = False
@@ -86,7 +89,6 @@ rates = A*np.sin(2*np.pi*matr) + b      # each row is a time series
 t_start = time.time()
 training_data_per_freq = 10             # number of simulations that are run per frequency
 sim_index = int(training_data_per_freq*rank)
-#for i in range(len(frequencies)):
 
 for j in range(training_data_per_freq):
 
