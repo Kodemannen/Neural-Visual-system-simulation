@@ -7,7 +7,7 @@
 #SBATCH --account=nn9565k
 #
 # Wall clock limit:
-#SBATCH --time=00:05:01     
+#SBATCH --time=00:07:01     
 #
 # Max memory usage:
 #SBATCH --mem-per-cpu=2G
@@ -26,10 +26,10 @@ set -o errexit # exit on errors
 
 # ## Do some work:
 cd simulation
-python set_parameters abel
+python set_parameters.py abel
 python main.py $SLURM_ARRAY_TASK_ID abel
 
 # Run this file by: 
-# sbatch --array=0-7 jobscript.sh 
+# sbatch --array=0-7 jobscript.sh abel
 
-# output will be found at /work/users/samuelkk
+# output will be found at /work/users/samuelkk/output
