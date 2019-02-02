@@ -23,8 +23,7 @@ def Set_parameters(abelrun):
     ###########################################
     if abelrun:
         # Running on Abel: 
-        #sim_dir = "$SCRATCH/simulation"
-        #sim_dir="/work/users/samuelkk/"
+
         sim_dir = os.path.join(os.getcwd(),os.path.dirname(os.path.relpath(__file__)))
         if sim_dir[-1] == "/":  
             sim_dir = sim_dir[:-1]  # removing "/" at the end
@@ -43,7 +42,6 @@ def Set_parameters(abelrun):
     original_name = sim_output_dir
     index=0
     if os.path.isdir(sim_output_dir):
-
         while os.path.isdir(sim_output_dir)==True:
             sim_output_dir = original_name + str(index)
             index+=1
