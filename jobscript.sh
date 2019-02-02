@@ -26,6 +26,7 @@ set -o errexit # exit on errors
 
 # ## Do some work:
 cd simulation
+python set_parameters abel
 python main.py $SLURM_ARRAY_TASK_ID abel
 
 # Run this file by: 

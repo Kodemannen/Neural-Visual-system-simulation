@@ -381,3 +381,8 @@ def Set_parameters(abelrun):
 
     PS.save(PS.params_path)
     return PS
+
+
+if __name__=="__main__":
+    abelrun = sys.argv[1].lower() == "abel"
+    Set_parameters(abelrun)

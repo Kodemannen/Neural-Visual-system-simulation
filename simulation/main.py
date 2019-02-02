@@ -45,7 +45,7 @@ if abelrun:
 else:
     params_path = "../output/out/params"
 
-if rank == 0:
+if rank == 0 and abelrun == False:
     Set_parameters(abelrun)     # updating parameters file
 #comm.barrier()
 network_parameters = ps.ParameterSet(params_path)
