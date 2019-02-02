@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Job name:
-#SBATCH --job-name=samueltest
+#SBATCH --job-name=samuel
 #
 # Project:
 #SBATCH --account=nn9565k
 #
 # Wall clock limit:
-#SBATCH --time=00:07:01     
+#SBATCH --time=10:00:01     
 #
 # Max memory usage:
 #SBATCH --mem-per-cpu=2G
