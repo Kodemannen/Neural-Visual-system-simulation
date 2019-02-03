@@ -58,29 +58,32 @@ network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
 if network_parameters.create_kernel:
     Create_kernels(network_parameters)
 #Plot_kernels(network_parameters)
-#Run_simulation([1.], [0.], network_parameters, 1)  # single run, no input
 
-##############################
-# Sinisoidal input from LGN: #
-##############################
+############################################
+# Part 1 and 2: Sinisoidal input from LGN: #
+############################################
+# simtime = network_parameters.simtime    # simulation time (ms)
+# dt = network_parameters.dt
+
+# frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 64, 128])  # len == mpi size
+# frequencies = frequencies_Hz/1000.          # Hz
+
+# rate_times = np.arange(dt, simtime+dt, dt*10)
+
+# A = 5.   # amplitude of rate oscillation
+# b = 15.  # mean rate
+# matr = np.outer(frequencies, rate_times)
+# rates = A*np.sin(2*np.pi*matr) + b      # each row is a time series
+
+
+#############################################################
+# Part 3: Sinusioidal input from LGN with varying amplitude #
+#############################################################
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
-
-# oscillations = np.array([4,8,12,16]) # oscillations per simulation
-# frequencies = oscillations/simtime      # kHz
-# rate_times = np.arange(dt, simtime+dt, dt*10) # *10 because 10*dt is the resolution
-                                                # of the LFP calculation
-frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 64, 128])  # len == mpi size
-frequencies = frequencies_Hz/1000.          # Hz
-#frequencies /= 1000.                            # dividing by 1000 since Nest
-                                                # uses ms and 4/ms = 4 kHz
-rate_times = np.arange(dt, simtime+dt, dt*10)
+input_freq = 24 / 1000  # Hz, /1000 since nest uses ms
 
 
-A = 5.   # amplitude of rate oscillation
-b = 15.  # mean rate
-matr = np.outer(frequencies, rate_times)
-rates = A*np.sin(2*np.pi*matr) + b      # each row is a time series
 
 
 ############################################
