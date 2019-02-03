@@ -33,13 +33,15 @@ from save_LFP import Save_LFP
 ##################################
 # Getting simulation parameters: #
 ##################################
-rank=int(sys.argv[1])
+
 try:
+    rank=int(sys.argv[1])
     abel = sys.argv[2]
     if abel.lower() == "abel":
         abelrun = True
 except IndexError:
     abelrun = False
+    rank=0
 if abelrun:
     params_path = "/work/users/samuelkk/output/out/params"
 else:
@@ -65,7 +67,7 @@ if network_parameters.create_kernel:
 # simtime = network_parameters.simtime    # simulation time (ms)
 # dt = network_parameters.dt
 
-# frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 64, 128])  # len == mpi size
+# frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 64, 128])  
 # frequencies = frequencies_Hz/1000.          # Hz
 
 # rate_times = np.arange(dt, simtime+dt, dt*10)
@@ -75,22 +77,53 @@ if network_parameters.create_kernel:
 # matr = np.outer(frequencies, rate_times)
 # rates = A*np.sin(2*np.pi*matr) + b      # each row is a time series
 
+# ############################################
+# # Running point neuron simulation in Nest: #
+# ############################################
+# t_start = time.time()
+# training_data_per_freq = 1000             # number of simulations that are run per frequency
+# sim_index = int(training_data_per_freq*rank)
+
+# for j in range(training_data_per_freq):
+
+#     events = Run_simulation(rate_times,
+#                     rates[rank],
+#                     network_parameters,
+#                     simulation_index=sim_index)
+#     LFP = Calculate_LFP(events, network_parameters)
+#     Save_LFP(LFP, network_parameters, sim_index, class_label=frequencies_Hz[rank] )
+#     #Plot_LFP(LFP, network_parameters, sim_index, class_label=frequencies[rank])
+#     sim_index += 1
+# t_stop = time.time() - t_start
+
+# print(f"Run time = {t_stop/(60**2)} h")
+# print(f"Run time = {t_stop/(60)} min")
+
+
 
 #############################################################
 # Part 3: Sinusioidal input from LGN with varying amplitude #
 #############################################################
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
-input_freq = 24 / 1000  # Hz, /1000 since nest uses ms
+frequencies_Hz = np.array([4, 24])      # one with linear effects and one with non linear
+frequencies = frequencies_Hz/1000.  
 
+step = 0.5
+A = np.arange(0., 15+step, step=step)      # amplitudes Hz
+b = 15                                     # mean rate
+sims_per_amplitude =  250
+
+rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
 
 
 ############################################
 # Running point neuron simulation in Nest: #
 ############################################
+n_jobs = 5
+
 t_start = time.time()
-training_data_per_freq = 1000             # number of simulations that are run per frequency
 sim_index = int(training_data_per_freq*rank)
 
 for j in range(training_data_per_freq):
@@ -100,7 +133,7 @@ for j in range(training_data_per_freq):
                     network_parameters,
                     simulation_index=sim_index)
     LFP = Calculate_LFP(events, network_parameters)
-    Save_LFP(LFP, network_parameters, sim_index, frequencies_Hz[rank])
+    Save_LFP(LFP, network_parameters, sim_index, class_label=[amplitude,frequencies_Hz[rank]] )
     #Plot_LFP(LFP, network_parameters, sim_index, class_label=frequencies[i])
     sim_index += 1
 t_stop = time.time() - t_start
