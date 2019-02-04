@@ -30,18 +30,19 @@ from save_LFP import Save_LFP
 # # run using: mpiexec -n 4 python script.py  for 4 nodes
 
 
-##################################
-# Getting simulation parameters: #
-##################################
-
+#################################
+# Getting job array parameters: #
+#################################
 try:
-    rank=int(sys.argv[1])
-    abel = sys.argv[2]
+    rank = int(sys.argv[1])         # job array index
+    n_jobs = int(sys.argv[2])       # total number of jobs
+    abel = sys.argv[3]              # whether simulation is done on Abel or not
     if abel.lower() == "abel":
         abelrun = True
 except IndexError:
     abelrun = False
-    rank=0
+    n_jobs = 1
+    rank = 0
 if abelrun:
     params_path = "/work/users/samuelkk/output/out/params"
 else:
@@ -64,6 +65,7 @@ if network_parameters.create_kernel:
 ############################################
 # Part 1 and 2: Sinisoidal input from LGN: #
 ############################################
+# rank is between 0 and 7
 # simtime = network_parameters.simtime    # simulation time (ms)
 # dt = network_parameters.dt
 
@@ -116,27 +118,37 @@ sims_per_amplitude =  250
 
 rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
-
+states = []
+for a in A:
+    for f in frequencies:
+        states.append((a,f))
 
 ############################################
 # Running point neuron simulation in Nest: #
 ############################################
-n_jobs = 5
+rank = rank     
+n_jobs_ = n_jobs
+n_sims_per_state = 10
+n_states = len(states)
+n_total_sims = n_sims_per_state*n_states
+sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 
 t_start = time.time()
-sim_index = int(training_data_per_freq*rank)
 
-for j in range(training_data_per_freq):
+for sim_index in range(len(sim_indices)):
+    state_index = sim_index % n_states 
+    current_state = states[state_index]
+    
+    amplitude, freq = current_state
+    rates = amplitude*np.sin(2*np.pi*freq*rate_times) + b        #A*np.sin(2*np.pi*matr) + b
 
-    events = Run_simulation(rate_times,
-                    rates[rank],
-                    network_parameters,
-                    simulation_index=sim_index)
-    LFP = Calculate_LFP(events, network_parameters)
-    Save_LFP(LFP, network_parameters, sim_index, class_label=[amplitude,frequencies_Hz[rank]] )
-    #Plot_LFP(LFP, network_parameters, sim_index, class_label=frequencies[i])
-    sim_index += 1
+    events = Run_simulation(rate_times, rates,
+                            network_parameters,
+                            simulation_index=sim_index,
+                            class_label = str(current_state))
+    LFP, population_rates = Calculate_LFP(events, network_parameters)
+    Save_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
+    # Save_population_rates() ### IMPLEMENT
 t_stop = time.time() - t_start
-
 print(f"Run time = {t_stop/(60**2)} h")
 print(f"Run time = {t_stop/(60)} min")

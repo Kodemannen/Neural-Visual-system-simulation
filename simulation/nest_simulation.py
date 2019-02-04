@@ -13,7 +13,7 @@ import sys
 
 
 
-def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_index=0):
+def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_index=0, class_label=""):
     #np.random.seed(0)
     #############################################
     # Extracting network/simulation parameters: #
@@ -106,17 +106,17 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     nest.SetStatus(background, {"rate" : background_rate})
 
     spike_detector_EX = nest.Create("spike_detector",  params={"to_file": store_spikes,
-                                    "label" : spike_dir + "/" + label + "-EX-"+str(simulation_index),
+                                    "label" : spike_dir + "/" + label + "-EX-"+str(simulation_index)+str(class_label),
                                     "withtime": True,
                                     "withgid": True ,
                                     "use_gid_in_filename": False})
     spike_detector_IN = nest.Create("spike_detector",  params={"to_file": store_spikes,
-                                    "label" : spike_dir + "/" + label + "-IN-"+str(simulation_index),
+                                    "label" : spike_dir + "/" + label + "-IN-"+str(simulation_index)+str(class_label),
                                     "withtime": True,
                                     "withgid": True,
                                     "use_gid_in_filename": False  })
     spike_detector_LGN = nest.Create("spike_detector", params={"to_file": store_spikes,
-                                    "label" : spike_dir + "/" + label + "-LGN-"+str(simulation_index),
+                                    "label" : spike_dir + "/" + label + "-LGN-"+str(simulation_index)+str(class_label),
                                     "withtime": True,
                                     "withgid": True,
                                     "use_gid_in_filename": False  })

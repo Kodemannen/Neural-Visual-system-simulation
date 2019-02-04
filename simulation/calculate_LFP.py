@@ -30,8 +30,8 @@ def Calculate_LFP(events, network_parameters):
     times_IN=events_IN["times"]
     times_LGN=events_LGN["times"]
 
-    bins = np.arange(PS.simtime + 2, ) - 0.5
-    rates_EX = np.histogram(times_EX, bins)[0]
+    bins = np.arange(0, PS.simtime + 2, step=1) - 0.5
+    rates_EX = np.histogram(times_EX, bins)[0]      # population firing rates
     rates_IN = np.histogram(times_IN, bins)[0]
     rates_LGN = np.histogram(times_LGN, bins)[0]
 
@@ -40,5 +40,5 @@ def Calculate_LFP(events, network_parameters):
     for i in range(PS.n_channels):
         LFP[i] =   np.convolve(rates_EX, EX_kernel[i], mode="same") \
                  + np.convolve(rates_IN, IN_kernel[i], mode="same") \
-                 + np.convolve(rates_LGN, LGN_kernel[i], mode="same")
-    return LFP # unit mV
+                 + np.convolve(rates_LGN, LGN_kernel[i], mode="same") # unit mV
+    return LFP, [rates_EX, rates_IN, rates_LGN] 
