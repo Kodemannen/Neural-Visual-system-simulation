@@ -71,10 +71,8 @@ def Create_kernels(network_parameters):
     """
 
     Create_fake_spikes(network_parameters)
-    #try:
     Create_LFP_from_simultaneous_firings(network_parameters)
-    #except Exception:
-    #    pass
+
     PS = network_parameters     # just for faster typing
     data_folder = PS.hybrid_output_path + "/populations/"
     kernel_path = PS.kernel_path

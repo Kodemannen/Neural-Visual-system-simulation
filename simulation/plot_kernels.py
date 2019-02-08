@@ -20,9 +20,15 @@ def Plot_kernels(network_parameters, ax=0):
     n_channels = PS.n_channels
     kernel_path = PS.kernel_path
     with h5py.File(kernel_path, "r") as file:
+        # * 1000 to plot as uV instead of mV
         EX_kernel = file["EX"][:]   *1000
         IN_kernel = file["IN"][:]   *1000
         LGN_kernel = file["LGN"][:] *1000
+
+
+    # EX_kernel -= np.mean(EX_kernel, axis=1,keepdims=True)
+    # IN_kernel -= np.mean(EX_kernel, axis=1,keepdims=True)
+    # LGN_kernel -= np.mean(LGN_kernel, axis=1,keepdims=True)
 
     #ax = plt.axes() ## remove later
     unit = 1    # mV
@@ -34,14 +40,15 @@ def Plot_kernels(network_parameters, ax=0):
     # Normalize: #
     ##############
     scale = np.max([np.max(abs(EX_kernel)), np.max(abs(IN_kernel)), np.max(abs(LGN_kernel))])
-
+    print("scale=", scale, " uV")
     EX_kernel /= scale
     IN_kernel /= scale
     LGN_kernel /= scale
+    print(([np.min((EX_kernel)), np.min((IN_kernel)), np.min((LGN_kernel))]))
 
     for i in range(n_channels):
-        ax.plot(EX_kernel[i]  + space*(n_channels-i), color="#4363d8", label="EX" if i==1 else None)
-        ax.plot(IN_kernel[i]  + space*(n_channels-i),  color="#f58231", label="IN" if i==1 else None)
+        ax.plot(EX_kernel[i]  + space*(n_channels-i), color="#f58231", label="EX" if i==1 else None)
+        ax.plot(IN_kernel[i]  + space*(n_channels-i),  color="#4363d8", label="IN" if i==1 else None)
         ax.plot(LGN_kernel[i] + space*(n_channels-i), color="k", label="LGN" if i==1 else None)
 
     ####################
@@ -50,11 +57,10 @@ def Plot_kernels(network_parameters, ax=0):
     if scalebar:
         posx = time[-1]
         posy = 3*space
-        barlength = 5  # uV
+        barlength = 5   # uV
+        #print(barlength*scale, "uV")
+        #line=barlength
         line = barlength/scale * 1/1000. # barlength uV
-
-        #ax.plot([posx,posx],[posy-line/2, posy+line/2], color="k", linewidth=2)
-        #ax.text(posx + 2,posy-0.1, "$%s \mu V$" % barlength)
 
         ax.plot([posx,posx],[posy, posy+line], color="k", linewidth=2)
         ax.text(posx + 2,posy+line/2-0.1, "$%s \mu V$" % barlength)
@@ -73,12 +79,15 @@ def Plot_kernels(network_parameters, ax=0):
 
     ax.set_title("Kernels")
     ax.legend(loc=4, prop={"size": 12})
-
+    plt.tight_layout()
     if single_plot:
+        print(PS.kernel_plot)
         plt.savefig(PS.kernel_plot) ### remove
+        #plt.savefig("asdsdd")
+        plt.show()
         plt.close()
 
-if __name__=="__main__":
-    from parameters import ParameterSet
-    network_parameters = ParameterSet("params")
-    Plot_kernels(network_parameters)
+# if __name__=="__main__":
+#     from parameters import ParameterSet
+#     network_parameters = ParameterSet("params")
+#     Plot_kernels(network_parameters)

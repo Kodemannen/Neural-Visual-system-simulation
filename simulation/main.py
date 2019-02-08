@@ -2,12 +2,11 @@
                         Simulation mainframe
 """
 import matplotlib 
-matplotlib.use("Agg")
 import numpy as np
 import parameters as ps
 import matplotlib.pyplot as plt
 import time
-
+import os
 import sys
 
 ############################
@@ -20,6 +19,7 @@ from nest_simulation import Run_simulation
 from calculate_LFP import Calculate_LFP
 from plot_LFP import Plot_LFP
 from save_LFP import Save_LFP
+from save_population_rates import Save_population_rates
 
 ###########
 ### MPI ###
@@ -39,19 +39,17 @@ try:
     abel = sys.argv[3]              # whether simulation is done on Abel or not
     if abel.lower() == "abel":
         abelrun = True
+        matplotlib.use("Agg")
+
 except IndexError:
     abelrun = False
     n_jobs = 1
     rank = 0
-if abelrun:
-    params_path = "/work/users/samuelkk/output/out/params"
-else:
-    params_path = "../output/out/params"
 
-if (rank == 0) and (abelrun == False):
-    Set_parameters(abelrun)     # updating parameters file
-#comm.barrier()
-network_parameters = ps.ParameterSet(params_path)
+if (rank == 0):
+    network_parameters = Set_parameters(abelrun)     # updating parameters file
+
+#network_parameters = ps.ParameterSet(PS.params_path)
 
 ################################################################
 # Creating kernels for mapping population firing rates to LFP: #
@@ -60,12 +58,12 @@ network_parameters = ps.ParameterSet(params_path)
 network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
 if network_parameters.create_kernel:
     Create_kernels(network_parameters)
-#Plot_kernels(network_parameters)
-
-############################################
-# Part 1 and 2: Sinisoidal input from LGN: #
-############################################
-# rank is between 0 and 7
+Plot_kernels(network_parameters)
+exit("trusemann")
+# ############################################
+# # Part 1 and 2: Sinisoidal input from LGN: #
+# ############################################
+# # rank is between 0 and 7
 # simtime = network_parameters.simtime    # simulation time (ms)
 # dt = network_parameters.dt
 
@@ -83,7 +81,8 @@ if network_parameters.create_kernel:
 # # Running point neuron simulation in Nest: #
 # ############################################
 # t_start = time.time()
-# training_data_per_freq = 1000             # number of simulations that are run per frequency
+# training_data_per_freq = 1             # number of simulations that are run per frequency
+# rank = 4    # 24 hz
 # sim_index = int(training_data_per_freq*rank)
 
 # for j in range(training_data_per_freq):
@@ -92,9 +91,11 @@ if network_parameters.create_kernel:
 #                     rates[rank],
 #                     network_parameters,
 #                     simulation_index=sim_index)
-#     LFP = Calculate_LFP(events, network_parameters)
+#     LFP, population_rates = Calculate_LFP(events, network_parameters)
 #     Save_LFP(LFP, network_parameters, sim_index, class_label=frequencies_Hz[rank] )
+#     Save_population_rates(population_rates, network_parameters, sim_index, class_label=frequencies[rank])
 #     #Plot_LFP(LFP, network_parameters, sim_index, class_label=frequencies[rank])
+
 #     sim_index += 1
 # t_stop = time.time() - t_start
 
@@ -114,7 +115,6 @@ frequencies = frequencies_Hz/1000.
 step = 0.5
 A = np.arange(0., 15+step, step=step)      # amplitudes Hz
 b = 15                                     # mean rate
-sims_per_amplitude =  250
 
 rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
@@ -128,7 +128,7 @@ for a in A:
 ############################################
 rank = rank     
 n_jobs_ = n_jobs
-n_sims_per_state = 10
+n_sims_per_state = 1
 n_states = len(states)
 n_total_sims = n_sims_per_state*n_states
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
@@ -140,6 +140,7 @@ for sim_index in range(len(sim_indices)):
     current_state = states[state_index]
     
     amplitude, freq = current_state
+    amplitude = 5.
     rates = amplitude*np.sin(2*np.pi*freq*rate_times) + b        #A*np.sin(2*np.pi*matr) + b
 
     events = Run_simulation(rate_times, rates,
@@ -148,7 +149,13 @@ for sim_index in range(len(sim_indices)):
                             class_label = str(current_state))
     LFP, population_rates = Calculate_LFP(events, network_parameters)
     Save_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
-    # Save_population_rates() ### IMPLEMENT
+    Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(current_state)) ### IMPLEMENT
+    
+    Plot_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
+    plt.plot(population_rates[0])
+    plt.show()
+    
+    break
 t_stop = time.time() - t_start
 print(f"Run time = {t_stop/(60**2)} h")
 print(f"Run time = {t_stop/(60)} min")

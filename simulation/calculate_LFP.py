@@ -34,11 +34,14 @@ def Calculate_LFP(events, network_parameters):
     rates_EX = np.histogram(times_EX, bins)[0]      # population firing rates
     rates_IN = np.histogram(times_IN, bins)[0]
     rates_LGN = np.histogram(times_LGN, bins)[0]
+    # histogram because each bin will be the number of neurons that fire during the the timestep that
+    # corresponds to that bin
 
+    
     LFP = np.zeros(shape=(PS.n_channels, len(rates_EX)))
 
     for i in range(PS.n_channels):
         LFP[i] =   np.convolve(rates_EX, EX_kernel[i], mode="same") \
                  + np.convolve(rates_IN, IN_kernel[i], mode="same") \
                  + np.convolve(rates_LGN, LGN_kernel[i], mode="same") # unit mV
-    return LFP, [rates_EX, rates_IN, rates_LGN] 
+    return LFP, [rates_EX, rates_IN, rates_LGN, bins] 

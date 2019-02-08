@@ -23,7 +23,6 @@ def Set_parameters(abelrun):
     ###########################################
     if abelrun:
         # Running on Abel: 
-
         sim_dir = os.path.join(os.getcwd(),os.path.dirname(os.path.relpath(__file__)))
         if sim_dir[-1] == "/":  
             sim_dir = sim_dir[:-1]  # removing "/" at the end
@@ -45,8 +44,8 @@ def Set_parameters(abelrun):
         while os.path.isdir(sim_output_dir)==True:
             sim_output_dir = original_name + str(index)
             index+=1
-
-
+    print("egghod")
+    print(sim_output_dir)
     PS = ps.ParameterSet(dict(
         #################
         # Folder paths: #
@@ -56,16 +55,17 @@ def Set_parameters(abelrun):
         
         hybrid_output_path = sim_output_dir + "/hybridLFPy_output",   # folder where the hybridLFPy stuff is stored
         nest_output_path= sim_output_dir + "/nest_output",
+        population_rates_path=sim_output_dir + "/population_rates",
         LFP_path = sim_output_dir + "/LFP_files",                # where the LFP signals are kept
         LFP_plot_path = sim_output_dir + "/LFP_plots/",
         
         fake_spikes_path = sim_output_dir + "/kernel_creation/fake_spikes",      # folder where the fake spikes are stored
     ))
-
+    
     #####################
     # Creating folders: #
     #####################
-    print(PS.sim_output_dir)
+
     os.makedirs(PS.sim_output_dir)
     for key in PS:
         if not os.path.isdir(PS[key]):
@@ -83,7 +83,7 @@ def Set_parameters(abelrun):
         #kernel_plot = sim_output_dir + "/kernels.png",
 
         kernel_path = sim_output_dir + "/kernels.h5"  if create_kernel else sim_dir + "/kernels.h5" ,        # meaning this folder
-        kernel_plot = sim_output_dir + "/kernels.png",# if create_kernel else sim_dir + "/kernels.png",
+        kernel_plot = sim_output_dir + "/kernels.pdf",# if create_kernel else sim_dir + "/kernels.png",
         params_path = sim_output_dir + "/params",
 
 
@@ -97,7 +97,7 @@ def Set_parameters(abelrun):
         label ="spikes",    # label for the spike files
         save_spikes=False,
         dt=0.1,             # Simulation time resolution in ms
-        simtime = 10001.,    # Simulation time in ms
+        simtime = 1001.,    # Simulation time in ms
         create_kernel_simtime = 600,    # simtime for when creating kernel
 
         #nest_seed=int(time.time()), # base for seeds, will be updated for each individual parameterset
@@ -113,8 +113,8 @@ def Set_parameters(abelrun):
         ##################################
         # Neuron and synapse parameters: #
         ##################################
-        J_EX = .1,                # excitatory weight, unit: nS ?
-        g=4.5,          # ratio inhibitory weight/excitatory weight (before: 5.0)
+        J_EX = .1,     # excitatory weight, unit: nS ?
+        g=4.5,         # ratio inhibitory weight/excitatory weight (before: 5.0)
         eta=.8,        # external rate relative to threshold rate
         #background_rate = 10.0,  # poissonian background rate
 
@@ -136,7 +136,8 @@ def Set_parameters(abelrun):
 
         order=2500,     # network scaling factor
     ))
-
+    print("egerbam")
+    print(PS.kernel_plot)
     ################################################
     # Params that are dependent on the ones above: #
     ################################################
