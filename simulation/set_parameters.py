@@ -16,7 +16,7 @@ def Set_parameters(abelrun):
     ###############################################################
     # Deciding if kernel will be created or if its already there: #
     ###############################################################
-    create_kernel = False       # whether to create kernel or not
+    create_kernel = True       # whether to create kernel or not
     
     ###########################################
     # Setting paths (sim_dir = absolute path) #
@@ -44,8 +44,7 @@ def Set_parameters(abelrun):
         while os.path.isdir(sim_output_dir)==True:
             sim_output_dir = original_name + str(index)
             index+=1
-    print("egghod")
-    print(sim_output_dir)
+
     PS = ps.ParameterSet(dict(
         #################
         # Folder paths: #
@@ -114,7 +113,7 @@ def Set_parameters(abelrun):
         # Neuron and synapse parameters: #
         ##################################
         J_EX = .1,     # excitatory weight, unit: nS ?
-        g=4.5,         # ratio inhibitory weight/excitatory weight (before: 5.0)
+        g=4.,         # ratio inhibitory weight/excitatory weight (before: 5.0)
         eta=.8,        # external rate relative to threshold rate
         #background_rate = 10.0,  # poissonian background rate
 
@@ -136,8 +135,7 @@ def Set_parameters(abelrun):
 
         order=2500,     # network scaling factor
     ))
-    print("egerbam")
-    print(PS.kernel_plot)
+
     ################################################
     # Params that are dependent on the ones above: #
     ################################################
@@ -311,11 +309,9 @@ def Set_parameters(abelrun):
     ########################################################
 
     PS.update(dict(J_yX = dict(
-                     EX = [PS['J_EX']*1E-3, PS['J_IN']*1E-3, PS["J_LGN"]*1E-3],
-                     IN = [PS['J_EX']*1E-3, PS['J_IN']*1E-3, PS["J_LGN"]*1E-3],
+                     EX = [PS['J_EX'], PS['J_IN'], PS["J_LGN"]],
+                     IN = [PS['J_EX'], PS['J_IN'], PS["J_LGN"]],
                      )))
-    # IMPORTANT: Multiplying by 1E-3 because LFPy/hybridLFPy uses uS while nest uses nS
-    # as units for conductance
 
 
     #for each population, define layer- and population-specific connectivity

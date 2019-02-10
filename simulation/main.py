@@ -59,7 +59,7 @@ network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
 if network_parameters.create_kernel:
     Create_kernels(network_parameters)
 Plot_kernels(network_parameters)
-exit("trusemann")
+exit("Done creating kernel")
 # ############################################
 # # Part 1 and 2: Sinisoidal input from LGN: #
 # ############################################

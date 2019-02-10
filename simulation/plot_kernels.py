@@ -19,6 +19,8 @@ def Plot_kernels(network_parameters, ax=0):
     PS = network_parameters
     n_channels = PS.n_channels
     kernel_path = PS.kernel_path
+    #kernel_path = "/home/samknu/MyRepos/Brunel-with-optical-input/simulation/../output/out4/kernels.h5"
+    print(PS.kernel_path)
     with h5py.File(kernel_path, "r") as file:
         # * 1000 to plot as uV instead of mV
         EX_kernel = file["EX"][:]   *1000
@@ -26,9 +28,6 @@ def Plot_kernels(network_parameters, ax=0):
         LGN_kernel = file["LGN"][:] *1000
 
 
-    # EX_kernel -= np.mean(EX_kernel, axis=1,keepdims=True)
-    # IN_kernel -= np.mean(EX_kernel, axis=1,keepdims=True)
-    # LGN_kernel -= np.mean(LGN_kernel, axis=1,keepdims=True)
 
     #ax = plt.axes() ## remove later
     unit = 1    # mV
@@ -40,7 +39,10 @@ def Plot_kernels(network_parameters, ax=0):
     # Normalize: #
     ##############
     scale = np.max([np.max(abs(EX_kernel)), np.max(abs(IN_kernel)), np.max(abs(LGN_kernel))])
-    print("scale=", scale, " uV")
+    diffch5 = np.max(IN_kernel[4])-np.min(IN_kernel[4])
+    print(diffch5)
+    #IN_kernel[4] *= 0
+    print("scale=", scale, "uV")
     EX_kernel /= scale
     IN_kernel /= scale
     LGN_kernel /= scale
@@ -60,7 +62,7 @@ def Plot_kernels(network_parameters, ax=0):
         barlength = 5   # uV
         #print(barlength*scale, "uV")
         #line=barlength
-        line = barlength/scale * 1/1000. # barlength uV
+        line = barlength/scale # barlength uV
 
         ax.plot([posx,posx],[posy, posy+line], color="k", linewidth=2)
         ax.text(posx + 2,posy+line/2-0.1, "$%s \mu V$" % barlength)
@@ -81,13 +83,13 @@ def Plot_kernels(network_parameters, ax=0):
     ax.legend(loc=4, prop={"size": 12})
     plt.tight_layout()
     if single_plot:
-        print(PS.kernel_plot)
+
         plt.savefig(PS.kernel_plot) ### remove
         #plt.savefig("asdsdd")
         plt.show()
         plt.close()
-
 # if __name__=="__main__":
+
 #     from parameters import ParameterSet
 #     network_parameters = ParameterSet("params")
 #     Plot_kernels(network_parameters)
