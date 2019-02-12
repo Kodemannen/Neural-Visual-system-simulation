@@ -76,7 +76,7 @@ def Create_kernels(network_parameters):
     PS = network_parameters     # just for faster typing
     data_folder = PS.hybrid_output_path + "/populations/"
     kernel_path = PS.kernel_path
-
+    
     with h5py.File(data_folder + "EX_population_LFP.h5", "r") as file:
         EX_LFP = file["data"][()]
         #print(EX_LFP.shape)
@@ -88,9 +88,9 @@ def Create_kernels(network_parameters):
     # Scaling the kernel so it represents the ratio  of LFP per firing neuron: #
     ############################################################################
     
-    EX_kernel = (EX_LFP[:,0:200] + IN_LFP[:,0:200])/PS.NE
-    IN_kernel = (EX_LFP[:,200:400] + IN_LFP[:,200:400])/PS.NI
-    LGN_kernel = (EX_LFP[:,400:600] + IN_LFP[:,400:600])/PS.N_LGN
+    EX_kernel = (EX_LFP[:,0:199] + IN_LFP[:,0:199])/PS.NE
+    IN_kernel = (EX_LFP[:,200:399] + IN_LFP[:,200:399])/PS.NI
+    LGN_kernel = (EX_LFP[:,400:599] + IN_LFP[:,400:599])/PS.N_LGN
 
     #########################
     # Save kernels to file: #

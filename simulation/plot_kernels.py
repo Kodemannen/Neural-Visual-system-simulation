@@ -29,24 +29,30 @@ def Plot_kernels(network_parameters, ax=0):
 
 
 
-    #ax = plt.axes() ## remove later
-    unit = 1    # mV
-    space = 1.2
+
+    space = 10      # uV 
 
     time = np.linspace(0,200,201)
 
     ##############
-    # Normalize: #
+    # Normalize: #    # print(diffch5)
+    # #IN_kernel[4] *= 0
+    # print("scale=", scale, "uV")
+    # EX_kernel /= scale
+    # IN_kernel /= scale
+    # LGN_kernel /= scale
     ##############
-    scale = np.max([np.max(abs(EX_kernel)), np.max(abs(IN_kernel)), np.max(abs(LGN_kernel))])
+    #scale = np.max([np.max(abs(EX_kernel)), np.max(abs(IN_kernel)), np.max(abs(LGN_kernel))])
     diffch5 = np.max(IN_kernel[4])-np.min(IN_kernel[4])
+    #space = diffch5
+    space = diffch5*1.5
     print(diffch5)
-    #IN_kernel[4] *= 0
-    print("scale=", scale, "uV")
-    EX_kernel /= scale
-    IN_kernel /= scale
-    LGN_kernel /= scale
-    print(([np.min((EX_kernel)), np.min((IN_kernel)), np.min((LGN_kernel))]))
+    # #IN_kernel[4] *= 0
+    # print("scale=", scale, "uV")
+    # EX_kernel /= scale
+    # IN_kernel /= scale
+    # LGN_kernel /= scale
+    #print(([np.min((EX_kernel)), np.min((IN_kernel)), np.min((LGN_kernel))]))
 
     for i in range(n_channels):
         ax.plot(EX_kernel[i]  + space*(n_channels-i), color="#f58231", label="EX" if i==1 else None)
@@ -59,10 +65,10 @@ def Plot_kernels(network_parameters, ax=0):
     if scalebar:
         posx = time[-1]
         posy = 3*space
-        barlength = 5   # uV
+        barlength = 0.1   # uV
         #print(barlength*scale, "uV")
         #line=barlength
-        line = barlength/scale # barlength uV
+        line = barlength#/scale # barlength uV
 
         ax.plot([posx,posx],[posy, posy+line], color="k", linewidth=2)
         ax.text(posx + 2,posy+line/2-0.1, "$%s \mu V$" % barlength)

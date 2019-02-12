@@ -124,7 +124,7 @@ def Set_parameters(abelrun):
         E_L=0.0,      # resting membrane potential in mV
         V_m=0.0,      # membrane potential in mV
 
-        tauSyn_nest=0.5,# synaptic time constant in ms
+        tauSyn = 5.0,   # synaptic time constant for alpha synapses in HybridLFPy (ms)
         tauMem=20.0,    # time constant of membrane potential in ms
         delay=1.5,      # synaptic delay
         t_ref=2.0,      # refractory period
@@ -133,7 +133,7 @@ def Set_parameters(abelrun):
 
         n_channels = 6, # number of LFP recording channels
 
-        order=2500,     # network scaling factor
+        order=5,     # network scaling factor
     ))
 
     ################################################
@@ -307,10 +307,11 @@ def Set_parameters(abelrun):
     ########################################################
     # Creating matrix with synapse weights for hybridLFPy: #
     ########################################################
-
+    K = 1/(np.e*PS.tauSyn**2)   # for scaling since hybridLFPy uses
+    # alpha synapses while NEST uses delta
     PS.update(dict(J_yX = dict(
-                     EX = [PS['J_EX'], PS['J_IN'], PS["J_LGN"]],
-                     IN = [PS['J_EX'], PS['J_IN'], PS["J_LGN"]],
+                     EX = [PS['J_EX']*K, PS['J_IN']*K, PS["J_LGN"]*K],
+                     IN = [PS['J_EX']*K, PS['J_IN']*K, PS["J_LGN"]*K],
                      )))
 
 
@@ -353,8 +354,8 @@ def Set_parameters(abelrun):
 
         #set up table of synapse time constants from each presynaptic populations
         tau_yX = dict(
-            EX = [5.0, 5.0, 5.0],
-            IN = [5.0, 5.0, 5.0],
+            EX = [PS.tauSyn, PS.tauSyn, PS.tauSyn],
+            IN = [PS.tauSyn, PS.tauSyn, PS.tauSyn],
         ),
         #set up delays, here using fixed delays of network
         synDelayLoc = dict(

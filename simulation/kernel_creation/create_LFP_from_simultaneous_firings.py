@@ -39,6 +39,7 @@ def Create_LFP_from_simultaneous_firings(network_parameters):
     COMM = MPI.COMM_WORLD
     SIZE = COMM.Get_size()
     RANK = COMM.Get_rank()
+    print("MY RANK IS: ",RANK)
 
     #if True, execute full model. If False, do only the plotting. Simulation results
     #must exist.
