@@ -30,8 +30,8 @@ cd simulation
 #     python set_parameters.py abel 
 #     echo "setting parameters"
 # fi
-
-python main.py $SLURM_ARRAY_TASK_ID $SLURM_ARRAY_TASK_COUNT abel
+params_path=$(python set_parameters.py abel) 
+python main.py $SLURM_ARRAY_TASK_ID $SLURM_ARRAY_TASK_COUNT $params_path
 
 # Run this file by: 
 # sbatch --array=0-7 jobscript.sh abel

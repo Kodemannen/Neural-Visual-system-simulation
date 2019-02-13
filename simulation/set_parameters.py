@@ -170,10 +170,7 @@ def Set_parameters(abelrun):
     PS.update(dict(
         background_rate = PS.eta*PS.threshold_rate,
     ))
-    # print(PS.background_rate)
-    # exit("ballemann")
-    #PS = ps.ParameterSet(PS)
-    #PS = PS
+
 
     ##########################
     # hybridLFPy parameters: #
@@ -377,6 +374,7 @@ def Set_parameters(abelrun):
     ))
 
     PS.save(PS.params_path)
+    print(PS.params_path)
     return PS
 
 

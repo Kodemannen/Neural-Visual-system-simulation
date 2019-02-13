@@ -36,6 +36,7 @@ from save_population_rates import Save_population_rates
 try:
     rank = int(sys.argv[1])         # job array index
     n_jobs = int(sys.argv[2])       # total number of jobs
+    params_path = sys.argv[3]
     # abel = sys.argv[3]              # whether simulation is done on Abel or not
     # if abel.lower() == "abel":
     abelrun = True
@@ -46,10 +47,10 @@ except IndexError:
     n_jobs = 1
     rank = 0
 
-if (rank == 0):
-    network_parameters = Set_parameters(abelrun)     # updating parameters file
+# if (rank == 0):
+#     network_parameters = Set_parameters(abelrun)     # updating parameters file
 
-#network_parameters = ps.ParameterSet(PS.params_path)
+network_parameters = ps.ParameterSet(PS.params_path)
 
 ################################################################
 # Creating kernels for mapping population firing rates to LFP: #
