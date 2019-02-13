@@ -54,7 +54,7 @@ def Create_fake_spikes(network_parameters):
     # The LGN spikes: #
     ###################
     in_file = open(dir + "/" + label + "-py-" + "LGN-%.i-0.gdf" % NI, "w")
-    in_time = "500.000"     # time when we pretend all the inhibitories spike
+    in_time = "500.000"     # time when we pretend all the LGN neurons spike
 
     for i in range(NE+1 + NI, NE + NI + N_LGN + 1):
         in_file.write(str(i) + " " + in_time + "\r\n" )

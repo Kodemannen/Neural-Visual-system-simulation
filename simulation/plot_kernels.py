@@ -28,8 +28,6 @@ def Plot_kernels(network_parameters, ax=0):
         LGN_kernel = file["LGN"][:] *1000
 
 
-
-
     space = 10      # uV 
 
     time = np.linspace(0,200,201)
@@ -70,8 +68,8 @@ def Plot_kernels(network_parameters, ax=0):
         #line=barlength
         line = barlength#/scale # barlength uV
 
-        ax.plot([posx,posx],[posy, posy+line], color="k", linewidth=2)
-        ax.text(posx + 2,posy+line/2-0.1, "$%s \mu V$" % barlength)
+        ax.plot([posx,posx],[posy, posy+line], color="k", linewidth=3)
+        ax.text(posx*1.01, posy+line/2*0.8, "$%s \mu V$" % barlength)
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
