@@ -113,7 +113,7 @@ dt = network_parameters.dt
 frequencies_Hz = np.array([4, 24])      # one with linear effects and one with non linear
 frequencies = frequencies_Hz/1000.  
 
-step = 5
+step = 1
 A = np.arange(0., 15+step, step=step)      # amplitudes Hz
 b = 15                                     # mean rate
 
@@ -130,13 +130,19 @@ for a in A:
 rank = rank     
 n_jobs_ = n_jobs
 
-n_sims_per_state = 10
+n_sims_per_state = 500
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
 
 t_start = time.time()
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
+
+# on average 0.5 min per simulation
+# ca sim time per job = 0.5 * n_total_sims / n_jobs min
+#print(0.5*n_total_sims/32)
+
+
 for sim_index in sim_indices:
 
     state_index = sim_index % n_states 
@@ -155,7 +161,7 @@ for sim_index in sim_indices:
     #Plot_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
     
     #plt.plot(population_rates[0])
-    #plt.show()
+    #plt.show()cd
     
     
 t_stop = time.time() - t_start
