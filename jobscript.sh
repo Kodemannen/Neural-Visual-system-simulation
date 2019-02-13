@@ -30,7 +30,7 @@ cd simulation
 #     python set_parameters.py abel 
 #     echo "setting parameters"
 # fi
-params_path=$(python set_parameters.py abel) 
+
 python main.py $SLURM_ARRAY_TASK_ID $SLURM_ARRAY_TASK_COUNT $params_path
 
 # Run this file by: 

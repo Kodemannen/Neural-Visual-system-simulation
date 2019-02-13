@@ -49,9 +49,9 @@ except IndexError:
 
 # if (rank == 0):
 #     network_parameters = Set_parameters(abelrun)     # updating parameters file
-
-network_parameters = ps.ParameterSet(PS.params_path)
-
+print(params_path)
+network_parameters = ps.ParameterSet(params_path)
+exit("ferdig")
 ################################################################
 # Creating kernels for mapping population firing rates to LFP: #
 ################################################################
