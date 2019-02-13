@@ -36,10 +36,10 @@ from save_population_rates import Save_population_rates
 try:
     rank = int(sys.argv[1])         # job array index
     n_jobs = int(sys.argv[2])       # total number of jobs
-    abel = sys.argv[3]              # whether simulation is done on Abel or not
-    if abel.lower() == "abel":
-        abelrun = True
-        matplotlib.use("Agg")
+    # abel = sys.argv[3]              # whether simulation is done on Abel or not
+    # if abel.lower() == "abel":
+    abelrun = True
+    matplotlib.use("Agg")
 
 except IndexError:
     abelrun = False
@@ -59,7 +59,7 @@ network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
 if network_parameters.create_kernel:
     Create_kernels(network_parameters)
 Plot_kernels(network_parameters)
-exit("Done")
+
 # ############################################
 # # Part 1 and 2: Sinisoidal input from LGN: #
 # ############################################
@@ -128,20 +128,21 @@ for a in A:
 ############################################
 rank = rank     
 n_jobs_ = n_jobs
-n_sims_per_state = 1
+
+n_sims_per_state = 5
 n_states = len(states)
+
 n_total_sims = n_sims_per_state*n_states
-sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 
 t_start = time.time()
+sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
+for sim_index in sim_indices:
 
-for sim_index in range(len(sim_indices)):
     state_index = sim_index % n_states 
     current_state = states[state_index]
-    
     amplitude, freq = current_state
-    amplitude = 5.
-    rates = amplitude*np.sin(2*np.pi*freq*rate_times) + b        #A*np.sin(2*np.pi*matr) + b
+    
+    rates = amplitude*np.sin(2*np.pi*freq*rate_times) + b        
 
     events = Run_simulation(rate_times, rates,
                             network_parameters,
@@ -150,12 +151,12 @@ for sim_index in range(len(sim_indices)):
     LFP, population_rates = Calculate_LFP(events, network_parameters)
     Save_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
     Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(current_state)) ### IMPLEMENT
+    #Plot_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
     
-    Plot_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
-    plt.plot(population_rates[0])
-    plt.show()
+    #plt.plot(population_rates[0])
+    #plt.show()
     
-    break
+    
 t_stop = time.time() - t_start
 print(f"Run time = {t_stop/(60**2)} h")
 print(f"Run time = {t_stop/(60)} min")

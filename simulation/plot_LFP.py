@@ -29,7 +29,7 @@ def Plot_LFP(LFP, network_parameters, sim_index, class_label, ax=0):
     # Normalize: #
     ##############
     scale = np.max( [np.max(abs(LFP[i])) for i in range(k)] )
-    LFP /= scale
+
 
     for i in range(k):
         ax.plot(LFP[i] + space*(k-i), color = "black")
@@ -39,13 +39,12 @@ def Plot_LFP(LFP, network_parameters, sim_index, class_label, ax=0):
     # Adding scalebar: #
     ####################
     if scalebar:
-        posx = PS.simtime
-        posy = 3.5*space
-        barlength = 10  # uV
-        line = barlength/scale * 1/1000. # barlength uV
+        posx = 1021 # ms
+        posy = 2.*space
+        barlength = 0.25  # mV
 
-        ax.plot([posx,posx],[posy-line/2, posy+line/2], color="k", linewidth=3)
-        ax.text(posx + 2,posy-0.1, "$%s \mu V$" % barlength)
+        ax.plot([posx,posx],[posy, posy+barlength], color="k", linewidth=3)
+        ax.text(posx*1.01,  posy+barlength/2*0.7, " %s mV" % barlength)
 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)

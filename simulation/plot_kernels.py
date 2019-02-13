@@ -62,7 +62,7 @@ def Plot_kernels(network_parameters, ax=0):
     ####################
     if scalebar:
         posx = time[-1]
-        posy = 3*space
+        posy = 2*space
         barlength = 0.1   # uV
         #print(barlength*scale, "uV")
         #line=barlength
@@ -84,13 +84,13 @@ def Plot_kernels(network_parameters, ax=0):
     ax.set_xlabel("Time (ms)")
 
     ax.set_title("Kernels")
-    ax.legend(loc=4, prop={"size": 12})
+    ax.legend(loc=1, prop={"size": 12})
     plt.tight_layout()
     if single_plot:
 
         plt.savefig(PS.kernel_plot) ### remove
         #plt.savefig("asdsdd")
-        plt.show()
+        #plt.show()
         plt.close()
 # if __name__=="__main__":
 

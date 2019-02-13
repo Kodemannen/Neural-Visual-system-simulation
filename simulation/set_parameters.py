@@ -95,7 +95,8 @@ def Set_parameters(abelrun):
         predict_LFP = True,
         label ="spikes",    # label for the spike files
         save_spikes=False,
-        dt=0.1,             # Simulation time resolution in ms
+        dt=0.1,             # (ms) Simulation time resolution 
+
         simtime = 1001.,    # Simulation time in ms
         create_kernel_simtime = 600,    # simtime for when creating kernel
 
@@ -133,7 +134,7 @@ def Set_parameters(abelrun):
 
         n_channels = 6, # number of LFP recording channels
 
-        order=2500,     # network scaling factor
+        order=25,     # network scaling factor
     ))
 
     ################################################

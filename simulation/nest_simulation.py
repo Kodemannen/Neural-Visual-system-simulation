@@ -76,9 +76,9 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     nodes_IN = nest.Create("iaf_psc_delta", NI)     # inhibitory neurons
     nodes_LGN = nest.Create("parrot_neuron", N_LGN) # LGN neurons for recording their synapse activity
 
-    # Initializing nodes to be randomly distributed around the resting potential
-    nest.SetStatus(nodes_EX, "V_m", np.random.rand(NE)*PS["V_m"] )
-    nest.SetStatus(nodes_IN, "V_m", np.random.rand(NI)*PS["V_m"] )
+    # Initializing nodes to be randomly distributed around the threshold potential
+    nest.SetStatus(nodes_EX, "V_m", np.random.rand(NE)*PS.theta )
+    nest.SetStatus(nodes_IN, "V_m", np.random.rand(NI)*PS.theta )
     ## SET INITIAL V_m STATUS HERE!
 
     # Same connection rules for all:
