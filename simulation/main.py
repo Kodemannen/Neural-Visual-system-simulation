@@ -149,7 +149,6 @@ for sim_index in sim_indices:
     current_state = states[state_index]
     amplitude, freq = current_state
     
-    amplitude = 0
     rates = amplitude*np.sin(2*np.pi*freq*rate_times) + b        
     
     events = Run_simulation(rate_times, rates,
