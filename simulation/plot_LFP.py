@@ -61,7 +61,7 @@ def Plot_LFP(LFP, network_parameters, sim_index, class_label, ax=0):
     #ax.legend(loc=4, prop={"size": 12})
 
     if single_plot:
-        plt.savefig(filename) ### remove
+        plt.savefig(filename+".pdf") ### remove
         plt.close()
         #plt.show()
     return ax
