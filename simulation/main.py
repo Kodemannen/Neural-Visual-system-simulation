@@ -47,11 +47,11 @@ except IndexError:
     n_jobs = 1
     rank = 0
 
-# if (rank == 0):
-#     network_parameters = Set_parameters(abelrun)     # updating parameters file
-print(params_path)
+if abelrun==False:
+    network_parameters = Set_parameters(abelrun)     # updating parameters file
+    params_path = network_parameters.params_path
+
 network_parameters = ps.ParameterSet(params_path)
-exit("ferdig")
 ################################################################
 # Creating kernels for mapping population firing rates to LFP: #
 ################################################################
@@ -113,7 +113,7 @@ dt = network_parameters.dt
 frequencies_Hz = np.array([4, 24])      # one with linear effects and one with non linear
 frequencies = frequencies_Hz/1000.  
 
-step = 0.5
+step = 5
 A = np.arange(0., 15+step, step=step)      # amplitudes Hz
 b = 15                                     # mean rate
 
@@ -130,7 +130,7 @@ for a in A:
 rank = rank     
 n_jobs_ = n_jobs
 
-n_sims_per_state = 5
+n_sims_per_state = 10
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
@@ -159,5 +159,6 @@ for sim_index in sim_indices:
     
     
 t_stop = time.time() - t_start
+print(f"sims_per_job = {n_total_sims/n_jobs}" )
 print(f"Run time = {t_stop/(60**2)} h")
 print(f"Run time = {t_stop/(60)} min")
