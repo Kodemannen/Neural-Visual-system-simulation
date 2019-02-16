@@ -6,8 +6,10 @@ import os
 from parameters import ParameterSet
 import h5py
 import matplotlib.pyplot as plt
+first = "#f58231 #4363d8 k".split()
 
-
+pop_colors = "#a6cee3 #1f78b4 #141039".split()
+pop_colors = first
 def Plot_kernels(network_parameters, ax=0):
     if ax == 0:
         ax = plt.axes()
@@ -51,11 +53,10 @@ def Plot_kernels(network_parameters, ax=0):
     # IN_kernel /= scale
     # LGN_kernel /= scale
     #print(([np.min((EX_kernel)), np.min((IN_kernel)), np.min((LGN_kernel))]))
-
     for i in range(n_channels):
-        ax.plot(EX_kernel[i]  + space*(n_channels-i), color="#f58231", label="EX" if i==1 else None)
-        ax.plot(IN_kernel[i]  + space*(n_channels-i),  color="#4363d8", label="IN" if i==1 else None)
-        ax.plot(LGN_kernel[i] + space*(n_channels-i), color="k", label="LGN" if i==1 else None)
+        ax.plot(EX_kernel[i]  + space*(n_channels-i), color=pop_colors[0], label="EX" if i==1 else None)
+        ax.plot(IN_kernel[i]  + space*(n_channels-i),  color=pop_colors[1], label="IN" if i==1 else None)
+        ax.plot(LGN_kernel[i] + space*(n_channels-i), color=pop_colors[2], label="LGN" if i==1 else None)
 
     ####################
     # Adding scalebar: #

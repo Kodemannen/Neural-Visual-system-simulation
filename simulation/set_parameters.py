@@ -97,7 +97,7 @@ def Set_parameters(abelrun):
         save_spikes=False,
         dt=0.1,             # (ms) Simulation time resolution 
 
-        simtime = 1001.,    # Simulation time in ms
+        simtime = 10001.,    # Simulation time in ms
         create_kernel_simtime = 600,    # simtime for when creating kernel
 
         #nest_seed=int(time.time()), # base for seeds, will be updated for each individual parameterset
@@ -114,7 +114,7 @@ def Set_parameters(abelrun):
         # Neuron and synapse parameters: #
         ##################################
         J_EX = .1,     # excitatory weight, unit: nS ?
-        g=4.,         # ratio inhibitory weight/excitatory weight (before: 5.0)
+        g=4.5,         # ratio inhibitory weight/excitatory weight (before: 5.0)
         eta=.8,        # external rate relative to threshold rate
         #background_rate = 10.0,  # poissonian background rate
 

@@ -59,8 +59,8 @@ network_parameters = ps.ParameterSet(params_path)
 network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
 if network_parameters.create_kernel:
     Create_kernels(network_parameters)
-Plot_kernels(network_parameters)
-
+#Plot_kernels(network_parameters)
+#exit("Kernel created")
 # ############################################
 # # Part 1 and 2: Sinisoidal input from LGN: #
 # ############################################
@@ -106,16 +106,17 @@ Plot_kernels(network_parameters)
 
 
 #############################################################
-# Part 3: Sinusioidal input from LGN with varying amplitude #
+# Part 4: Sinusioidal input from LGN with varying amplitude #
 #############################################################
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
-frequencies_Hz = np.array([4, 24])      # one with linear effects and one with non linear
+frequencies_Hz = np.array([4, 12, 24, 36])      # one with linear effects and one with non linear
+frequencies_Hz = np.array([36])
 frequencies = frequencies_Hz/1000.  
 
-step = 1
-A = np.arange(0., 15+step, step=step)      # amplitudes Hz
-b = 15                                     # mean rate
+step = 6
+A = np.arange(0., 60+step, step=step)      # amplitudes Hz
+b = 0                                     # mean rate
 
 rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
@@ -130,7 +131,7 @@ for a in A:
 rank = rank     
 n_jobs_ = n_jobs
 
-n_sims_per_state = 500
+n_sims_per_state = 1
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
@@ -138,9 +139,20 @@ n_total_sims = n_sims_per_state*n_states
 t_start = time.time()
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 
-# on average 0.5 min per simulation
+# on average 0.5 min per simulation with simtime = 1001 ms
 # ca sim time per job = 0.5 * n_total_sims / n_jobs min
 #print(0.5*n_total_sims/32)
+
+
+############################
+# With simtime = 10001 ms: #
+# n_total_sims = 11 for testing
+
+
+
+#################################
+# reading some missing indices: #
+#################################
 
 
 for sim_index in sim_indices:
@@ -148,22 +160,22 @@ for sim_index in sim_indices:
     state_index = sim_index % n_states 
     current_state = states[state_index]
     amplitude, freq = current_state
-    
-    rates = amplitude*np.sin(2*np.pi*freq*rate_times) + b        
+
+    rates = amplitude*(np.sin(2*np.pi*freq*rate_times))*((np.sin(2*np.pi*freq*rate_times)>0))
 
     events = Run_simulation(rate_times, rates,
                             network_parameters,
                             simulation_index=sim_index,
                             class_label = str(current_state))
+
     LFP, population_rates = Calculate_LFP(events, network_parameters)
     Save_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
     Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(current_state)) ### IMPLEMENT
     #Plot_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
-    
     #plt.plot(population_rates[0])
     #plt.show()cd
     
-    
+
 t_stop = time.time() - t_start
 print(f"sims_per_job = {n_total_sims/n_jobs}" )
 print(f"Run time = {t_stop/(60**2)} h")
