@@ -111,11 +111,11 @@ if network_parameters.create_kernel:
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 frequencies_Hz = np.array([4, 12, 24, 36])      # one with linear effects and one with non linear
-frequencies_Hz = np.array([36])
+
 frequencies = frequencies_Hz/1000.  
 
-step = 6
-A = np.arange(0., 60+step, step=step)      # amplitudes Hz
+step = 1
+A = np.arange(0., 25+step, step=step)      # amplitudes Hz
 b = 0                                     # mean rate
 
 rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
@@ -131,7 +131,7 @@ for a in A:
 rank = rank     
 n_jobs_ = n_jobs
 
-n_sims_per_state = 1
+n_sims_per_state = 500
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
@@ -147,7 +147,9 @@ sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 ############################
 # With simtime = 10001 ms: #
 # n_total_sims = 11 for testing
-
+# running 11 sims took 22.913775674502055 min = 0.3818962612417009 h
+# dvs total simtime per job = 0.3819 * n_total_sims / n_jobs
+# setter n_jobs = 32
 
 
 #################################
