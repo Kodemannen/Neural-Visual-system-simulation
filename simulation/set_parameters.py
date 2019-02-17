@@ -97,7 +97,7 @@ def Set_parameters(abelrun):
         save_spikes=False,
         dt=0.1,             # (ms) Simulation time resolution 
 
-        simtime = 10001.,    # Simulation time in ms
+        simtime = 1001.,    # Simulation time in ms
         create_kernel_simtime = 600,    # simtime for when creating kernel
 
         #nest_seed=int(time.time()), # base for seeds, will be updated for each individual parameterset
