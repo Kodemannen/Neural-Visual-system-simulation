@@ -162,21 +162,36 @@ for sim_index in sim_indices:
     state_index = sim_index % n_states 
     current_state = states[state_index]
     amplitude, freq = current_state
-
-    rates = amplitude*(np.sin(2*np.pi*freq*rate_times))*((np.sin(2*np.pi*freq*rate_times)>0))
-
+    amplitude = 10
+    freq = 4
+    freq /= 1000
+    #rates = amplitude*(np.sin(2*np.pi*freq*rate_times))*((np.sin(2*np.pi*freq*rate_times)>0))
+    rates = amplitude*(np.sin(2*np.pi*freq*rate_times)) + 15
+    #plt.plot(rates)
+    #plt.show()
     events = Run_simulation(rate_times, rates,
                             network_parameters,
                             simulation_index=sim_index,
                             class_label = str(current_state))
 
+
+
     LFP, population_rates = Calculate_LFP(events, network_parameters)
+    plt.plot(population_rates[0])
+    plt.show()
     Save_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
     Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(current_state)) ### IMPLEMENT
-    #Plot_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
-    #plt.plot(population_rates[0])
-    #plt.show()cd
+    #ax = Plot_LFP(LFP, network_parameters, sim_index, class_label=str(current_state))
     
+    ax = Plot_LFP(LFP)
+    plt.show(ax)
+    events_EX, events_IN, events_LGN = events
+    plt.scatter(events_EX["times"], events_EX["senders"],color="red")
+    plt.scatter(events_IN["times"], events_IN["senders"],color="green")
+    plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue")
+    #plt.plot(population_rates[0])
+    plt.show()
+    exit("egg")
 
 t_stop = time.time() - t_start
 print(f"sims_per_job = {n_total_sims/n_jobs}" )

@@ -159,7 +159,7 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     times = voltages["events"]["times"]
 
     plt.plot(times, volt)
-    plt.close()
+    #plt.close()
     #plt.show()
 
 

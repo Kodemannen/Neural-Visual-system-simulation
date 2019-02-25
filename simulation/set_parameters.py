@@ -115,7 +115,7 @@ def Set_parameters(abelrun):
         ##################################
         J_EX = .1,     # excitatory weight, unit: nS ?
         g=4.5,         # ratio inhibitory weight/excitatory weight (before: 5.0)
-        eta=.8,        # external rate relative to threshold rate
+        eta=0.81,        # external rate relative to threshold rate
         #background_rate = 10.0,  # poissonian background rate
 
         epsilon=0.1,    # connection probability
@@ -163,14 +163,13 @@ def Set_parameters(abelrun):
         #C_background = PS.CE,
         C_background = 1,
 
-        threshold_rate = PS.theta/(PS.J_EX*PS.tauMem) * 1000.  # Hz, that's why we
-        # have to multiply by 1000. THIS IS ASSUMING C_background = 1
+        threshold_rate = PS.theta/(PS.J_EX*PS.tauMem),  #kHz
     ))
 
     PS.update(dict(
-        background_rate = PS.eta*PS.threshold_rate,
-    ))
-
+        background_rate = PS.eta*PS.threshold_rate*1000,    # Hz
+    ))  # nest uses Hz while threshold_rate is in kHz since tauMem is in ms
+        # to 15 kHz = 15 000 Hz, etc. so we have to *1000
 
     ##########################
     # hybridLFPy parameters: #
