@@ -162,13 +162,8 @@ for sim_index in sim_indices:
     state_index = sim_index % n_states 
     current_state = states[state_index]
     amplitude, freq = current_state
-    amplitude = 10
-    freq = 4
-    freq /= 1000
-    #rates = amplitude*(np.sin(2*np.pi*freq*rate_times))*((np.sin(2*np.pi*freq*rate_times)>0))
-    rates = amplitude*(np.sin(2*np.pi*freq*rate_times)) + 15
-    #plt.plot(rates)
-    #plt.show()
+
+    rates = amplitude*(np.sin(2*np.pi*freq*rate_times))*((np.sin(2*np.pi*freq*rate_times)>0))
     events = Run_simulation(rate_times, rates,
                             network_parameters,
                             simulation_index=sim_index,
