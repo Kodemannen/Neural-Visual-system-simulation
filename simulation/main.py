@@ -87,7 +87,7 @@ n_jobs = n_jobs
 
 #sim_index = int(training_data_per_freq*rank)
 states = frequencies
-n_sims_per_state = 10
+n_sims_per_state = 20
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
