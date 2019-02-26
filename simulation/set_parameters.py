@@ -115,7 +115,8 @@ def Set_parameters(abelrun):
         ##################################
         J_EX = .1,     # excitatory weight, unit: nS ?
         g=4.5,         # ratio inhibitory weight/excitatory weight (before: 5.0)
-        eta=0.81,        # external rate relative to threshold rate
+        eta=0.0,        # external rate relative to threshold rate
+        mean_eta=2.3,
         #background_rate = 10.0,  # poissonian background rate
 
         epsilon=0.1,    # connection probability
@@ -161,7 +162,7 @@ def Set_parameters(abelrun):
     PS.update(dict(
         C_tot = PS.CE + PS.CI, #+ PS.C_LGN + PS.C_background ??,  # total number of synapses per neuron
         #C_background = PS.CE,
-        C_background = 1,
+        C_background = 1.5,
 
         threshold_rate = PS.theta/(PS.J_EX*PS.tauMem),  #kHz
     ))

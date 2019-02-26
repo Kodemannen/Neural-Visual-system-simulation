@@ -41,6 +41,7 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     dt = PS.dt
     delay = PS.delay     # synaptic delay
     background_rate = PS.background_rate
+
     simtime = PS.simtime
     J_background = PS.J_background
 
@@ -158,7 +159,7 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     volt = voltages["events"]["V_m"]
     times = voltages["events"]["times"]
 
-    plt.plot(times, volt)
+    #plt.plot(times, volt)
     #plt.close()
     #plt.show()
 
