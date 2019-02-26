@@ -73,7 +73,7 @@ frequencies = frequencies_Hz/1000.          # Hz
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
-amplitude = 3   # amplitude of rate oscillation
+amplitude = 3   # Hz, amplitude of rate oscillation
 b = 0.  # mean rate
 #matr = np.outer(frequencies, rate_times)
 #rates = A*np.sin(2*np.pi*matr) + b      # each row is a time series
@@ -81,13 +81,15 @@ b = 0.  # mean rate
 ############################################
 # Running point neuron simulation in Nest: #
 ############################################
+# avg 1.1 min per sim with amplitude=3, mean_eta = 2.3
+# simtime=1001 ms, 
 t_start = time.time()
 rank = rank    
 n_jobs = n_jobs
 
 #sim_index = int(training_data_per_freq*rank)
 states = frequencies
-n_sims_per_state = 20
+n_sims_per_state = 1000
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states

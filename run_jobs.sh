@@ -7,4 +7,4 @@ cd ..
 #sbatch --array=0-7 n_jobs jobscript.sh
 #sbatch --array=0-31 jobscript.sh 
 
-sbatch --array=0-1 jobscript.sh
+sbatch --array=0-31 jobscript.sh
