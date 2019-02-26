@@ -43,5 +43,5 @@ def Calculate_LFP(events, network_parameters):
     for i in range(PS.n_channels):
         LFP[i] =   np.convolve(rates_EX, EX_kernel[i], mode="same") \
                  + np.convolve(rates_IN, IN_kernel[i], mode="same") \
-                 #+ np.convolve(rates_LGN, LGN_kernel[i], mode="same") # unit mV
+                 + np.convolve(rates_LGN, LGN_kernel[i], mode="same") # unit mV
     return LFP, [rates_EX, rates_IN, rates_LGN, bins] 
