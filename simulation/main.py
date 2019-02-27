@@ -76,7 +76,7 @@ if network_parameters.create_kernel:
 
 # amplitude = 3   # Hz, amplitude of rate oscillation
 # b = 0.  # mean rate
-#states = frequencies
+# states = frequencies_Hz
 
 
 ####################################
@@ -113,11 +113,7 @@ n_sims_per_state = 500
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
-# print(n_total_sims)
-# print(n_total_sims / 128 * 1.25, "min")
-# print(n_total_sims / 128 * 1.25 / 60, "h")
 
-# exit("bare tester")
 
 t_start = time.time()
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
@@ -136,6 +132,8 @@ for sim_index in sim_indices:
 
     state_index = sim_index % n_states
     amplitude, freq=states[state_index]
+    #freq=states[state_index]
+
     freq=freq/1000      # because rate_times is in ms
 
     ##################################################
