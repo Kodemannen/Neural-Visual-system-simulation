@@ -90,11 +90,8 @@ frequencies = np.array([4, 12, 24, 36])
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
-b = 0.  # mean rate
 step = 1
-A = np.arange(0., 20+step, step=step)      # amplitudes Hz
-b = 0                                     # mean rate
-
+A = np.arange(1., 15+step, step=step)      # amplitudes Hz
 rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
 states = []
@@ -102,7 +99,7 @@ for a in A:
     for f in frequencies:
         states.append((a,f))
 
-states = [(20, 20)]
+
 ############################################
 # Running point neuron simulation in Nest: #
 ############################################
@@ -112,10 +109,15 @@ t_start = time.time()
 rank = rank    
 n_jobs = n_jobs
 
-n_sims_per_state = 20
+n_sims_per_state = 500
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
+# print(n_total_sims)
+# print(n_total_sims / 128 * 1.25, "min")
+# print(n_total_sims / 128 * 1.25 / 60, "h")
+
+# exit("bare tester")
 
 t_start = time.time()
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
