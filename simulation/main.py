@@ -139,7 +139,7 @@ for sim_index in sim_indices:
     ##################################################
     # Setting new eta value to keep the mean to 2.3: #
     ##################################################
-    eta_LGN = amplitude/2 / threshold_rate_LGN
+    eta_LGN = amplitude / threshold_rate_LGN
     eta_bg = network_parameters.mean_eta - eta_LGN
     bg_rate = eta_bg*network_parameters.threshold_rate * 1000 # *1000 because nest uses Hz
 
