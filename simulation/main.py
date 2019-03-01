@@ -63,41 +63,41 @@ if network_parameters.create_kernel:
 
 
 
-# ############################################
-# # Part 1 rerun: Sinisoidal input from LGN: #
-# ############################################
-simtime = network_parameters.simtime    # simulation time (ms)
-dt = network_parameters.dt
-
-frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 96])  
-frequencies = frequencies_Hz/1000.          # Hz
-
-rate_times = np.arange(dt, simtime+dt, dt*10)
-
-amplitude = 3   # Hz, amplitude of rate oscillation
-b = 0.  # mean rate
-states = frequencies_Hz
-
-
-# ####################################
-# # Part 2 rerun: Varying amplitude: #
-# ####################################
-
+# # ############################################
+# # # Part 1 rerun: Sinisoidal input from LGN: #
+# # ############################################
 # simtime = network_parameters.simtime    # simulation time (ms)
 # dt = network_parameters.dt
 
-# frequencies = np.array([4, 12, 24, 36])
+# frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 96])  
+# frequencies = frequencies_Hz/1000.          # Hz
 
 # rate_times = np.arange(dt, simtime+dt, dt*10)
 
-# step = 1
-# A = np.arange(1., 15+step, step=step)      # amplitudes Hz
-# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+# amplitude = 3   # Hz, amplitude of rate oscillation
+# b = 0.  # mean rate
+# states = frequencies_Hz
 
-# states = []
-# for a in A:
-#     for f in frequencies:
-#         states.append((a,f))
+
+####################################
+# Part 2 rerun: Varying amplitude: #
+####################################
+
+simtime = network_parameters.simtime    # simulation time (ms)
+dt = network_parameters.dt
+
+frequencies = np.array([4, 12, 24, 36])
+
+rate_times = np.arange(dt, simtime+dt, dt*10)
+
+step = 1
+A = np.arange(1., 30+step, step=step)      # amplitudes Hz
+rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+
+states = []
+for a in A:
+    for f in frequencies:
+        states.append((a,f))
 
 
 ############################################
@@ -128,45 +128,45 @@ if rank == 0:
         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
         filen.write("states="+str(states) + "\n")
 
-sim_indices=[0,1,2,3,4,5,6]
 for sim_index in sim_indices:
 
     state_index = sim_index % n_states
-    #amplitude, freq=states[state_index]
-    freq=states[state_index]
+    amplitude, freq=states[state_index]
+    #freq=states[state_index]
 
     freq=freq/1000      # because rate_times is in ms
+    if amplitude > 15:
 
-    ##################################################
-    # Setting new eta value to keep the mean to 2.3: #
-    ##################################################
-    eta_LGN = amplitude / threshold_rate_LGN
-    eta_bg = network_parameters.mean_eta - eta_LGN
-    bg_rate = eta_bg*network_parameters.threshold_rate * 1000 # *1000 because nest uses Hz
+        ##################################################
+        # Setting new eta value to keep the mean to 2.3: #
+        ##################################################
+        eta_LGN = amplitude / threshold_rate_LGN
+        eta_bg = network_parameters.mean_eta - eta_LGN
+        bg_rate = eta_bg*network_parameters.threshold_rate * 1000 # *1000 because nest uses Hz
 
-    network_parameters.eta=eta_bg  
-    network_parameters.background_rate=bg_rate
+        network_parameters.eta=eta_bg  
+        network_parameters.background_rate=bg_rate
 
-    rates = amplitude*(np.sin(2*np.pi*freq*rate_times)) + amplitude # avg rate = amplitude/2
-    
-    events = Run_simulation(rate_times,
-                    rates,
-                    network_parameters,
-                    simulation_index=sim_index)
-    LFP, population_rates = Calculate_LFP(events, network_parameters)
-    Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
-    Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(states[state_index]))
+        rates = amplitude*(np.sin(2*np.pi*freq*rate_times)) + amplitude # avg rate = amplitude/2
+        
+        events = Run_simulation(rate_times,
+                        rates,
+                        network_parameters,
+                        simulation_index=sim_index)
+        LFP, population_rates = Calculate_LFP(events, network_parameters)
+        Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
+        Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(states[state_index]))
 
-    # ax = Plot_LFP(LFP)
-    # plt.show(ax)
-    # events_EX, events_IN, events_LGN = events
-    # plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
-    # plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
-    # plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
-    # #plt.plot(population_rates[0])
-    # print(amplitude, freq)
-    # plt.show()
-    # exit("egg")
+        # ax = Plot_LFP(LFP)
+        # plt.show(ax)
+        # events_EX, events_IN, events_LGN = events
+        # plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
+        # plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
+        # plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
+        # #plt.plot(population_rates[0])
+        # print(amplitude, freq)
+        # plt.show()
+        # exit("egg")
 
 t_stop = time.time() - t_start
 print(f"sims_per_job = {n_total_sims/n_jobs}" )
