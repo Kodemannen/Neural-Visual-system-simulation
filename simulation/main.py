@@ -63,41 +63,41 @@ if network_parameters.create_kernel:
 
 
 
-# # ############################################
-# # # Part 1 rerun: Sinisoidal input from LGN: #
-# # ############################################
-# simtime = network_parameters.simtime    # simulation time (ms)
-# dt = network_parameters.dt
-
-# frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 96])  
-# frequencies = frequencies_Hz/1000.          # Hz
-
-# rate_times = np.arange(dt, simtime+dt, dt*10)
-
-# amplitude = 3   # Hz, amplitude of rate oscillation
-# b = 0.  # mean rate
-# states = frequencies_Hz
-
-
-####################################
-# Part 2 rerun: Varying amplitude: #
-####################################
-
+# ############################################
+# # Part 1 rerun: Sinisoidal input from LGN: #
+# ############################################
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
-frequencies = np.array([4, 12, 24, 36])
+frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 96])  
+frequencies = frequencies_Hz/1000.          # Hz
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
-step = 1
-A = np.arange(1., 15+step, step=step)      # amplitudes Hz
-rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+amplitude = 3   # Hz, amplitude of rate oscillation
+b = 0.  # mean rate
+states = frequencies_Hz
 
-states = []
-for a in A:
-    for f in frequencies:
-        states.append((a,f))
+
+# ####################################
+# # Part 2 rerun: Varying amplitude: #
+# ####################################
+
+# simtime = network_parameters.simtime    # simulation time (ms)
+# dt = network_parameters.dt
+
+# frequencies = np.array([4, 12, 24, 36])
+
+# rate_times = np.arange(dt, simtime+dt, dt*10)
+
+# step = 1
+# A = np.arange(1., 15+step, step=step)      # amplitudes Hz
+# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+
+# states = []
+# for a in A:
+#     for f in frequencies:
+#         states.append((a,f))
 
 
 ############################################
@@ -131,8 +131,8 @@ if rank == 0:
 for sim_index in sim_indices:
 
     state_index = sim_index % n_states
-    amplitude, freq=states[state_index]
-    #freq=states[state_index]
+    #amplitude, freq=states[state_index]
+    freq=states[state_index]
 
     freq=freq/1000      # because rate_times is in ms
 
