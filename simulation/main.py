@@ -122,12 +122,13 @@ threshold_rate_LGN = network_parameters.theta / (network_parameters.J_LGN* netwo
 
 if rank == 0:
     with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
+        filen.write("noe om simuleringen")
         filen.write("n_jobs=" + str(n_jobs) + "\n")
         filen.write("n_sims_per_state=" + str(n_sims_per_state) + "\n")
         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
         filen.write("states="+str(states) + "\n")
 
-
+sim_indices=[0,1,2,3,4,5,6]
 for sim_index in sim_indices:
 
     state_index = sim_index % n_states
