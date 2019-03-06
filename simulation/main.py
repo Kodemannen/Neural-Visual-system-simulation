@@ -130,7 +130,7 @@ simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
 #frequencies = np.array([4, 12, 24, 36])
-frequencies = np.array([36])
+frequencies = np.array([4, 36])
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
 step = 1
