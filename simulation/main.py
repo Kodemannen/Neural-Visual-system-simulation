@@ -101,19 +101,41 @@ if network_parameters.create_kernel:
 #         states.append((a,f))
 
 
-############################
-# Part 3: Sawtooth signal #  
-###########################
+# ############################
+# # Part 3: Sawtooth signal #  
+# ###########################
+
+# simtime = network_parameters.simtime    # simulation time (ms)
+# dt = network_parameters.dt
+
+# frequencies = np.array([4, 12, 24, 36])
+
+# rate_times = np.arange(dt, simtime+dt, dt*10)
+
+# step = 1
+# A = np.arange(1., 30+step, step=step)      # amplitudes Hz
+# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+
+# states = []
+# for a in A:
+#     for f in frequencies:
+#         states.append((a,f))
+
+
+###################################
+# Part 3b: Reverse awtooth signal #  
+###################################
 
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
-frequencies = np.array([4, 12, 24, 36])
-
+#frequencies = np.array([4, 12, 24, 36])
+frequencies = np.array([36])
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
 step = 1
-A = np.arange(1., 30+step, step=step)      # amplitudes Hz
+#A = np.arange(1., 30+step, step=step)      # amplitudes Hz
+A = np.array([3,10,20,30])
 rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
 states = []
@@ -123,29 +145,29 @@ for a in A:
 
 
 
+
 ############################################
 # Running point neuron simulation in Nest: #
 ############################################
 # avg 1.1 min per sim with amplitude=3, mean_eta = 2.3
 # simtime=1001 ms, 
-t_start = time.time()
 rank = rank    
 n_jobs = n_jobs
 
 n_sims_per_state = 500
 n_states = len(states)
-
 n_total_sims = n_sims_per_state*n_states
-
-
-t_start = time.time()
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
+
 
 threshold_rate_LGN = network_parameters.theta / (network_parameters.J_LGN* network_parameters.tauMem * network_parameters.C_LGN) * 1000     # * 1000 to get it in Hz
 
+
+t_start = time.time()
+
 if rank == 0:
     with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
-        filen.write("Part 3: Sawtooth signal")
+        filen.write("Part 3b: Reverse sawtooth signal \n")
         filen.write("n_jobs=" + str(n_jobs) + "\n")
         filen.write("n_sims_per_state=" + str(n_sims_per_state) + "\n")
         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
@@ -169,7 +191,7 @@ for sim_index in sim_indices:
     network_parameters.eta=eta_bg  
     network_parameters.background_rate=bg_rate
 
-    rates = amplitude*(signal.sawtooth(2*np.pi*freq*rate_times)) + amplitude # avg rate = amplitude/2
+    rates = np.flip(amplitude*(signal.sawtooth(2*np.pi*freq*rate_times)) + amplitude) # avg rate = amplitude/2
 
     events = Run_simulation(rate_times,
                     rates,
