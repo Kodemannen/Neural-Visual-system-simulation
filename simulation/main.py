@@ -188,7 +188,7 @@ t_start = time.time()
 
 if rank == 0:
     with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
-        filen.write("Part 3b: Reverse sawtooth signal \n")
+        filen.write("Part 4: effective eta = 1.2 \n")
         filen.write("n_jobs=" + str(n_jobs) + "\n")
         filen.write("n_sims_per_state=" + str(n_sims_per_state) + "\n")
         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
@@ -212,15 +212,15 @@ for sim_index in sim_indices:
     network_parameters.eta=eta_bg  
     network_parameters.background_rate=bg_rate
 
-    rates = np.flip(amplitude*(signal.sawtooth(2*np.pi*freq*rate_times)) + amplitude) # avg rate = amplitude/2
+    # rates = np.flip(amplitude*(signal.sawtooth(2*np.pi*freq*rate_times)) + amplitude) # avg rate = amplitude/2
 
-    events = Run_simulation(rate_times,
-                    rates,
-                    network_parameters,
-                    simulation_index=sim_index)
-    LFP, population_rates = Calculate_LFP(events, network_parameters)
-    Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
-    Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(states[state_index]))
+    # events = Run_simulation(rate_times,
+    #                 rates,
+    #                 network_parameters,
+    #                 simulation_index=sim_index)
+    # LFP, population_rates = Calculate_LFP(events, network_parameters)
+    # Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
+    # Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(states[state_index]))
 
     # ax = Plot_LFP(LFP)
     # plt.show(ax)
