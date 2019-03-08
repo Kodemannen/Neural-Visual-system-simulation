@@ -122,28 +122,49 @@ if network_parameters.create_kernel:
 #         states.append((a,f))
 
 
-###################################
-# Part 3b: Reverse awtooth signal #  
-###################################
+# ###################################
+# # Part 3b: Reverse awtooth signal #  
+# ###################################
+
+# simtime = network_parameters.simtime    # simulation time (ms)
+# dt = network_parameters.dt
+
+# #frequencies = np.array([4, 12, 24, 36])
+# frequencies = np.array([4, 36])
+# rate_times = np.arange(dt, simtime+dt, dt*10)
+
+# step = 1
+# #A = np.arange(1., 30+step, step=step)      # amplitudes Hz
+# A = np.array([3,10,20,30])
+# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+
+# states = []
+# for a in A:
+#     for f in frequencies:
+#         states.append((a,f))
+
+
+#########################################################
+# Part 4: Lower eta, because avg. poprate was too high. #
+#########################################################
+
 
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
 #frequencies = np.array([4, 12, 24, 36])
-frequencies = np.array([4, 36])
+frequencies = np.array([4, 24])
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
 step = 1
 #A = np.arange(1., 30+step, step=step)      # amplitudes Hz
-A = np.array([3,10,20,30])
+A = np.array([3])
 rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
 states = []
 for a in A:
     for f in frequencies:
         states.append((a,f))
-
-
 
 
 ############################################
@@ -154,7 +175,7 @@ for a in A:
 rank = rank    
 n_jobs = n_jobs
 
-n_sims_per_state = 500
+n_sims_per_state = 5000
 n_states = len(states)
 n_total_sims = n_sims_per_state*n_states
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)

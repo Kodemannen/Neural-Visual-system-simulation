@@ -1,16 +1,8 @@
 import numpy as np
-import nest
-import time
-import os
 import matplotlib.pyplot as plt
-from parameters import ParameterSet
-import h5py
-from set_parameters import Set_parameters
-import sys
 
-
-
-def Plot_LFP(LFP,ax=0, letter=None, scalebar=True, channels_on=True,title_fontsize = None):
+def Plot_LFP(LFP,ax=0, title=None, letter=None, scalebar=False, channels_on=True,title_fontsize = None,
+            space=0.5):
 
     if ax == 0:
         fig = plt.figure()
@@ -28,7 +20,7 @@ def Plot_LFP(LFP,ax=0, letter=None, scalebar=True, channels_on=True,title_fontsi
     scale = 1
     #LFP /= scale
 
-    space = 0.5 # mV
+    space = space # mV
     for i in range(k):
         ax.plot(LFP[i] - np.mean(LFP[i]) - np.mean(LFP[-1]) + space*(k-i)- space/2, color = "k", linewidth=1)
 
@@ -36,12 +28,13 @@ def Plot_LFP(LFP,ax=0, letter=None, scalebar=True, channels_on=True,title_fontsi
     ####################
     # Adding scalebar: #
     ####################
-    if scalebar:
+    if scalebar!=False:
         posx = 1021  # ms
         posy = 2*space - space/2  - np.mean(LFP[-1]) #- np.mean(LFP[4])
-        barlength = .25  # mV
+        #barlength = .25  # mV
+        barlength = scalebar
 
-        ax.plot([posx,posx],[posy-barlength/2, posy+barlength/2], color="k", linewidth=3)
+        ax.plot([posx,posx],[posy-barlength/2, posy+barlength/2], color="k", linewidth=2)
         ax.text(posx*1.01,posy, 
                 " %smV" % barlength, fontsize=8, va="center")
 
@@ -59,6 +52,7 @@ def Plot_LFP(LFP,ax=0, letter=None, scalebar=True, channels_on=True,title_fontsi
     ax.set_xlabel("t (ms)")
     if letter != None:
         ax.text(-100, space*6.5, letter, fontsize=12)
-    ax.set_title("LFP", fontsize=title_fontsize)
+    #ax.set_title("LFP", fontsize=title_fontsize) if title==None else 0
+    ax.set_title(title, fontsize=title_fontsize)if title!=None else 0
     #ax.legend(loc=4, prop={"size": 12})
     return ax
