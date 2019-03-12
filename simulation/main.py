@@ -153,7 +153,7 @@ simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
 #frequencies = np.array([4, 12, 24, 36])
-frequencies = np.array([4, 24])
+frequencies = np.array([4])
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
 step = 1
@@ -175,7 +175,7 @@ for a in A:
 rank = rank    
 n_jobs = n_jobs
 
-n_sims_per_state = 5000
+n_sims_per_state = 500
 n_states = len(states)
 n_total_sims = n_sims_per_state*n_states
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
