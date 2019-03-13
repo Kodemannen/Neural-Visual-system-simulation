@@ -188,7 +188,7 @@ t_start = time.time()
 
 if rank == 0:
     with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
-        filen.write("Part 4: effective eta = 1.2 \n")
+        filen.write("Part 4: effective eta = 1.0 \n")
         filen.write("n_jobs=" + str(n_jobs) + "\n")
         filen.write("n_sims_per_state=" + str(n_sims_per_state) + "\n")
         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
