@@ -64,21 +64,22 @@ if network_parameters.create_kernel:
 
 
 
-# # ############################################
-# # # Part 1 rerun: Sinisoidal input from LGN: #
-# # ############################################
-# simtime = network_parameters.simtime    # simulation time (ms)
-# dt = network_parameters.dt
+# ############################################
+# # Part 1 rerun: Sinisoidal input from LGN: #
+# ############################################
+simtime = network_parameters.simtime    # simulation time (ms)
+dt = network_parameters.dt
 
-# frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 96])  
-# frequencies = frequencies_Hz/1000.          # Hz
+frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 96])  
+frequencies = frequencies_Hz/1000.          # Hz
 
-# rate_times = np.arange(dt, simtime+dt, dt*10)
+rate_times = np.arange(dt, simtime+dt, dt*10)
 
-# amplitude = 3   # Hz, amplitude of rate oscillation
-# b = 0.  # mean rate
-# states = frequencies_Hz
-
+amplitude = 3   # Hz, amplitude of rate oscillation
+b = 0.  # mean rate
+states = frequencies_Hz
+def state_func(state):
+    pass
 
 # ####################################
 # # Part 2 rerun: Varying amplitude: #
