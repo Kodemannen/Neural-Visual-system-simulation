@@ -158,7 +158,7 @@ rate_times = np.arange(dt, simtime+dt, dt*10)
 
 step = 1
 #A = np.arange(1., 30+step, step=step)      # amplitudes Hz
-A = np.array([3])
+A = np.array([1])
 rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
 states = []
@@ -212,8 +212,8 @@ for sim_index in sim_indices:
     network_parameters.eta=eta_bg  
     network_parameters.background_rate=bg_rate
 
-    rates = np.flip(amplitude*(signal.sawtooth(2*np.pi*freq*rate_times)) + amplitude) # avg rate = amplitude/2
-
+    #rates = np.flip(amplitude*(signal.sawtooth(2*np.pi*freq*rate_times)) + amplitude) # avg rate = amplitude/2
+    rates = amplitude*(signal.sawtooth(2*np.pi*freq*rate_times)) + amplitude # avg rate = amplitude/2
     events = Run_simulation(rate_times,
                     rates,
                     network_parameters,

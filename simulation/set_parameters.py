@@ -116,7 +116,7 @@ def Set_parameters(abelrun):
         J_EX = .1,     # excitatory weight, unit: nS ?
         g=4.5,         # ratio inhibitory weight/excitatory weight (before: 5.0)
         eta=0.0,        # external rate relative to threshold rate
-        mean_eta=1.0,
+        mean_eta=1.,
         #background_rate = 10.0,  # poissonian background rate
 
         epsilon=0.1,    # connection probability
