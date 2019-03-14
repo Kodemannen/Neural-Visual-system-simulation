@@ -119,7 +119,6 @@ def rate_func(amp, freq_Hz):
 
 n_sims_per_state = 500
 
-
 # ############################
 # # Part 3: Sawtooth signal #  
 # ###########################
