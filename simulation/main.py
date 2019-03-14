@@ -64,26 +64,52 @@ if network_parameters.create_kernel:
 
 
 
-# #######################################
-# # Part 1 : Sinisoidal input from LGN: #
-# #######################################
+# # #######################################
+# # # Part 1 : Sinisoidal input from LGN: #
+# # #######################################
+# simtime = network_parameters.simtime    # simulation time (ms)
+# dt = network_parameters.dt
+
+# frequencies_Hz = np.array([4, 10, 25, 45, 100])  
+# #frequencies = frequencies_Hz/1000.          # Hz
+
+# rate_times = np.arange(dt, simtime+dt, dt*10)
+
+# states = frequencies_Hz
+# n_sims_per_state = 500
+
+# states = frequencies_Hz
+# A = np.array([3])
+
+# states = []
+# for a in A:
+#     for f in frequencies_Hz:
+#         states.append((a,f))
+
+# def rate_func(amp, freq_Hz):
+#     freq = freq_Hz/1000
+#     rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
+#     return rates
+
+
+# ##############################
+# # Part 2: Varying amplitude: #
+# ##############################
+Part = "Part 2: varying amplitude"
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
-frequencies_Hz = np.array([4, 10, 25, 45, 100])  
-#frequencies = frequencies_Hz/1000.          # Hz
+frequencies = np.array([4, 12, 24, 36])
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
-states = frequencies_Hz
-n_sims_per_state = 500
-
-states = frequencies_Hz
-A = np.array([3])
+step = 1
+A = np.arange(1., 30+step, step=step)      # amplitudes Hz
+rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
 states = []
 for a in A:
-    for f in frequencies_Hz:
+    for f in frequencies:
         states.append((a,f))
 
 def rate_func(amp, freq_Hz):
@@ -91,26 +117,7 @@ def rate_func(amp, freq_Hz):
     rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
     return rates
 
-
-# ####################################
-# # Part 2 rerun: Varying amplitude: #
-# ####################################
-
-# simtime = network_parameters.simtime    # simulation time (ms)
-# dt = network_parameters.dt
-
-# frequencies = np.array([4, 12, 24, 36])
-
-# rate_times = np.arange(dt, simtime+dt, dt*10)
-
-# step = 1
-# A = np.arange(1., 30+step, step=step)      # amplitudes Hz
-# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
-
-# states = []
-# for a in A:
-#     for f in frequencies:
-#         states.append((a,f))
+n_sims_per_state = 500
 
 
 # ############################
@@ -199,7 +206,7 @@ t_start = time.time()
 
 if rank == 0:
     with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
-        filen.write("Part 1 \n")
+        filen.write(Part + "\n")
         filen.write("Mean eta: " + str(network_parameters.mean_eta) + " \n")  
         filen.write("n_jobs=" + str(n_jobs) + "\n")
         filen.write("n_sims_per_state=" + str(n_sims_per_state) + "\n")
