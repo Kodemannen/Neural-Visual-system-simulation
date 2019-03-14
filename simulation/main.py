@@ -64,22 +64,33 @@ if network_parameters.create_kernel:
 
 
 
-# ############################################
-# # Part 1 rerun: Sinisoidal input from LGN: #
-# ############################################
+# #######################################
+# # Part 1 : Sinisoidal input from LGN: #
+# #######################################
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
-frequencies_Hz = np.array([4, 8, 12, 16, 24, 32, 96])  
-frequencies = frequencies_Hz/1000.          # Hz
+frequencies_Hz = np.array([4, 10, 25, 45, 100])  
+#frequencies = frequencies_Hz/1000.          # Hz
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
-amplitude = 3   # Hz, amplitude of rate oscillation
-b = 0.  # mean rate
 states = frequencies_Hz
-def state_func(state):
-    pass
+n_sims_per_state = 500
+
+states = frequencies_Hz
+A = np.array([3])
+
+states = []
+for a in A:
+    for f in frequencies_Hz:
+        states.append((a,f))
+
+def rate_func(amp, freq_Hz):
+    freq = freq_Hz/1000
+    rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
+    return rates
+
 
 # ####################################
 # # Part 2 rerun: Varying amplitude: #
@@ -145,27 +156,27 @@ def state_func(state):
 #         states.append((a,f))
 
 
-#########################################################
-# Part 4: Lower eta, because avg. poprate was too high. #
-#########################################################
+# #########################################################
+# # Part 4: Lower eta, because avg. poprate was too high. #
+# #########################################################
 
 
-simtime = network_parameters.simtime    # simulation time (ms)
-dt = network_parameters.dt
+# simtime = network_parameters.simtime    # simulation time (ms)
+# dt = network_parameters.dt
 
-#frequencies = np.array([4, 12, 24, 36])
-frequencies = np.array([4])
-rate_times = np.arange(dt, simtime+dt, dt*10)
+# #frequencies = np.array([4, 12, 24, 36])
+# frequencies = np.array([4])
+# rate_times = np.arange(dt, simtime+dt, dt*10)
 
-step = 1
-#A = np.arange(1., 30+step, step=step)      # amplitudes Hz
-A = np.array([1])
-rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+# step = 1
+# #A = np.arange(1., 30+step, step=step)      # amplitudes Hz
+# A = np.array([1])
+# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
-states = []
-for a in A:
-    for f in frequencies:
-        states.append((a,f))
+# states = []
+# for a in A:
+#     for f in frequencies:
+#         states.append((a,f))
 
 
 ############################################
@@ -176,7 +187,6 @@ for a in A:
 rank = rank    
 n_jobs = n_jobs
 
-n_sims_per_state = 500
 n_states = len(states)
 n_total_sims = n_sims_per_state*n_states
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
@@ -189,7 +199,8 @@ t_start = time.time()
 
 if rank == 0:
     with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
-        filen.write("Part 4: effective eta = 1.0 \n")
+        filen.write("Part 1 \n")
+        filen.write("Mean eta: " + str(network_parameters.mean_eta) + " \n")  
         filen.write("n_jobs=" + str(n_jobs) + "\n")
         filen.write("n_sims_per_state=" + str(n_sims_per_state) + "\n")
         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
@@ -198,13 +209,13 @@ if rank == 0:
 for sim_index in sim_indices:
 
     state_index = sim_index % n_states
-    amplitude, freq=states[state_index]
-    #freq=states[state_index]
+    state = states[state_index]
+    amplitude, freq=state
 
-    freq=freq/1000      # because rate_times is in ms
+    rates = rate_func(amplitude, freq)
 
     ##################################################
-    # Setting new eta value to keep the mean to 2.3: #
+    # Setting new eta value to keep the mean to 1.2: #
     ##################################################
     eta_LGN = amplitude / threshold_rate_LGN
     eta_bg = network_parameters.mean_eta - eta_LGN
@@ -213,8 +224,6 @@ for sim_index in sim_indices:
     network_parameters.eta=eta_bg  
     network_parameters.background_rate=bg_rate
 
-    #rates = np.flip(amplitude*(signal.sawtooth(2*np.pi*freq*rate_times)) + amplitude) # avg rate = amplitude/2
-    rates = amplitude*(signal.sawtooth(2*np.pi*freq*rate_times)) + amplitude # avg rate = amplitude/2
     events = Run_simulation(rate_times,
                     rates,
                     network_parameters,
