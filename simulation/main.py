@@ -64,26 +64,53 @@ if network_parameters.create_kernel:
 
 
 
-# # #######################################
-# # # Part 1 : Sinisoidal input from LGN: #
-# # #######################################
+# #######################################
+# # Part 1 : Sinisoidal input from LGN: #
+# #######################################
+Part = "Part 1: sinusoidal input"
+simtime = network_parameters.simtime    # simulation time (ms)
+dt = network_parameters.dt
+
+#frequencies_Hz = np.array([4, 10, 25, 45, 70, 110]) 
+frequencies_Hz = np.array([8]) 
+#frequencies = frequencies_Hz/1000.          # Hz
+
+rate_times = np.arange(dt, simtime+dt, dt*10)
+
+states = frequencies_Hz
+n_sims_per_state = 1
+
+A = np.array([3])
+
+states = []
+for a in A:
+    for f in frequencies_Hz:
+        states.append((a,f))
+
+def rate_func(amp, freq_Hz):
+    freq = freq_Hz/1000
+    rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
+    return rates
+n_sims_per_state = 1000
+
+# # ##############################
+# # # Part 2: Varying amplitude: #
+# # ##############################
+# Part = "Part 2: varying amplitude"
 # simtime = network_parameters.simtime    # simulation time (ms)
 # dt = network_parameters.dt
 
-# frequencies_Hz = np.array([4, 10, 25, 45, 100])  
-# #frequencies = frequencies_Hz/1000.          # Hz
+# frequencies = np.array([4, 12, 24, 36])
 
 # rate_times = np.arange(dt, simtime+dt, dt*10)
 
-# states = frequencies_Hz
-# n_sims_per_state = 500
-
-# states = frequencies_Hz
-# A = np.array([3])
+# step = 1
+# A = np.arange(1., 30+step, step=step)      # amplitudes Hz
+# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
 # states = []
 # for a in A:
-#     for f in frequencies_Hz:
+#     for f in frequencies:
 #         states.append((a,f))
 
 # def rate_func(amp, freq_Hz):
@@ -91,33 +118,7 @@ if network_parameters.create_kernel:
 #     rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
 #     return rates
 
-
-# ##############################
-# # Part 2: Varying amplitude: #
-# ##############################
-Part = "Part 2: varying amplitude"
-simtime = network_parameters.simtime    # simulation time (ms)
-dt = network_parameters.dt
-
-frequencies = np.array([4, 12, 24, 36])
-
-rate_times = np.arange(dt, simtime+dt, dt*10)
-
-step = 1
-A = np.arange(1., 30+step, step=step)      # amplitudes Hz
-rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
-
-states = []
-for a in A:
-    for f in frequencies:
-        states.append((a,f))
-
-def rate_func(amp, freq_Hz):
-    freq = freq_Hz/1000
-    rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
-    return rates
-
-n_sims_per_state = 500
+# n_sims_per_state = 500
 
 # ############################
 # # Part 3: Sawtooth signal #  
@@ -235,7 +236,7 @@ for sim_index in sim_indices:
                     network_parameters,
                     simulation_index=sim_index)
     LFP, population_rates = Calculate_LFP(events, network_parameters)
-    Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
+    #Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
     Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(states[state_index]))
 
     # ax = Plot_LFP(LFP)

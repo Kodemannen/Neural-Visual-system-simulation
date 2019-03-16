@@ -114,7 +114,7 @@ def Set_parameters(abelrun):
         # Neuron and synapse parameters: #
         ##################################
         J_EX = .1,     # excitatory weight, unit: nS ?
-        g=4.5,         # ratio inhibitory weight/excitatory weight (before: 5.0)
+        g=5.0,         # ratio inhibitory weight/excitatory weight (before: 5.0)
         eta=0.0,        # external rate relative to threshold rate
         mean_eta=1.2,    # effective eta
         #background_rate = 10.0,  # poissonian background rate
