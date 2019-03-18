@@ -91,7 +91,7 @@ def rate_func(amp, freq_Hz):
     freq = freq_Hz/1000
     rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
     return rates
-n_sims_per_state = 1000
+n_sims_per_state = 500
 
 # # ##############################
 # # # Part 2: Varying amplitude: #
@@ -236,7 +236,7 @@ for sim_index in sim_indices:
                     network_parameters,
                     simulation_index=sim_index)
     LFP, population_rates = Calculate_LFP(events, network_parameters)
-    #Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
+    Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
     Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(states[state_index]))
 
     # ax = Plot_LFP(LFP)

@@ -17,9 +17,11 @@ def Calculate_LFP(events, network_parameters):
     ####################
     # Kernels are in mV:
     kernel_path = PS.kernel_path
+    g = PS.g
+    J_EX = PS.J_EX
     with h5py.File(kernel_path, "r") as file:
-        EX_kernel = file["EX"][:]     
-        IN_kernel = file["IN"][:]
+        EX_kernel = file["EX"][:] * J_EX / 0.1      # kernel was created with J_EX=0.1
+        IN_kernel = file["IN"][:] * g / 4.5         # kernel was created with g=4.5
         LGN_kernel = file["LGN"][:]
 
     #########################################
