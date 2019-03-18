@@ -71,8 +71,8 @@ Part = "Part 1: sinusoidal input"
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
-#frequencies_Hz = np.array([4, 10, 25, 45, 70, 110]) 
-frequencies_Hz = np.array([8]) 
+frequencies_Hz = np.array([4, 10, 25, 45, 70, 110]) 
+#frequencies_Hz = np.array([8]) 
 #frequencies = frequencies_Hz/1000.          # Hz
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
@@ -92,6 +92,7 @@ def rate_func(amp, freq_Hz):
     rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
     return rates
 n_sims_per_state = 500
+
 
 # # ##############################
 # # # Part 2: Varying amplitude: #
@@ -239,16 +240,16 @@ for sim_index in sim_indices:
     Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
     Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(states[state_index]))
 
-    # ax = Plot_LFP(LFP)
-    # plt.show(ax)
-    # events_EX, events_IN, events_LGN = events
-    # plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
-    # plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
-    # plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
-    # #plt.plot(population_rates[0])
-    # print(amplitude, freq)
-    # plt.show()
-    # exit("egg")
+    ax = Plot_LFP(LFP)
+    plt.show(ax)
+    events_EX, events_IN, events_LGN = events
+    plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
+    plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
+    plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
+    #plt.plot(population_rates[0])
+    print(amplitude, freq)
+    plt.show()
+    exit("egg")
 
 t_stop = time.time() - t_start
 print(f"sims_per_job = {n_total_sims/n_jobs}" )
