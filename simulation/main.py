@@ -162,7 +162,7 @@ n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
 print("Total sims= ", n_total_sims)
-exit("lol")
+
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 
 threshold_rate_LGN = network_parameters.theta / (network_parameters.J_LGN* network_parameters.tauMem * network_parameters.C_LGN) * 1000     # * 1000 to get it in Hz
