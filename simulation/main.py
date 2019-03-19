@@ -63,7 +63,6 @@ if network_parameters.create_kernel:
 #Plot_kernels(network_parameters)
 
 
-
 # # #######################################
 # # # Part 1 : Sinisoidal input from LGN: #
 # # #######################################
@@ -86,48 +85,21 @@ if network_parameters.create_kernel:
 #     for f in frequencies_Hz:
 #         states.append((a,f))
 
-# def rate_func(amp, freq_Hz):
+# def rate_func(amp, freq_Hz, sim_index):
 #     freq = freq_Hz/1000
 #     rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
 #     return rates
-# n_sims_per_state = 500
+# n_sims_per_state = 1
 
 
-# ##############################
-# # Part 2: Varying amplitude: #
-# ##############################
-Part = "Part 2: varying amplitude"
-simtime = network_parameters.simtime    # simulation time (ms)
-dt = network_parameters.dt
-
-frequencies = np.array([4, 10, 25, 70])
-
-rate_times = np.arange(dt, simtime+dt, dt*10)
-
-step = 1
-A = np.arange(1., 30+step, step=step)      # amplitudes Hz
-rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
-
-states = []
-for a in A:
-    for f in frequencies:
-        states.append((a,f))
-
-def rate_func(amp, freq_Hz):
-    freq = freq_Hz/1000
-    rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
-    return rates
-
-n_sims_per_state = 500
-
-# ############################
-# # Part 3: Sawtooth signal #  
-# ###########################
-
+# # ##############################
+# # # Part 2: Varying amplitude: #
+# # ##############################
+# Part = "Part 2: varying amplitude"
 # simtime = network_parameters.simtime    # simulation time (ms)
 # dt = network_parameters.dt
 
-# frequencies = np.array([4, 12, 24, 36])
+# frequencies = np.array([4, 10, 25, 70])
 
 # rate_times = np.arange(dt, simtime+dt, dt*10)
 
@@ -140,51 +112,43 @@ n_sims_per_state = 500
 #     for f in frequencies:
 #         states.append((a,f))
 
+# def rate_func(amp, freq_Hz, sim_index):
+#     freq = freq_Hz/1000
+#     rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
+#     return rates
 
-# ###################################
-# # Part 3b: Reverse awtooth signal #  
-# ###################################
+# n_sims_per_state = 500
 
-# simtime = network_parameters.simtime    # simulation time (ms)
-# dt = network_parameters.dt
+############################
+# Part 3: Sawtooth signal #  
+###########################
+Part = "Part 3: Sawtooth signals"
+simtime = network_parameters.simtime    # simulation time (ms)
+dt = network_parameters.dt
 
-# #frequencies = np.array([4, 12, 24, 36])
-# frequencies = np.array([4, 36])
-# rate_times = np.arange(dt, simtime+dt, dt*10)
+frequencies = np.array([4, 10, 45, 70])
 
-# step = 1
-# #A = np.arange(1., 30+step, step=step)      # amplitudes Hz
-# A = np.array([3,10,20,30])
-# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+rate_times = np.arange(dt, simtime+dt, dt*10)
 
-# states = []
-# for a in A:
-#     for f in frequencies:
-#         states.append((a,f))
+step = 2
+A = np.arange(1., 30, step=step)      # amplitudes Hz
 
+rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
-# #########################################################
-# # Part 4: Lower eta, because avg. poprate was too high. #
-# #########################################################
+states = []
+for a in A:
+    for f in frequencies:
+        states.append((a,f))
 
+def rate_func(amp, freq_Hz, sim_index):
+    freq = freq_Hz/1000
+    if sim_index % 2 == 1:
+        rates = amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp
+    else:
+        rates = np.flip(amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp)
+    return rates
 
-# simtime = network_parameters.simtime    # simulation time (ms)
-# dt = network_parameters.dt
-
-# #frequencies = np.array([4, 12, 24, 36])
-# frequencies = np.array([4])
-# rate_times = np.arange(dt, simtime+dt, dt*10)
-
-# step = 1
-# #A = np.arange(1., 30+step, step=step)      # amplitudes Hz
-# A = np.array([1])
-# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
-
-# states = []
-# for a in A:
-#     for f in frequencies:
-#         states.append((a,f))
-
+n_sims_per_state = 1000
 
 ############################################
 # Running point neuron simulation in Nest: #
@@ -197,6 +161,8 @@ n_jobs = n_jobs
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
+print("Total sims= ", n_total_sims)
+exit("lol")
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 
 threshold_rate_LGN = network_parameters.theta / (network_parameters.J_LGN* network_parameters.tauMem * network_parameters.C_LGN) * 1000     # * 1000 to get it in Hz
@@ -219,8 +185,9 @@ for sim_index in sim_indices:
     state = states[state_index]
     amplitude, freq=state
 
-    rates = rate_func(amplitude, freq)
-
+    rates = rate_func(amplitude, freq, sim_index)
+    plt.plot(rate_times, rates)
+    plt.show()
     ##################################################
     # Setting new eta value to keep the mean to 1.2: #
     ##################################################

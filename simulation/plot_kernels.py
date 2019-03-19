@@ -25,8 +25,8 @@ def Plot_kernels(network_parameters, ax=0):
     print(PS.kernel_path)
     with h5py.File(kernel_path, "r") as file:
         # * 1000 to plot as uV instead of mV
-        EX_kernel = file["EX"][:]   *1000
-        IN_kernel = file["IN"][:]   *1000
+        EX_kernel = file["EX"][:]   *1000   * PS.J_EX / 0.1
+        IN_kernel = file["IN"][:]   *1000   * PS.g / 4.5
         LGN_kernel = file["LGN"][:] *1000
 
 
