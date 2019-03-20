@@ -102,6 +102,8 @@ dt = network_parameters.dt
 #frequencies = np.array([4, 10, 25, 70])
 frequencies = np.array([15, 20, 30, 40, 50, 60])
 
+frequencies = np.arange(2, 80, 2)
+
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
 #step = 1
@@ -165,7 +167,7 @@ n_jobs = n_jobs
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
-print("Total sims= ", n_total_sims/100)
+#print("Total sims= ", n_total_sims/200/60)
 
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 
@@ -190,8 +192,7 @@ for sim_index in sim_indices:
     amplitude, freq=state
 
     rates = rate_func(amplitude, freq, sim_index)
-    plt.plot(rate_times, rates)
-    plt.show()
+
     ##################################################
     # Setting new eta value to keep the mean to 1.2: #
     ##################################################
