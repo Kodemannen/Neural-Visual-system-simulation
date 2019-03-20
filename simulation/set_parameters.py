@@ -56,7 +56,7 @@ def Set_parameters(abelrun):
         nest_output_path= sim_output_dir + "/nest_output",
         population_rates_path=sim_output_dir + "/population_rates",
         LFP_path = sim_output_dir + "/LFP_files",                # where the LFP signals are kept
-        LFP_plot_path = sim_output_dir + "/LFP_plots/",
+        #LFP_plot_path = sim_output_dir + "/LFP_plots/",
         
         fake_spikes_path = sim_output_dir + "/kernel_creation/fake_spikes",      # folder where the fake spikes are stored
     ))

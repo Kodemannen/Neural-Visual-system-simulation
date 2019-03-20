@@ -92,51 +92,23 @@ if network_parameters.create_kernel:
 # n_sims_per_state = 1
 
 
-# ##############################
-# # Part 2: Varying amplitude: #
-# ##############################
-Part = "Part 2b: varying amplitude"
-simtime = network_parameters.simtime    # simulation time (ms)
-dt = network_parameters.dt
-
-#frequencies = np.array([4, 10, 25, 70])
-frequencies = np.array([15, 20, 30, 40, 50, 60])
-
-frequencies = np.arange(2, 80, 2)
-
-rate_times = np.arange(dt, simtime+dt, dt*10)
-
-#step = 1
-#A = np.arange(1., 30+step, step=step)      # amplitudes Hz
-A = [1, 5, 10, 15, 20]
-rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
-
-states = []
-for a in A:
-    for f in frequencies:
-        states.append((a,f))
-
-def rate_func(amp, freq_Hz, sim_index):
-    freq = freq_Hz/1000
-    rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
-    return rates
-
-n_sims_per_state = 500
-
-# ############################
-# # Part 3: Sawtooth signal #  
-# ###########################
-# Part = "Part 3: Sawtooth signals"
+# # ##############################
+# # # Part 2: Varying amplitude: #
+# # ##############################
+# Part = "Part 2b: varying amplitude"
 # simtime = network_parameters.simtime    # simulation time (ms)
 # dt = network_parameters.dt
 
-# frequencies = np.array([4, 10, 45, 70])
+# #frequencies = np.array([4, 10, 25, 70])
+# frequencies = np.array([15, 20, 30, 40, 50, 60])
+
+# frequencies = np.arange(2, 80, 2)
 
 # rate_times = np.arange(dt, simtime+dt, dt*10)
 
-# step = 2
-# A = np.arange(1., 30, step=step)      # amplitudes Hz
-
+# #step = 1
+# #A = np.arange(1., 30+step, step=step)      # amplitudes Hz
+# A = [1, 5, 10, 15, 20]
 # rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
 # states = []
@@ -146,13 +118,43 @@ n_sims_per_state = 500
 
 # def rate_func(amp, freq_Hz, sim_index):
 #     freq = freq_Hz/1000
-#     if sim_index % 2 == 1:
-#         rates = amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp
-#     else:
-#         rates = np.flip(amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp)
+#     rates = amp*np.sin(2*np.pi*freq*rate_times) + amp
 #     return rates
 
-# n_sims_per_state = 1000
+# n_sims_per_state = 500
+
+############################
+# Part 3: Sawtooth signal #  
+###########################
+Part = "Part 3: Sawtooth signals, redo"
+simtime = network_parameters.simtime    # simulation time (ms)
+dt = network_parameters.dt
+
+frequencies = np.array([4, 10, 25, 70])
+
+rate_times = np.arange(dt, simtime+dt, dt*10)
+
+step = 2
+A = np.arange(1., 30, step=step)      # amplitudes Hz
+
+rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+
+states = []
+for a in A:
+    for f in frequencies:
+        states.append((a,f))
+print(len(states)/2)
+
+
+def rate_func(amp, freq_Hz, sim_index):
+    freq = freq_Hz/1000
+    if sim_index < n_total_sims/2:
+        rates = amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp
+    else:
+        rates = np.flip(amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp)
+    return rates
+
+n_sims_per_state = 500
 
 
 
@@ -167,7 +169,6 @@ n_jobs = n_jobs
 n_states = len(states)
 
 n_total_sims = n_sims_per_state*n_states
-#print("Total sims= ", n_total_sims/200/60)
 
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 
