@@ -123,19 +123,53 @@ if network_parameters.create_kernel:
 
 # n_sims_per_state = 500
 
-############################
-# Part 3: Sawtooth signal #  
-###########################
-Part = "Part 3: Sawtooth signals, redo"
+# ############################
+# # Part 3: Sawtooth signal #  
+# ###########################
+# Part = "Part 3: Sawtooth signals, redo"
+# simtime = network_parameters.simtime    # simulation time (ms)
+# dt = network_parameters.dt
+
+# frequencies = np.array([4, 10, 25, 70])
+
+# rate_times = np.arange(dt, simtime+dt, dt*10)
+
+# step = 2
+# A = np.arange(1., 30, step=step)      # amplitudes Hz
+
+# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+
+# states = []
+# for a in A:
+#     for f in frequencies:
+#         states.append((a,f))
+# print(len(states)/2)
+
+
+# def rate_func(amp, freq_Hz, sim_index):
+#     freq = freq_Hz/1000
+#     if sim_index < n_total_sims/2:
+#         rates = amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp
+#     else:
+#         rates = np.flip(amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp)
+#     return rates
+
+# n_sims_per_state = 500
+
+
+
+########################################
+# Part 4: Classifying sawtooth signals #  
+########################################
+Part = "Part 4: Classifying sawtooths"
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
-frequencies = np.array([4, 10, 25, 70])
+frequencies = np.array([4, 10, 25, 45, 70])
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
-step = 2
-A = np.arange(1., 30, step=step)      # amplitudes Hz
+A = np.array([3])      # amplitudes Hz
 
 rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
 
@@ -143,7 +177,6 @@ states = []
 for a in A:
     for f in frequencies:
         states.append((a,f))
-print(len(states)/2)
 
 
 def rate_func(amp, freq_Hz, sim_index):
@@ -154,7 +187,8 @@ def rate_func(amp, freq_Hz, sim_index):
         rates = np.flip(amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp)
     return rates
 
-n_sims_per_state = 500
+n_sims_per_state = 20000
+
 
 
 
