@@ -2,7 +2,7 @@ import pylgn
 import quantities as pq
 import pylgn.kernels.spatial as spl
 import pylgn.kernels.temporal as tpl
-from scipy.misc import imread 
+
 import numpy as np
 import quantities as qp
 
@@ -145,7 +145,7 @@ def Create_LGN_signals():
     plt.show()
 
 if __name__=="__main__":
-    
+    from scipy.misc import imread 
     import matplotlib.pyplot as plt
     #np.random.seed(1)
     # for i in range(1):

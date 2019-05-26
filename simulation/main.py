@@ -284,8 +284,8 @@ for sim_index in sim_indices:
     #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
     ########################################################################
 
-    ax = Plot_LFP(LFP)
-    plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
+    #ax = Plot_LFP(LFP)
+    #plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
     # events_EX, events_IN, events_LGN = events
     # plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
     # plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
