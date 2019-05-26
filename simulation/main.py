@@ -21,6 +21,7 @@ from calculate_LFP import Calculate_LFP
 from plot_LFP import Plot_LFP
 from save_LFP import Save_LFP
 from save_population_rates import Save_population_rates
+from LGNsimulation import Get_LGN_signal
 
 ###########
 ### MPI ###
@@ -158,37 +159,54 @@ if network_parameters.create_kernel:
 
 
 
-########################################
-# Part 4: Classifying sawtooth signals #  
-########################################
-Part = "Part 4: Classifying sawtooths"
+# ########################################
+# # Part 4: Classifying sawtooth signals #  
+# ########################################
+# Part = "Part 4: Classifying sawtooths"
+# simtime = network_parameters.simtime    # simulation time (ms)
+# dt = network_parameters.dt
+
+# frequencies = np.array([4, 10, 25, 45, 70])
+
+# rate_times = np.arange(dt, simtime+dt, dt*10)
+
+# A = np.array([3])      # amplitudes Hz
+
+# rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
+
+# states = []
+# for a in A:
+#     for f in frequencies:
+#         states.append((a,f))
+
+
+# def rate_func(amp, freq_Hz, sim_index):
+#     freq = freq_Hz/1000
+#     if sim_index < n_total_sims/2:
+#         rates = amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp
+#     else:
+#         rates = np.flip(amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp)
+#     return rates
+
+# n_sims_per_state = 20000
+
+
+########################
+# Part 5: Using pyLGN: #
+########################
+
+Part = "Part5: the full simulation using pyLGN"
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
-frequencies = np.array([4, 10, 25, 45, 70])
+seq = np.random.choice(10, size=10, replace=False)
+
+#rate = Get_LGN_signal(seq)
+
+n_sequences = 10000
+n_sims_per_sequence = 10
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
-
-A = np.array([3])      # amplitudes Hz
-
-rate_times = np.arange(dt, simtime+dt, dt*10)   # times when input rate changes
-
-states = []
-for a in A:
-    for f in frequencies:
-        states.append((a,f))
-
-
-def rate_func(amp, freq_Hz, sim_index):
-    freq = freq_Hz/1000
-    if sim_index < n_total_sims/2:
-        rates = amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp
-    else:
-        rates = np.flip(amp*signal.sawtooth(2*np.pi*freq*rate_times) + amp)
-    return rates
-
-n_sims_per_state = 20000
-
 
 
 
@@ -200,9 +218,8 @@ n_sims_per_state = 20000
 rank = rank    
 n_jobs = n_jobs
 
-n_states = len(states)
-
-n_total_sims = n_sims_per_state*n_states
+#n_states = len(states)
+n_total_sims = n_sims_per_sequence*n_sequences
 
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 
@@ -216,25 +233,35 @@ if rank == 0:
         filen.write(Part + "\n")
         filen.write("Mean eta: " + str(network_parameters.mean_eta) + " \n")  
         filen.write("n_jobs=" + str(n_jobs) + "\n")
-        filen.write("n_sims_per_state=" + str(n_sims_per_state) + "\n")
+        filen.write("n_sims_per_state=" + str(n_sims_per_sequence) + "\n")
         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
-        filen.write("states="+str(states) + "\n")
+        #filen.write("states="+str(states) + "\n")
+
+count = 0
 
 for sim_index in sim_indices:
 
-    state_index = sim_index % n_states
-    state = states[state_index]
-    amplitude, freq=state
-
-    rates = rate_func(amplitude, freq, sim_index)
-
+    if count % 10 == 0:
+        seq = np.random.choice(10, size=10, replace=False)
+        rates = Get_LGN_signal(seq)
+    plt.plot(rates)
+    plt.show()
+    print(rates.shape)
+    print(rate_times.shape)
+    #print(np.mean(rates))
+    #print(np.var(rates))
+    
+    #state_index = sim_index % n_states
+    #state = states[state_index]
+    
+    
     ##################################################
-    # Setting new eta value to keep the mean to 1.2: #
+    # Setting new eta value to keep the mean to 1.1: #
     ##################################################
-    eta_LGN = amplitude / threshold_rate_LGN
+    eta_LGN = 6.846617063994459 / threshold_rate_LGN
     eta_bg = network_parameters.mean_eta - eta_LGN
     bg_rate = eta_bg*network_parameters.threshold_rate * 1000 # *1000 because nest uses Hz
-
+    
     network_parameters.eta=eta_bg  
     network_parameters.background_rate=bg_rate
 
@@ -243,19 +270,25 @@ for sim_index in sim_indices:
                     network_parameters,
                     simulation_index=sim_index)
     LFP, population_rates = Calculate_LFP(events, network_parameters)
-    Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
-    Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(states[state_index]))
+    #Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
+    #Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(states[state_index]))
+    
+    
+    ########################################################################
+    # REMEMBER the poprate is in units of kHz, so to get rate per neuron we need to multiply by 1000 (to get Hz) and then divide by population size
+    #print("mean poprate", np.mean(population_rates[0]) * 1000 /10000 )
+    #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
+    ########################################################################
 
-    # ax = Plot_LFP(LFP)
-    # plt.show(ax)
-    # events_EX, events_IN, events_LGN = events
-    # plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
-    # plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
-    # plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
-    # #plt.plot(population_rates[0])
-    # print(amplitude, freq)
-    # plt.show()
-    # exit("egg")
+    ax = Plot_LFP(LFP)
+    plt.show(ax)
+    events_EX, events_IN, events_LGN = events
+    plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
+    plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
+    plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
+    #plt.plot(population_rates[0])
+    plt.show()
+    exit("egg")
 
 t_stop = time.time() - t_start
 print(f"sims_per_job = {n_total_sims/n_jobs}" )

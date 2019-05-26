@@ -6,11 +6,11 @@ import os
 from parameters import ParameterSet
 import h5py
 import matplotlib.pyplot as plt
-first = "#f58231 #4363d8 k".split()
+#first = "#f58231 #4363d8 k".split()
 
-pop_colors = "#a6cee3 #1f78b4 #141039".split()
-pop_colors = first
-def Plot_kernels(network_parameters, ax=0):
+#pop_colors = "#a6cee3 #1f78b4 #141039".split()
+#pop_colors = first
+def Plot_kernels(network_parameters, ax=0, pop_colors=None):
     if ax == 0:
         ax = plt.axes()
         single_plot = True
@@ -46,7 +46,7 @@ def Plot_kernels(network_parameters, ax=0):
     diffch5 = np.max(IN_kernel[4])-np.min(IN_kernel[4])
     #space = diffch5
     space = diffch5*1.5
-    print(diffch5)
+    #print(diffch5)
     # #IN_kernel[4] *= 0
     # print("scale=", scale, "uV")
     # EX_kernel /= scale
@@ -69,7 +69,9 @@ def Plot_kernels(network_parameters, ax=0):
         #line=barlength
         line = barlength#/scale # barlength uV
 
-        ax.plot([posx,posx],[posy, posy+line], color="k", linewidth=3)
+        #ax.plot([posx,posx],[posy, posy+line], color="k", linewidth=3)
+        barwidth = 3
+        ax.plot([posx,posx],[posy, posy+line], color="k", linewidth=barwidth)
         ax.text(posx*1.01, posy+line/2*0.8, "$%s \mu V$" % barlength)
 
     ax.spines["top"].set_visible(False)
@@ -82,17 +84,21 @@ def Plot_kernels(network_parameters, ax=0):
 
     ax.xaxis.set_ticks_position('bottom')
     ax.yaxis.set_ticks_position('left')
-    ax.set_xlabel("Time (ms)")
+    ax.set_xlabel("t (ms)")
+    ax.set_xlim([0,200])
 
     ax.set_title("Kernels")
-    ax.legend(loc=1, prop={"size": 12})
-    plt.tight_layout()
+    #ax.legend(loc=1, prop={"size": 12})
+    #plt.tight_layout()
     if single_plot:
 
-        plt.savefig(PS.kernel_plot) ### remove
+        #plt.savefig(PS.kernel_plot) ### remove
+        plt.savefig("kernel_plot.eps")
         #plt.savefig("asdsdd")
         #plt.show()
         plt.close()
+    return ax
+
 # if __name__=="__main__":
 
 #     from parameters import ParameterSet
