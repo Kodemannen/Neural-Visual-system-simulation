@@ -203,11 +203,17 @@ seq = np.random.choice(10, size=10, replace=False)
 
 #rate = Get_LGN_signal(seq)
 
-n_sequences = 10000
+n_sequences = 5
 n_sims_per_sequence = 10
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
+def seq_to_string(s):
+    """"Function for making a compact class label from sequence array"""
+    string = ""
+    for t in s:
+        string+=str(t)
+    return string
 
 
 ############################################
@@ -238,16 +244,14 @@ if rank == 0:
         #filen.write("states="+str(states) + "\n")
 
 count = 0
-
 for sim_index in sim_indices:
 
-    if count % 10 == 0:
+    if count % n_sims_per_sequence == 0:
         seq = np.random.choice(10, size=10, replace=False)
         rates = Get_LGN_signal(seq)
-    plt.plot(rates)
-    plt.show()
-    print(rates.shape)
-    print(rate_times.shape)
+        seq_label = seq_to_string(seq)
+
+
     #print(np.mean(rates))
     #print(np.var(rates))
     
@@ -270,8 +274,8 @@ for sim_index in sim_indices:
                     network_parameters,
                     simulation_index=sim_index)
     LFP, population_rates = Calculate_LFP(events, network_parameters)
-    #Save_LFP(LFP, network_parameters, sim_index, class_label=str(states[state_index] ))
-    #Save_population_rates(population_rates, network_parameters, sim_index, class_label=str(states[state_index]))
+    Save_LFP(LFP, network_parameters, sim_index, class_label=seq_label)
+    Save_population_rates(population_rates, network_parameters, sim_index, class_label=seq_label)
     
     
     ########################################################################
@@ -281,14 +285,14 @@ for sim_index in sim_indices:
     ########################################################################
 
     ax = Plot_LFP(LFP)
-    plt.show(ax)
-    events_EX, events_IN, events_LGN = events
-    plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
-    plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
-    plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
-    #plt.plot(population_rates[0])
-    plt.show()
-    exit("egg")
+    plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
+    # events_EX, events_IN, events_LGN = events
+    # plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
+    # plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
+    # plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
+    # #plt.plot(population_rates[0])
+    # plt.show()
+    # exit("egg")
 
 t_stop = time.time() - t_start
 print(f"sims_per_job = {n_total_sims/n_jobs}" )
