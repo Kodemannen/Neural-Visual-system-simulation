@@ -6,4 +6,4 @@ export params_path
 cd ..
 
 #sbatch --array=0-199 jobscript.sh
-# sbatch --array=0 jobscript.sh
+sbatch --array=0 jobscript.sh 
