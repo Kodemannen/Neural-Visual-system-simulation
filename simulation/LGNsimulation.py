@@ -31,7 +31,7 @@ def Get_LGN_signal(permutation):
 
     # Network resolution parameters:
     nt=12       # 2**nt is the number of time steps in the simulation
-    nr=7
+    nr=5
     dt=1*pq.ms
     dr=0.1*pq.deg
 
@@ -89,11 +89,15 @@ def Get_LGN_signal(permutation):
     signal = signal[:250*12] # assuming duration of 250 ms 
     
     # shifting and normalizing for nr=7
-    signal += 126/qp.s
-    signal *= np.sqrt(1.5/554)  # found the variance of the pyLGN signal to be 554 empirically. 1.5 is the variance we want the signal to have, as that corresponds to the variance of the sinusoid signal
+    #signal += 126/qp.s
+    #signal *= np.sqrt(1.5/554)  # found the variance of the pyLGN signal to be 554 empirically. 1.5 is the variance we want the signal to have, as that corresponds to the variance of the sinusoid signal
     # This gives it a mean of 6.846617063994459 1/s
     
 
+    # shifting and normalizing for nr = 5
+    signal += 140/qp.s
+    signal *= np.sqrt(1.5/740.4)
+    # This gives it a mean of 6.512339651169235
 
     # shifting signal and "normalizing, sort of"
     #signal = signal + 85 / qp.s
@@ -117,13 +121,15 @@ def Get_LGN_signal(permutation):
 
 def Create_LGN_signals():
     # 117 sec per sim
-
+    import time
+    t = time.time()
     vars = []
     maxes = []
     mins = []
-    for i in range(100):
+    for i in range(2):
         print(i)
         seq = np.random.choice(10, size=10, replace=False)
+        
         signal = Get_LGN_signal(seq)
         
         #signal = signal[:250*12] 
@@ -135,13 +141,17 @@ def Create_LGN_signals():
         mins.append(np.min(signal))
         
         plt.plot(signal)
-    
+    t = time.time()-t
+    print(t)
+
     print(np.mean(vars))
     print("------------")
     print(np.max(maxes))
     print("------------")
     print(np.min(mins))
     print(np.mean(mins))
+    print("-----")
+    print(np.mean(signal))
     plt.show()
 
 if __name__=="__main__":

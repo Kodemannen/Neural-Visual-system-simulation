@@ -203,8 +203,7 @@ seq = np.random.choice(10, size=10, replace=False)
 
 #rate = Get_LGN_signal(seq)
 
-n_sequences = 5
-n_sims_per_sequence = 10
+n_sims = 100
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
@@ -225,7 +224,7 @@ rank = rank
 n_jobs = n_jobs
 
 #n_states = len(states)
-n_total_sims = n_sims_per_sequence*n_sequences
+n_total_sims = n_sims
 
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 
@@ -239,17 +238,15 @@ if rank == 0:
         filen.write(Part + "\n")
         filen.write("Mean eta: " + str(network_parameters.mean_eta) + " \n")  
         filen.write("n_jobs=" + str(n_jobs) + "\n")
-        filen.write("n_sims_per_state=" + str(n_sims_per_sequence) + "\n")
         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
         #filen.write("states="+str(states) + "\n")
 
-count = 0
+
 for sim_index in sim_indices:
 
-    if count % n_sims_per_sequence == 0:
-        seq = np.random.choice(10, size=10, replace=False)
-        rates = Get_LGN_signal(seq)
-        seq_label = seq_to_string(seq)
+    seq = np.random.choice(10, size=10, replace=False)  # image sequence
+    rates = Get_LGN_signal(seq)
+    seq_label = seq_to_string(seq)
 
 
     #print(np.mean(rates))
@@ -262,7 +259,7 @@ for sim_index in sim_indices:
     ##################################################
     # Setting new eta value to keep the mean to 1.1: #
     ##################################################
-    eta_LGN = 6.846617063994459 / threshold_rate_LGN
+    eta_LGN = 6.512339651169235 / threshold_rate_LGN
     eta_bg = network_parameters.mean_eta - eta_LGN
     bg_rate = eta_bg*network_parameters.threshold_rate * 1000 # *1000 because nest uses Hz
     
@@ -284,8 +281,9 @@ for sim_index in sim_indices:
     #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
     ########################################################################
 
-    #ax = Plot_LFP(LFP)
-    #plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
+    # ax = Plot_LFP(LFP)
+    # plt.show()
+    # plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
     # events_EX, events_IN, events_LGN = events
     # plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
     # plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
