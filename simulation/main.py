@@ -203,7 +203,7 @@ seq = np.random.choice(10, size=10, replace=False)
 
 #rate = Get_LGN_signal(seq)
 
-n_sims = 100
+n_sims = 10
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
@@ -291,6 +291,7 @@ for sim_index in sim_indices:
     # #plt.plot(population_rates[0])
     # plt.show()
     # exit("egg")
+    print("sim_index", sim_index)
 
 t_stop = time.time() - t_start
 print(f"sims_per_job = {n_total_sims/n_jobs}" )
