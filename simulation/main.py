@@ -194,7 +194,7 @@ if network_parameters.create_kernel:
 ########################
 # Part 5: Using pyLGN: #
 ########################
-
+## En sim tar ca 0.712 min
 Part = "Part5: the full simulation using pyLGN"
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
@@ -203,7 +203,7 @@ seq = np.random.choice(10, size=10, replace=False)
 
 #rate = Get_LGN_signal(seq)
 
-n_sims = 10
+n_sims = 100000
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
@@ -291,7 +291,7 @@ for sim_index in sim_indices:
     # #plt.plot(population_rates[0])
     # plt.show()
     # exit("egg")
-    print("sim_index", sim_index)
+    #print("sim_index", sim_index)
 
 t_stop = time.time() - t_start
 print(f"sims_per_job = {n_total_sims/n_jobs}" )
