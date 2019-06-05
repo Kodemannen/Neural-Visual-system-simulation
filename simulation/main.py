@@ -192,10 +192,10 @@ if network_parameters.create_kernel:
 
 
 ########################
-# Part 5: Using pyLGN: #
+# Part 6: Using pyLGN: #
 ########################
 ## En sim tar ca 0.712 min
-Part = "Part5: the full simulation using pyLGN"
+Part = "Part6: the full simulation using pyLGN"
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
@@ -236,7 +236,8 @@ t_start = time.time()
 if rank == 0:
     with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
         filen.write(Part + "\n")
-        filen.write("Mean eta: " + str(network_parameters.mean_eta) + " \n")  
+        filen.write("Mean eta: " + str(network_parameters.mean_eta) + " \n") 
+        filen.write("amplitude=6" + "\n")     
         filen.write("n_jobs=" + str(n_jobs) + "\n")
         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
         #filen.write("states="+str(states) + "\n")
@@ -245,7 +246,7 @@ if rank == 0:
 for sim_index in sim_indices:
 
     seq = np.random.choice(10, size=10, replace=False)  # image sequence
-    rates = Get_LGN_signal(seq)
+    rates, mean = Get_LGN_signal(seq, amplitude=6)
     seq_label = seq_to_string(seq)
 
 
@@ -259,7 +260,7 @@ for sim_index in sim_indices:
     ##################################################
     # Setting new eta value to keep the mean to 1.1: #
     ##################################################
-    eta_LGN = 6.512339651169235 / threshold_rate_LGN
+    eta_LGN = float(mean) / threshold_rate_LGN
     eta_bg = network_parameters.mean_eta - eta_LGN
     bg_rate = eta_bg*network_parameters.threshold_rate * 1000 # *1000 because nest uses Hz
     

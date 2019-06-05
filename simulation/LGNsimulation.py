@@ -19,7 +19,7 @@ stimulus_image_paths =  sorted([stimulus_image_directory + dir_info[0][2][i] \
 N = len(stimulus_image_paths)
 image_indices = list(range(N))
 
-def Get_LGN_signal(permutation):
+def Get_LGN_signal(permutation, amplitude):
 
     sequence = [stimulus_image_paths[-1]]
     for index in permutation:
@@ -86,7 +86,7 @@ def Get_LGN_signal(permutation):
     network.compute_response(relay)
     signal = relay.center_response
 
-    signal = signal[:250*12] # assuming duration of 250 ms 
+    signal = signal[:250*12] # assuming duration of 250 ms, dt=1 ms
     
     # shifting and normalizing for nr=7
     #signal += 126/qp.s
@@ -96,7 +96,9 @@ def Get_LGN_signal(permutation):
 
     # shifting and normalizing for nr = 5
     signal += 140/qp.s
-    signal *= np.sqrt(1.5/740.4)
+    signal *= np.sqrt(amplitude/2/740.4)
+    mean = np.mean(signal)
+    
     # This gives it a mean of 6.512339651169235
 
     # shifting signal and "normalizing, sort of"
@@ -116,43 +118,47 @@ def Get_LGN_signal(permutation):
     #                         dt=integrator.dt.rescale("ms"))
 
 
-    return signal*(signal>0)
+    return signal*(signal>0), mean
 
 
-def Create_LGN_signals():
-    # 117 sec per sim
-    import time
-    t = time.time()
-    vars = []
-    maxes = []
-    mins = []
-    for i in range(2):
-        print(i)
+def LGN_classification_test():
+    N = 10000
+    data = np.zeros((10,N,250))
+    #np.random.seed(0)
+    for i in range(N):
         seq = np.random.choice(10, size=10, replace=False)
-        
-        signal = Get_LGN_signal(seq)
-        
-        #signal = signal[:250*12] 
-        
-        #signal = signal + 85 / qp.s
-        #signal = signal / 170
-        vars.append(np.var(signal))
-        maxes.append(np.max(signal))
-        mins.append(np.min(signal))
-        
-        plt.plot(signal)
-    t = time.time()-t
-    print(t)
+        #seq = np.arange(10)
 
-    print(np.mean(vars))
-    print("------------")
-    print(np.max(maxes))
-    print("------------")
-    print(np.min(mins))
-    print(np.mean(mins))
-    print("-----")
-    print(np.mean(signal))
-    plt.show()
+        signal = Get_LGN_signal(seq, amplitude=6)
+        #plt.plot(signal, "black")
+        splitted = np.split(signal,12)
+        
+        for j in range(10):
+            data[j,i] = splitted[seq[j]+1]
+            #plt.plot(np.arange((seq[j]+1)*250,(seq[j]+2)*250), data[j,i])
+            #plt.plot(np.arange((j+1)*250,(j+2)*250), data[j,i])
+        #plt.show()
+        #exit("asd")
+
+        # plt.plot(signal)
+        # for p in range(10):
+        #     plt.plot(np.arange(250,250*11), data[:,0,:].reshape(-1), linestyle="--", color="green")
+        # plt.show()
+        # exit("hore")
+        print(i)
+    
+    class_colors = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
+
+
+    np.save("/home/samknu/data/pyLGN.npy", data)
+    # for j in classes:
+    #     mean = np.mean(data[j], axis=0)
+
+    #     plt.plot(mean, color=class_colors[j], label=str(j))
+
+    # plt.legend()
+    # plt.show()
+    
 
 if __name__=="__main__":
     from scipy.misc import imread 
@@ -161,10 +167,9 @@ if __name__=="__main__":
     # for i in range(1):
     #     rate = Get_LGN_signal(np.random.choice(10, size=10, replace=False))
     #     print(np.shape(rate))
-    Create_LGN_signals()
 
     # nr2=Get_LGN_signal(np.random.choice(10, size=10, replace=False))
-
+    LGN_classification_test()
 
 
     # print(np.mean(nr1))
