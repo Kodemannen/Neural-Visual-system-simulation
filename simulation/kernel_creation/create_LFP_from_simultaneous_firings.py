@@ -6,7 +6,7 @@ if 'DISPLAY' not in os.environ:
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 from time import time
-import nest #not used, but load order determine if network is run in parallel
+#import nest #not used, but load order determine if network is run in parallel
 from hybridLFPy import PostProcess, Population, CachedNetwork, setup_file_dest
 from parameters import ParameterSet
 import h5py
