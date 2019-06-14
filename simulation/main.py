@@ -14,7 +14,7 @@ from scipy import signal
 # Importing local scripts: #
 ############################
 from set_parameters import Set_parameters
-from kernel_creation.create_kernels import Create_kernels
+#from kernel_creation.create_kernels import Create_kernels
 from plot_kernels import Plot_kernels
 from nest_simulation import Run_simulation
 from calculate_LFP import Calculate_LFP
