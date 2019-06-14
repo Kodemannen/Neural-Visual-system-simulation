@@ -124,17 +124,19 @@ def Get_LGN_signal(permutation, amplitude):
 def LGN_classification_test():
     N = 10000
     data = np.zeros((10,N,250))
+
     #np.random.seed(0)
     for i in range(N):
         seq = np.random.choice(10, size=10, replace=False)
         #seq = np.arange(10)
 
-        signal = Get_LGN_signal(seq, amplitude=6)
+        signal, mean = Get_LGN_signal(seq, amplitude=6)
+        
         #plt.plot(signal, "black")
         splitted = np.split(signal,12)
         
         for j in range(10):
-            data[j,i] = splitted[seq[j]+1]
+            data[seq[j],i] = splitted[j+1]
             #plt.plot(np.arange((seq[j]+1)*250,(seq[j]+2)*250), data[j,i])
             #plt.plot(np.arange((j+1)*250,(j+2)*250), data[j,i])
         #plt.show()

@@ -192,10 +192,10 @@ if network_parameters.create_kernel:
 
 
 ########################
-# Part 6: Using pyLGN: #
+# Part 7: Using pyLGN: #
 ########################
 ## En sim tar ca 0.712 min
-Part = "Part6: the full simulation using pyLGN"
+Part = "Part7: with fixed topography"
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
@@ -237,7 +237,7 @@ if rank == 0:
     with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
         filen.write(Part + "\n")
         filen.write("Mean eta: " + str(network_parameters.mean_eta) + " \n") 
-        filen.write("amplitude=6" + "\n")     
+        filen.write("amplitude=3" + "\n")     
         filen.write("n_jobs=" + str(n_jobs) + "\n")
         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
         #filen.write("states="+str(states) + "\n")
@@ -246,7 +246,7 @@ if rank == 0:
 for sim_index in sim_indices:
 
     seq = np.random.choice(10, size=10, replace=False)  # image sequence
-    rates, mean = Get_LGN_signal(seq, amplitude=6)
+    rates, mean = Get_LGN_signal(seq, amplitude=3)
     seq_label = seq_to_string(seq)
 
 
@@ -262,6 +262,7 @@ for sim_index in sim_indices:
     ##################################################
     eta_LGN = float(mean) / threshold_rate_LGN
     eta_bg = network_parameters.mean_eta - eta_LGN
+
     bg_rate = eta_bg*network_parameters.threshold_rate * 1000 # *1000 because nest uses Hz
     
     network_parameters.eta=eta_bg  
@@ -282,16 +283,16 @@ for sim_index in sim_indices:
     #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
     ########################################################################
 
-    # ax = Plot_LFP(LFP)
-    # plt.show()
-    # plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
-    # events_EX, events_IN, events_LGN = events
-    # plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
-    # plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
-    # plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
-    # #plt.plot(population_rates[0])
-    # plt.show()
-    # exit("egg")
+    ax = Plot_LFP(LFP)
+    plt.show()
+    plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
+    events_EX, events_IN, events_LGN = events
+    plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
+    plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
+    plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
+    #plt.plot(population_rates[0])
+    plt.show()
+    exit("egg")
     #print("sim_index", sim_index)
 
 t_stop = time.time() - t_start
