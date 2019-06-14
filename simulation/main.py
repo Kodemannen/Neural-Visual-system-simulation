@@ -14,7 +14,7 @@ from scipy import signal
 # Importing local scripts: #
 ############################
 from set_parameters import Set_parameters
-#from kernel_creation.create_kernels import Create_kernels
+from kernel_creation.create_kernels import Create_kernels
 from plot_kernels import Plot_kernels
 from nest_simulation import Run_simulation
 from calculate_LFP import Calculate_LFP
@@ -283,17 +283,17 @@ for sim_index in sim_indices:
     #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
     ########################################################################
 
-    ax = Plot_LFP(LFP)
-    plt.show()
-    plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
-    events_EX, events_IN, events_LGN = events
-    plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
-    plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
-    plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
-    #plt.plot(population_rates[0])
-    plt.show()
-    exit("egg")
-    #print("sim_index", sim_index)
+    # ax = Plot_LFP(LFP)
+    # plt.show()
+    # plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
+    # events_EX, events_IN, events_LGN = events
+    # plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
+    # plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
+    # plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
+    # #plt.plot(population_rates[0])
+    # plt.show()
+    # exit("egg")
+    # #print("sim_index", sim_index)
 
 t_stop = time.time() - t_start
 print(f"sims_per_job = {n_total_sims/n_jobs}" )
