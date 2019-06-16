@@ -140,10 +140,18 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
             weights = f["weights"][()]
 
         conn_dict = {"rule": "one_to_one"}
-        syn_dict = {"weight": weights}
         
-        nest.Connect(pre,post,conn_dict, syn_dict)
+        n = len(pre)
+        #exit("hor")
+        n_splits = 100
+        gap = int(round(n/n_splits))
         
+        #t = time.time()
+        for i in range(n_splits):
+            nest.Connect(pre[i*gap:(i+1)*gap],post[i*gap:(i+1)*gap],conn_dict, {"weight": weights[i*gap:(i+1)*gap]})
+        #t = time.time()-t
+        #print(t)
+
     else:
         
         nest.Connect(LGN_output, nodes_LGN)     # connecting to the parrot neurons so we can record the LGN synapse activity

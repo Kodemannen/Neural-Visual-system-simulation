@@ -10,7 +10,7 @@
 #SBATCH --time=25:00:01     
 #
 # Max memory usage:
-#SBATCH --mem-per-cpu=2G
+#SBATCH --mem-per-cpu=4G
 
 #SBATCH --ntasks=8
 
