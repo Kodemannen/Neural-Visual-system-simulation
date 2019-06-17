@@ -1,6 +1,7 @@
 """
                         Simulation mainframe
 """
+import nest
 import matplotlib 
 import numpy as np
 import parameters as ps

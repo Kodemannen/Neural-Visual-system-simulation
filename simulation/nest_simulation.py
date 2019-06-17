@@ -18,7 +18,7 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     #############################################
     # Extracting network/simulation parameters: #
     #############################################
-
+    #simulation_index = 109
     PS = network_parameters
     spike_dir = PS.nest_output_path
     threads = PS.threads    # number of parallel threads
@@ -45,8 +45,7 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     simtime = PS.simtime
     J_background = PS.J_background
 
-    use_connectome = PS.use_connectome
-    create_connectome = PS.create_connectome
+    fixed_connectome = PS.fixed_connectome
 
     neuron_params = {"C_m" : PS.CMem,
                     "tau_m": PS.tauMem,
@@ -131,73 +130,38 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     #######################
     # Connecting network: #
     #######################
-    
-    if use_connectome:
+    if fixed_connectome:
+        nest.SetKernelStatus({
+                            "grng_seed": 0,
+                            "rng_seeds" : range(1, threads+1),
+                            })
         
-        with h5py.File("../../connectome.h5", "r") as f:
-            pre = tuple(f["pre"][()])
-            post = tuple(f["post"][()])
-            weights = f["weights"][()]
+    nest.Connect(LGN_output, nodes_LGN)     # connecting to the parrot neurons so we can record the LGN synapse activity
 
-        conn_dict = {"rule": "one_to_one"}
-        
-        n = len(pre)
-        #exit("hor")
-        n_splits = 100
-        gap = int(round(n/n_splits))
-        
-        #t = time.time()
-        for i in range(n_splits):
-            nest.Connect(pre[i*gap:(i+1)*gap],post[i*gap:(i+1)*gap],conn_dict, {"weight": weights[i*gap:(i+1)*gap]})
-        #t = time.time()-t
-        #print(t)
+    nest.Connect(nodes_LGN, nodes_EX + nodes_IN, conn_spec=conn_spec_LGN, syn_spec="excitatory")
+    nest.Connect(background, nodes_EX + nodes_IN, conn_spec=conn_spec_background, syn_spec="excitatory")
 
-    else:
-        
-        nest.Connect(LGN_output, nodes_LGN)     # connecting to the parrot neurons so we can record the LGN synapse activity
+    nest.Connect(nodes_EX, nodes_IN + nodes_EX, conn_spec=conn_spec_EX, syn_spec="excitatory")
+    nest.Connect(nodes_IN, nodes_EX + nodes_IN, conn_spec=conn_spec_IN, syn_spec="inhibitory")
 
-        nest.Connect(nodes_LGN, nodes_EX + nodes_IN, conn_spec=conn_spec_LGN, syn_spec="excitatory")
-        nest.Connect(background, nodes_EX + nodes_IN, conn_spec=conn_spec_background, syn_spec="excitatory")
+    # nest.Connect(LGN_output, nodes_ex+nodes_in, conn_spec=connection_specifications, syn_spec=syn_spec_LGN)
+    # nest.Connect(background, nodes_ex+nodes_in, conn_spec=connection_specifications, syn_spec=syn_spec_background)
+    nest.Connect(nodes_EX,  spike_detector_EX)
+    nest.Connect(nodes_IN,  spike_detector_IN)
+    nest.Connect(nodes_LGN, spike_detector_LGN)
 
-        nest.Connect(nodes_EX, nodes_IN + nodes_EX, conn_spec=conn_spec_EX, syn_spec="excitatory")
-        nest.Connect(nodes_IN, nodes_EX + nodes_IN, conn_spec=conn_spec_IN, syn_spec="inhibitory")
+    nest.Connect(volt_check, nodes_EX[0:1])
 
-        # nest.Connect(LGN_output, nodes_ex+nodes_in, conn_spec=connection_specifications, syn_spec=syn_spec_LGN)
-        # nest.Connect(background, nodes_ex+nodes_in, conn_spec=connection_specifications, syn_spec=syn_spec_background)
-        nest.Connect(nodes_EX,  spike_detector_EX)
-        nest.Connect(nodes_IN,  spike_detector_IN)
-        nest.Connect(nodes_LGN, spike_detector_LGN)
-
-        nest.Connect(volt_check, nodes_EX[0:1])
-
-
-
-
-    if create_connectome:
-        #######################
-        # Getting connectome: #
-        #######################
-        print("heio")
-        
-        connections = nest.GetStatus(nest.GetConnections(), ['source', 'target', "weight"])
-        connections = np.array(connections)
-        
-        pre = tuple(np.array(connections[:,0],dtype=np.int))
-        post = tuple(np.array(connections[:,1],dtype=np.int))
-        weights = tuple(connections[:,2])
-
-        with h5py.File("connectome.h5", "w") as f:
-            f["pre"] = pre
-            f["post"] = post
-            f["weights"] = weights
-
-        #print(connections.shape)
-        #np.save("connectome", connections)
-        exit("balle")
 
     ######################
     # Running simulation #
     ######################
+    if fixed_connectome:    # Resetting seed:
+        nest.SetKernelStatus({"grng_seed": simulation_index+threads,
+                            #"rng_seeds" : (simulation_index,),
+                            "rng_seeds" : range(simulation_index*10+threads+1, simulation_index*10+2*threads+1),
+                            })
+
     nest.Simulate(simtime)
 
     events_EX   = nest.GetStatus(spike_detector_EX)[0]["events"]
@@ -208,6 +172,7 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     voltages = nest.GetStatus(volt_check)[0]
     volt = voltages["events"]["V_m"]
     times = voltages["events"]["times"]
+
 
     #plt.plot(times, volt)
     #plt.close()
