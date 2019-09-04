@@ -82,7 +82,7 @@ def Plot_kernels(network_parameters, ax=0, pop_colors=None):
     ax.yaxis.set_ticks(ticks=yticks)#, labels = np.flip(["Ch. %s" %i for i in range(1,n_channels+1)]))
     ax.yaxis.set_ticklabels(np.flip(["Ch. %s" %i for i in range(1,n_channels+1)]))
 
-    ax.xaxis.set_ticks_position('bottom')
+    #ax.xaxis.set_ticks_position('bottom')
     ax.yaxis.set_ticks_position('left')
     ax.set_xlabel("t (ms)")
     ax.set_xlim([0,200])

@@ -113,9 +113,9 @@ def Get_LGN_signal(permutation, amplitude):
     
 
     # mean is now 0.49  Hz
-    # pylgn.plot.animate_cube(relay.response,
-    #                         title = "asd",
-    #                         dt=integrator.dt.rescale("ms"))
+    pylgn.plot.animate_cube(relay.response,
+                            title = "asd",
+                            dt=integrator.dt.rescale("ms"))
 
 
     return signal*(signal>0), mean
@@ -163,15 +163,15 @@ def LGN_classification_test():
     
 
 if __name__=="__main__":
-    from scipy.misc import imread 
+    #from scipy.misc import imread 
     import matplotlib.pyplot as plt
     #np.random.seed(1)
     # for i in range(1):
     #     rate = Get_LGN_signal(np.random.choice(10, size=10, replace=False))
     #     print(np.shape(rate))
-
-    # nr2=Get_LGN_signal(np.random.choice(10, size=10, replace=False))
-    LGN_classification_test()
+    order = np.random.choice(10, size=10, replace=False)
+    nr2=Get_LGN_signal(order,3)
+    #LGN_classification_test()
 
 
     # print(np.mean(nr1))

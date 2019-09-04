@@ -196,15 +196,15 @@ if network_parameters.create_kernel:
 # Part 7: Using pyLGN: #
 ########################
 ## En sim tar ca 0.712 min
-Part = "Part7: with fixed topography"
+Part = "just making a plot for part 5"
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
 seq = np.random.choice(10, size=10, replace=False)
-
+seq = np.arange(10)
 #rate = Get_LGN_signal(seq)
 
-n_sims = 100000
+n_sims = 1
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
@@ -246,7 +246,8 @@ if rank == 0:
 
 for sim_index in sim_indices:
 
-    seq = np.random.choice(10, size=10, replace=False)  # image sequence
+    #seq = np.random.choice(10, size=10, replace=False)  # image sequence
+    seq = np.arange(10)
     rates, mean = Get_LGN_signal(seq, amplitude=3)
     seq_label = seq_to_string(seq)
 

@@ -135,7 +135,7 @@ def Set_parameters(abelrun):
         sigma_in=0.3,   # sigma in mm
 
         n_channels = 6, # number of LFP recording channels
-        fixed_connectome=True, # use fixed connectome from file
+        fixed_connectome=False, # use fixed connectome from file
 
         order=2500,     # network scaling factor
     ))
