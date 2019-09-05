@@ -8,9 +8,10 @@ import quantities as qp
 
 ######################## Getting the paths to the input images ########################
 import os
+import sys 
 
+current_directory = os.path.dirname(os.path.realpath(__file__))
 
-current_directory = os.getcwd()
 stimulus_image_directory = current_directory + "/stimulus_images/" 
 dir_info = list(os.walk(stimulus_image_directory))
 stimulus_image_paths =  sorted([stimulus_image_directory + dir_info[0][2][i] \
@@ -19,7 +20,7 @@ stimulus_image_paths =  sorted([stimulus_image_directory + dir_info[0][2][i] \
 N = len(stimulus_image_paths)
 image_indices = list(range(N))
 
-def Get_LGN_signal(permutation, amplitude):
+def Get_LGN_signal(permutation, amplitude, show_anim=False):
 
     sequence = [stimulus_image_paths[-1]]
     for index in permutation:
@@ -113,9 +114,10 @@ def Get_LGN_signal(permutation, amplitude):
     
 
     # mean is now 0.49  Hz
-    pylgn.plot.animate_cube(relay.response,
-                            title = "asd",
-                            dt=integrator.dt.rescale("ms"))
+    if show_anim:
+        pylgn.plot.animate_cube(relay.response,
+                                title = "asd",
+                                dt=integrator.dt.rescale("ms"))
 
 
     return signal*(signal>0), mean
@@ -170,7 +172,7 @@ if __name__=="__main__":
     #     rate = Get_LGN_signal(np.random.choice(10, size=10, replace=False))
     #     print(np.shape(rate))
     order = np.random.choice(10, size=10, replace=False)
-    nr2=Get_LGN_signal(order,3)
+    nr2=Get_LGN_signal(order,3,show_anim=True)
     #LGN_classification_test()
 
 
