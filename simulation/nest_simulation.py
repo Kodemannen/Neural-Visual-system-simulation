@@ -101,7 +101,7 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     # syn_spec_LGN = {"weight": J_LGN, "delay" : delay}
     # syn_spec_background = {"weight": J_background}
 
-
+    
     LGN_output = nest.Create("inhomogeneous_poisson_generator")     # output from LGN
     nest.SetStatus(LGN_output, {"rate_times": rate_times, "rate_values": poisson_rates})
 

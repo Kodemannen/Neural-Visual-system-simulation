@@ -71,7 +71,6 @@ def Set_parameters(abelrun):
             os.makedirs(PS[key])
 
 
-
     PS.update(dict(
         create_kernel = create_kernel,
 
@@ -137,8 +136,8 @@ def Set_parameters(abelrun):
         n_channels = 6, # number of LFP recording channels
         fixed_connectome=False, # use fixed connectome from file
 
-        order=2500,     # network scaling factor
-    ))
+        order=2500     # network scaling factor
+    ).items())
 
     ################################################
     # Params that are dependent on the ones above: #
@@ -151,7 +150,7 @@ def Set_parameters(abelrun):
         J_IN = -PS.g*PS.J_EX,
         J_LGN = PS.J_EX,
         J_background = PS.J_EX
-    ))
+    ).items())
 
     PS.update(dict(
         N_neurons = PS.NE + PS.NI, # total number of neurons
@@ -159,7 +158,7 @@ def Set_parameters(abelrun):
         CI = round(PS.NI * PS.epsilon),  # number of inhibitory synapses per neuron
         C_LGN = round(PS.N_LGN * PS.epsilon), # number of LGN synapses onto an EX or IN neuron
 
-    ))
+    ).items())
 
     PS.update(dict(
         C_tot = PS.CE + PS.CI, #+ PS.C_LGN + PS.C_background ??,  # total number of synapses per neuron
@@ -167,11 +166,11 @@ def Set_parameters(abelrun):
         C_background = 1.5,
 
         threshold_rate = PS.theta/(PS.J_EX*PS.tauMem),  #kHz
-    ))
+    ).items())
 
     PS.update(dict(
         background_rate = PS.eta*PS.threshold_rate*1000,    # Hz
-    ))  # nest uses Hz while threshold_rate is in kHz since tauMem is in ms
+    ).items())  # nest uses Hz while threshold_rate is in kHz since tauMem is in ms
         # to 15 kHz = 15 000 Hz, etc. so we have to *1000
 
     ##########################
@@ -300,7 +299,7 @@ def Set_parameters(abelrun):
 
         #time resolution of saved signals
         dt_output = 1.
-    ))
+    ).items())
 
 
 
@@ -312,7 +311,8 @@ def Set_parameters(abelrun):
     PS.update(dict(J_yX = dict(
                      EX = [PS['J_EX']*K, PS['J_IN']*K, PS["J_LGN"]*K],
                      IN = [PS['J_EX']*K, PS['J_IN']*K, PS["J_LGN"]*K],
-                     )))
+                     )).items())
+    
 
 
     #for each population, define layer- and population-specific connectivity
@@ -367,17 +367,16 @@ def Set_parameters(abelrun):
             EX = [None, None, None],
             IN = [None, None, None],
         ),
-    ))
+    ).items())
 
     #putative mappting between population type and cell type specificity,
     #but here all presynaptic senders are also postsynaptic targets
     PS.update(dict(
         mapping_Yy = list(zip(PS.X, PS.X))      # DENNE??
-    ))
+    ).items())
 
     PS.save(PS.params_path)
     print(PS.params_path)
-
     return PS
 
 
