@@ -207,7 +207,7 @@ seq = np.random.choice(10, size=10, replace=False)
 seq = np.arange(10)
 #rate = Get_LGN_signal(seq)
 
-n_sims = 20000
+n_sims = 1
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
