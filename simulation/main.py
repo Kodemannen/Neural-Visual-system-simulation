@@ -250,7 +250,7 @@ if rank == 0:
 for sim_index in sim_indices:
 
     seq = np.random.choice(10, size=10, replace=False)  # image sequence
-    #seq = np.arange(10)
+    seq = np.arange(10)
     rates, mean = Get_LGN_signal(seq, amplitude=3)
     seq_label = seq_to_string(seq)
 
@@ -290,13 +290,15 @@ for sim_index in sim_indices:
 
     ax = Plot_LFP(LFP)
     plt.show()
+
     plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
     events_EX, events_IN, events_LGN = events
-    plt.scatter(events_EX["times"], events_EX["senders"],color="red", s=0.1)
-    plt.scatter(events_IN["times"], events_IN["senders"],color="green",s=0.1)
-    plt.scatter(events_LGN["times"], events_LGN["senders"],color="blue",s=0.1)
+    plt.scatter(events_EX["times"][250*3:250*4], events_EX["senders"][250*3:250*4],color="k", s=0.1)
+    plt.scatter(events_IN["times"][250*3:250*4], events_IN["senders"][250*3:250*4],color="k",s=0.1)
+    plt.scatter(events_LGN["times"][250*3:250*4], events_LGN["senders"][250*3:250*4],color="k",s=0.1)
     #plt.plot(population_rates[0])
-    plt.show()
+    plt.savefig("scatter.svg")
+    #plt.show()
     exit("egg")
     #print("sim_index", sim_index)
 
