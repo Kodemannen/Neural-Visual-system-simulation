@@ -286,16 +286,16 @@ for sim_index in sim_indices:
     #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
     ########################################################################
 
-    ax = Plot_LFP(LFP)
-    plt.show()
+    # ax = Plot_LFP(LFP)
+    # plt.show()
 
-    plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
+    #plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
     events_EX, events_IN, events_LGN = events
     plt.scatter(events_EX["times"][250*3:250*4], events_EX["senders"][250*3:250*4],color="k", s=0.1)
     plt.scatter(events_IN["times"][250*3:250*4], events_IN["senders"][250*3:250*4],color="k",s=0.1)
     plt.scatter(events_LGN["times"][250*3:250*4], events_LGN["senders"][250*3:250*4],color="k",s=0.1)
     #plt.plot(population_rates[0])
-    plt.savefig(ps.network_parameters.sim_output_dir+ "/scatter.png")
+    plt.savefig(ps.network_parameters.sim_output_dir+ "/scatter")
     #plt.show()
     exit("egg")
     #print("sim_index", sim_index)
