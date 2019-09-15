@@ -295,7 +295,7 @@ for sim_index in sim_indices:
     plt.scatter(events_IN["times"], events_IN["senders"],color="k",s=0.1)
     plt.scatter(events_LGN["times"], events_LGN["senders"],color="k",s=0.1)
     #plt.plot(population_rates[0])
-    plt.savefig(network_parameters.sim_output_dir+ "/scatter")
+    plt.savefig(network_parameters.sim_output_dir+ "/scatter.svg")
     #plt.show()
     exit("egg")
     #print("sim_index", sim_index)
