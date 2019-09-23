@@ -164,7 +164,7 @@ def LGN_classification_test():
     # plt.show()
 
 
-def Rf_heatmap(path, rank, n_jobs):
+def Rf_heatmap(path, rank, n_jobs, network_parameters):
     import matplotlib.pyplot as plt
     import PIL
     import numpy as np
