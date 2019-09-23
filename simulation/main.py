@@ -1,7 +1,7 @@
 """
                         Simulation mainframe
 """
-import nest
+#import nest
 import matplotlib 
 import numpy as np
 import parameters as ps
@@ -11,18 +11,18 @@ import os
 import sys
 from scipy import signal
 
-############################
-# Importing local scripts: #
-############################
+# ############################
+# # Importing local scripts: #
+# ############################
 from set_parameters import Set_parameters
-#from kernel_creation.create_kernels import Create_kernels
-from plot_kernels import Plot_kernels
-from nest_simulation import Run_simulation
-from calculate_LFP import Calculate_LFP
-from plot_LFP import Plot_LFP
-from save_LFP import Save_LFP
-from save_population_rates import Save_population_rates
-from LGNsimulation import Get_LGN_signal
+# #from kernel_creation.create_kernels import Create_kernels
+# from plot_kernels import Plot_kernels
+# from nest_simulation import Run_simulation
+# from calculate_LFP import Calculate_LFP
+# from plot_LFP import Plot_LFP
+# from save_LFP import Save_LFP
+# from save_population_rates import Save_population_rates
+# from LGNsimulation import Get_LGN_signal
 
 ###########
 ### MPI ###
