@@ -168,7 +168,7 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
     import matplotlib.pyplot as plt
     import PIL
     import numpy as np
-
+    
     #path = "/work/users/samuelkk/"
     #path = "/home/samknu/junk/"
 
@@ -216,7 +216,7 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
 
     original_signal = np.load("original_signal.npy") /qp.s
 
-    size = 900
+    size = 50
 
     count = 0
     heatmap_matrix = np.zeros((shape[0],shape[1]))
@@ -234,8 +234,12 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
     n = (918-size)
     m = (1174-size)
     
-    i_indices = np.arange(rank,n,n_jobs)
+    rank = 1
+    n_jobs = 10
+    i_indices = np.arange(0,n,n_jobs)
     j_indices = np.arange(rank,m,n_jobs)
+
+    
     
 
     for i in i_indices:
@@ -297,9 +301,13 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
             # del network
             # del integrator
             # del stimulus
-    
     #heatmap_matrix = np.load("/home/samknu/junk/heatmap_matrix.npy")
 
+    # print(heatmap_matrix[0,:20])
+    # import seaborn as sns
+    # sns.heatmap(heatmap_matrix)
+    # plt.show()
+    # exit("hore")
     np.save(network_parameters.heatmap_matrices+f"/heatmap_matrix{rank}.npy", heatmap_matrix)
     
     return 0
