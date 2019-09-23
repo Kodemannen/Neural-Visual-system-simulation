@@ -239,69 +239,65 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
     j_indices = np.arange(rank,m,n_jobs)
 
     
-    
-
     for i in i_indices:
         
         for j in j_indices:
             
-            heatmap_matrix[i,j] = 1
-            # img = original_image.copy()
-            # img[i:i+size,j:j+size,:] = 0
+            img = original_image.copy()
+            img[i:i+size,j:j+size,:] = 0
 
-            # im = PIL.Image.fromarray(np.uint8(img*255))
+            im = PIL.Image.fromarray(np.uint8(img*255))
             
-            # #im.save("/work/users/samuelkk/img.jpg")
-            # im.save(network_parameters.pyLGNimgs + f"/img{rank}.jpg")
+            #im.save("/work/users/samuelkk/img.jpg")
+            im.save(network_parameters.pyLGNimgs + f"/img{rank}.jpg")
 
             
-            # ######################## Setting up pyLGN network ########################
-            # network = pylgn.Network()
-            # integrator = network.create_integrator(nt, nr, dt, dr)
+            ######################## Setting up pyLGN network ########################
+            network = pylgn.Network()
+            integrator = network.create_integrator(nt, nr, dt, dr)
 
-            # # Ganglion Kernels
-            # Wg_r = spl.create_dog_ft(A_g, a_g, B_g, b_g)
-            # Wg_t = tpl.create_biphasic_ft()
-            # #Wg_t = tpl.create_delta_ft()
+            # Ganglion Kernels
+            Wg_r = spl.create_dog_ft(A_g, a_g, B_g, b_g)
+            Wg_t = tpl.create_biphasic_ft()
+            #Wg_t = tpl.create_delta_ft()
 
-            # # Relay kernels
-            # Wr_r = spl.create_dog_ft(A_r, a_r, B_r, b_r)
-            # Wr_t = tpl.create_biphasic_ft()
-            # #Wr_t = tpl.create_delta_ft()
+            # Relay kernels
+            Wr_r = spl.create_dog_ft(A_r, a_r, B_r, b_r)
+            Wr_t = tpl.create_biphasic_ft()
+            #Wr_t = tpl.create_delta_ft()
 
-            # ganglion = network.create_ganglion_cell()
-            # relay = network.create_relay_cell()
+            ganglion = network.create_ganglion_cell()
+            relay = network.create_relay_cell()
 
-            # network.connect(ganglion, relay, kernel=(Wr_r, Wr_t), weight=weights)
+            network.connect(ganglion, relay, kernel=(Wr_r, Wr_t), weight=weights)
 
-            # stimulus = pylgn.stimulus.create_natural_image(filenames=network_parameters.pyLGNimgs + f"/img{rank}.jpg", delay=delay, duration=image_duration)
+            stimulus = pylgn.stimulus.create_natural_image(filenames=network_parameters.pyLGNimgs + f"/img{rank}.jpg", delay=delay, duration=image_duration)
     
-            # network.set_stimulus(stimulus, compute_fft=True)
+            network.set_stimulus(stimulus, compute_fft=True)
             
-            # network.compute_response(relay)
+            network.compute_response(relay)
         
-            # signal = relay.center_response
+            signal = relay.center_response
 
-            # diff_vec = signal-original_signal
+            diff_vec = signal-original_signal
 
-            # diff = np.linalg.norm(diff_vec)
+            diff = np.linalg.norm(diff_vec)
             
-            # heatmap_matrix[i+int(size/2),j+int(size/2)] = diff
+            heatmap_matrix[i+int(size/2),j+int(size/2)] = diff
 
-            # count += 1 
-            # print(count/(m*n)*100)
+            count += 1 
+            #print(count/(m*n)*100)
 
-            # #t = time.time()
-            # #print(count/(m*n) /stride**2 *100, (t-t0)/count * m*n/stride**2)
-            # #print()
+            #t = time.time()
+            #print(count/(m*n) /stride**2 *100, (t-t0)/count * m*n/stride**2)
+            #print()
             
-            # #print(count/(m*n)*100)
+            #print(count/(m*n)*100)
 
-            # del network
-            # del integrator
-            # del stimulus
-    #heatmap_matrix = np.load("/home/samknu/junk/heatmap_matrix.npy")
-
+            del network
+            del integrator
+            del stimulus
+    
     # print(heatmap_matrix[0,:20])
     # import seaborn as sns
     # sns.heatmap(heatmap_matrix)
