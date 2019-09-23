@@ -247,7 +247,7 @@ def Rf_heatmap(path, rank, n_jobs):
             im = PIL.Image.fromarray(np.uint8(img*255))
             
             #im.save("/work/users/samuelkk/img.jpg")
-            im.save(path + f"img{rank}.jpg")
+            im.save(path + f"/img{rank}.jpg")
 
             
             ######################## Setting up pyLGN network ########################
@@ -269,7 +269,7 @@ def Rf_heatmap(path, rank, n_jobs):
 
             network.connect(ganglion, relay, kernel=(Wr_r, Wr_t), weight=weights)
 
-            stimulus = pylgn.stimulus.create_natural_image(filenames="/home/samknu/junk/img.jpg", delay=delay, duration=image_duration)
+            stimulus = pylgn.stimulus.create_natural_image(filenames=path + f"/img{rank}.jpg", delay=delay, duration=image_duration)
     
             network.set_stimulus(stimulus, compute_fft=True)
             
