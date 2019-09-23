@@ -223,8 +223,7 @@ if network_parameters.create_kernel:
 
 
 from LGNsimulation import Rf_heatmap
-Rf_heatmap(path=network_parameters.pyLGNimgs, rank=rank, n_jobs=n_jobs,network_parameters)
-
+Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
 
 
 
