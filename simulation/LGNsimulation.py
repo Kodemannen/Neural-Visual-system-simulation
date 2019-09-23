@@ -235,7 +235,7 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
     m = (1174-size)
     
 
-    i_indices = np.arange(0,n,n_jobs)
+    i_indices = np.arange(0,n,1)
     j_indices = np.arange(rank,m,n_jobs)
 
     
