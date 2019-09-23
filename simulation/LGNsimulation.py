@@ -162,7 +162,144 @@ def LGN_classification_test():
 
     # plt.legend()
     # plt.show()
+
+
+def Rf_heatmap(path, rank, n_jobs):
+    import matplotlib.pyplot as plt
+    import PIL
+    import numpy as np
+
+    #path = "/work/users/samuelkk/"
+    #path = "/home/samknu/junk/"
+
+    ######################## Simulation parameters: ########################
+
+    #im.save("/home/samknu/junk/test.jpg")
+    #scipy.misc.toimage("/home/samknu/junk/test.jpg", image)
+    # image dimension = (918, 1174, 3)
+
+
+    # Network resolution parameters:
+    nt=8       # 2**nt is the number of time steps in the simulation
+    nr=5
+    dt=1*pq.ms
+    dr=0.1*pq.deg
+
+
+    # Stimuli parameters:
+    image_duration = 50 * pq.ms      # duration of each individual stimulus image
+    delay = 0*pq.ms                 # delay between images (?)
+    total_simulation_time = N*image_duration + N*delay
+
+
+    # Ganglion DOG parameters:
+    A_g = 1             # center strength
+    a_g = 0.62*pq.deg   # center width
+    B_g = 0.85          # surround strength
+    b_g = 1.26*pq.deg   # surround width
+
+    # Ganglion weights:
+    weights = 1 
+
+    # Relay DOG parameters:
+    A_r = 1
+    a_r = 0.62*pq.deg
+    B_r = 0.85
+    b_r = 1.26*pq.deg
     
+    
+    #########
+    # alskd :#
+    image_path = stimulus_image_paths[2]
+    original_image = plt.imread(image_path)#*255
+    shape = original_image.shape 
+
+    original_signal = np.load("original_signal.npy") /qp.s
+
+    size = 50
+
+    count = 0
+    heatmap_matrix = np.zeros((shape[0],shape[1]))
+    stride = 1
+
+    # try:
+    #     rank = int(sys.argv[1])         # job array index
+    #     n_jobs = int(sys.argv[2])       # total number of jobs
+
+    # except IndexError:
+    #     n_jobs = 1
+    #     rank = 0
+
+
+    n = (918-size)
+    m = (1174-size)
+    
+    i_indices = np.arange(rank,n,n_jobs)
+    j_indices = np.arange(rank,m,n_jobs)
+    print(i_indices)
+    for i in i_indices:
+        
+        for j in j_indices:
+            
+            img = original_image.copy()
+            img[i:i+size,j:j+size,:] = 0
+
+            im = PIL.Image.fromarray(np.uint8(img*255))
+            
+            #im.save("/work/users/samuelkk/img.jpg")
+            im.save(path + f"img{rank}.jpg")
+
+            
+            ######################## Setting up pyLGN network ########################
+            network = pylgn.Network()
+            integrator = network.create_integrator(nt, nr, dt, dr)
+
+            # Ganglion Kernels
+            Wg_r = spl.create_dog_ft(A_g, a_g, B_g, b_g)
+            Wg_t = tpl.create_biphasic_ft()
+            #Wg_t = tpl.create_delta_ft()
+
+            # Relay kernels
+            Wr_r = spl.create_dog_ft(A_r, a_r, B_r, b_r)
+            Wr_t = tpl.create_biphasic_ft()
+            #Wr_t = tpl.create_delta_ft()
+
+            ganglion = network.create_ganglion_cell()
+            relay = network.create_relay_cell()
+
+            network.connect(ganglion, relay, kernel=(Wr_r, Wr_t), weight=weights)
+
+            stimulus = pylgn.stimulus.create_natural_image(filenames="/home/samknu/junk/img.jpg", delay=delay, duration=image_duration)
+    
+            network.set_stimulus(stimulus, compute_fft=True)
+            
+            network.compute_response(relay)
+        
+            signal = relay.center_response
+
+            diff = np.linalg.norm(signal-original_signal)
+
+            heatmap_matrix[i+int(size/2),j+int(size/2)] = diff
+
+            count += 1 
+            
+
+            #t = time.time()
+            #print(count/(m*n) /stride**2 *100, (t-t0)/count * m*n/stride**2)
+            #print()
+            
+            del network
+            del integrator
+            del stimulus
+    
+    #heatmap_matrix = np.load("/home/samknu/junk/heatmap_matrix.npy")
+
+    np.save(path+f"heatmap_matrix{rank}.npy", heatmap_matrix)
+    
+    return 0
+
+
+
 
 if __name__=="__main__":
     #from scipy.misc import imread 
@@ -171,8 +308,13 @@ if __name__=="__main__":
     # for i in range(1):
     #     rate = Get_LGN_signal(np.random.choice(10, size=10, replace=False))
     #     print(np.shape(rate))
-    order = np.random.choice(10, size=10, replace=False)
-    nr2=Get_LGN_signal(order,3,show_anim=True)
+
+    #Rf_heatmap(rank=0,n_jobs=1)
+
+    #order = np.random.choice(10, size=10, replace=False)
+    #nr2=Get_LGN_signal(order,3,show_anim=True)
+    
+    
     #LGN_classification_test()
 
 
