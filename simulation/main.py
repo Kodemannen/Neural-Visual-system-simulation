@@ -220,10 +220,10 @@ if network_parameters.create_kernel:
 ########################################
 # Calculating receptive field of pylgn #
 ########################################
-
-
+## Only need this part:
 from LGNsimulation import Rf_heatmap
 Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
+
 
 
 

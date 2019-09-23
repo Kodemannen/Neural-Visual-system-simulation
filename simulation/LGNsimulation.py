@@ -222,14 +222,6 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
     heatmap_matrix = np.zeros((shape[0],shape[1]))
     stride = 1
 
-    # try:
-    #     rank = int(sys.argv[1])         # job array index
-    #     n_jobs = int(sys.argv[2])       # total number of jobs
-
-    # except IndexError:
-    #     n_jobs = 1
-    #     rank = 0
-
 
     n = (918-size)
     m = (1174-size)
@@ -286,23 +278,12 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
             heatmap_matrix[i+int(size/2),j+int(size/2)] = diff
 
             count += 1 
-            #print(count/(m*n)*100)
-
-            #t = time.time()
-            #print(count/(m*n) /stride**2 *100, (t-t0)/count * m*n/stride**2)
-            #print()
-            
-            #print(count/(m*n)*100)
 
             del network
             del integrator
             del stimulus
     
-    # print(heatmap_matrix[0,:20])
-    # import seaborn as sns
-    # sns.heatmap(heatmap_matrix)
-    # plt.show()
-    # exit("hore")
+
     np.save(network_parameters.heatmap_matrices+f"/heatmap_matrix{rank}.npy", heatmap_matrix)
     
     return 0
