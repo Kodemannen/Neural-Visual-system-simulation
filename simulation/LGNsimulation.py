@@ -294,7 +294,7 @@ def Rf_heatmap(path, rank, n_jobs):
     
     #heatmap_matrix = np.load("/home/samknu/junk/heatmap_matrix.npy")
 
-    np.save(path+f"heatmap_matrix{rank}.npy", heatmap_matrix)
+    np.save(network_parameters.heatmap_matrices+f"/heatmap_matrix{rank}.npy", heatmap_matrix)
     
     return 0
 

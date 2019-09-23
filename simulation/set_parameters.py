@@ -53,6 +53,7 @@ def Set_parameters(abelrun):
         sim_output_dir = sim_output_dir,
         
         pyLGNimgs = sim_output_dir + "/pyLGNimgs",
+        heatmap_matrices = sim_output_dir + "/heatmap_matrices",
         hybrid_output_path = sim_output_dir + "/hybridLFPy_output",   # folder where the hybridLFPy stuff is stored
         nest_output_path= sim_output_dir + "/nest_output",
         population_rates_path=sim_output_dir + "/population_rates",
