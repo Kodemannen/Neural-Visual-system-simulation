@@ -1,7 +1,7 @@
 """
                         Simulation mainframe
 """
-#import nest
+import nest
 import matplotlib 
 import numpy as np
 import parameters as ps
@@ -15,14 +15,14 @@ from scipy import signal
 # # Importing local scripts: #
 # ############################
 from set_parameters import Set_parameters
-# #from kernel_creation.create_kernels import Create_kernels
-# from plot_kernels import Plot_kernels
-# from nest_simulation import Run_simulation
-# from calculate_LFP import Calculate_LFP
-# from plot_LFP import Plot_LFP
-# from save_LFP import Save_LFP
-# from save_population_rates import Save_population_rates
-# from LGNsimulation import Get_LGN_signal
+#from kernel_creation.create_kernels import Create_kernels
+from plot_kernels import Plot_kernels
+from nest_simulation import Run_simulation
+from calculate_LFP import Calculate_LFP
+from plot_LFP import Plot_LFP
+from save_LFP import Save_LFP
+from save_population_rates import Save_population_rates
+from LGNsimulation import Get_LGN_signal
 
 ###########
 ### MPI ###
@@ -204,7 +204,7 @@ if network_parameters.create_kernel:
 # seq = np.random.choice(10, size=10, replace=False)
 # seq = np.arange(10)
 # #rate = Get_LGN_signal(seq)
-
+# amplitude = 2
 # n_sims = 1
 
 # rate_times = np.arange(dt, simtime+dt, dt*10)
@@ -250,7 +250,7 @@ Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
 #     with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
 #         filen.write(Part + "\n")
 #         filen.write("Mean eta: " + str(network_parameters.mean_eta) + " \n") 
-#         filen.write("amplitude=3" + "\n")     
+#         filen.write("amplitude="+str(amplitude) + "\n")     
 #         filen.write("n_jobs=" + str(n_jobs) + "\n")
 #         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
 #         #filen.write("states="+str(states) + "\n")
@@ -260,9 +260,25 @@ Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
 
 #     seq = np.random.choice(10, size=10, replace=False)  # image sequence
 #     seq = np.arange(10)
-#     rates, mean = Get_LGN_signal(seq, amplitude=3)
+#     rates, mean = Get_LGN_signal(seq, amplitude=amplitude)
 #     seq_label = seq_to_string(seq)
 
+
+
+
+#     ax = plt.subplot(111)
+#     ax.plot(rates[250*4:250*5])
+#     #plt.axis("off")
+#         # Hide the right and top spines
+#     ax.spines['right'].set_visible(False)
+#     ax.spines['top'].set_visible(False)
+
+#     #plt.plot(population_rates[0])
+#     #plt.axis("off")
+#     plt.xticks([])
+#     plt.yticks([])
+#     plt.savefig(network_parameters.sim_output_dir+"/LGN_signal.svg")
+#     #exit("ballemos")
 
 #     #print(np.mean(rates))
 #     #print(np.var(rates))
@@ -297,15 +313,62 @@ Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
 #     #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
 #     ########################################################################
 
-#     # ax = Plot_LFP(LFP)
-#     # plt.show()
+#     plt.clf()
+#     ax = Plot_LFP(LFP[:,250*3:250*4],xlabel=False,space=0.12)
+#     ax.spines['right'].set_visible(False)
+#     ax.spines['top'].set_visible(False)
 
-#     #plt.savefig(network_parameters.sim_output_dir + "/" + str(sim_index))
-#     events_EX, events_IN, events_LGN = events
-#     plt.scatter(events_EX["times"], events_EX["senders"],color="k", s=0.1)
-#     plt.scatter(events_IN["times"], events_IN["senders"],color="k",s=0.1)
-#     plt.scatter(events_LGN["times"], events_LGN["senders"],color="k",s=0.1)
 #     #plt.plot(population_rates[0])
+#     #plt.axis("off")
+#     plt.xticks([])
+#     plt.yticks([])
+#     # plt.show()
+#     #250*3-250*4
+#     plt.savefig(network_parameters.sim_output_dir + "/LFP.svg" )
+#     events_EX, events_IN, events_LGN = events
+    
+#     ########
+#     # junk #
+#     LGN_spikes = events_LGN["times"]
+#     EX_spikes = events_EX["times"]
+#     IN_spikes = events_IN["times"]
+
+#     spikes_LGN = LGN_spikes*(LGN_spikes > 250*4)
+#     spikes_LGN = spikes_LGN*(spikes_LGN<250*5)
+#     indices_LGN = np.argwhere(spikes_LGN==LGN_spikes)
+    
+#     spikes_EX = EX_spikes*(EX_spikes > 250*4)
+#     spikes_EX = spikes_EX*(spikes_EX<250*5)
+#     indices_EX = np.argwhere(spikes_EX==EX_spikes)
+
+
+#     spikes_IN = IN_spikes*(IN_spikes > 250*4)
+#     spikes_IN = spikes_IN*(spikes_IN<250*5)
+#     indices_IN = np.argwhere(spikes_IN==IN_spikes)
+
+
+#     s=1
+#     raster =False
+
+#     plt.clf()
+#     ax = plt.subplot(111)
+#     #ax.plot(x, y)
+
+
+
+#     #ax.scatter(events_LGN["times"][indices_LGN], events_LGN["senders"][indices_LGN],color="k",s=s, rasterized=raster)
+#     ax.scatter(events_EX["times"][indices_EX], events_EX["senders"][indices_EX],color="k",s=s, rasterized=raster)
+#     ax.scatter(events_IN["times"][indices_IN], events_IN["senders"][indices_IN],color="k",s=s, rasterized=raster)
+
+#     # Hide the right and top spines
+#     ax.spines['right'].set_visible(False)
+#     ax.spines['top'].set_visible(False)
+
+#     #plt.plot(population_rates[0])
+#     #plt.axis("off")
+#     plt.xticks([])
+#     plt.yticks([])
+#     #plt.xlabel("Time")
 #     plt.savefig(network_parameters.sim_output_dir+ "/scatter.svg")
 #     #plt.show()
 #     exit("egg")

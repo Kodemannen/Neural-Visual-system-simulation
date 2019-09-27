@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def Plot_LFP(LFP,t=None,ax=0, title=None, letter=None, scalebar=False, channels_on=True,title_fontsize = None,
-            space=0.5):
+            space=0.5,xlabel=True):
 
     if ax == 0:
         fig = plt.figure()
@@ -55,7 +55,7 @@ def Plot_LFP(LFP,t=None,ax=0, title=None, letter=None, scalebar=False, channels_
         #ax.xaxis.set_ticks_position('bottom')
         ax.yaxis.set_ticks_position('left')
     ax.set_ylim([0 - np.mean(LFP[-1]), 6*space - np.mean(LFP[-1])])
-    ax.set_xlabel("t (ms)")
+    ax.set_xlabel("t (ms)") if xlabel else None
     if letter != None:
         ax.text(-100, space*6.5, letter, fontsize=12)
     #ax.set_title("LFP", fontsize=title_fontsize) if title==None else 0

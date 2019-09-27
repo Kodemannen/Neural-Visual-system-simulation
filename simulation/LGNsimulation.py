@@ -236,7 +236,7 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
         for j in j_indices:
             
             img = original_image.copy()
-            img[i:i+size,j:j+size,:] = 0
+            #img[i:i+size,j:j+size,:] = 0
 
             im = PIL.Image.fromarray(np.uint8(img*255))
             
