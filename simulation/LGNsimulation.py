@@ -216,7 +216,7 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
 
     original_signal = np.load("original_signal.npy") /qp.s
 
-    size = 50
+    size = 15
 
     count = 0
     heatmap_matrix = np.zeros((shape[0],shape[1]))
