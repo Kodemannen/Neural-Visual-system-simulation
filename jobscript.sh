@@ -4,10 +4,10 @@
 #SBATCH --job-name=samuelkk
 #
 # Project: CINPLA
-##SBATCH --account=nn9565k
+##  SBATCH --account=nn9565k
 
 # Project: Compfys
-# SBATCH --account=nn2977k
+#SBATCH --account=nn2977k
 # Wall clock limit:
 #SBATCH --time=02:00:01     
 #
