@@ -5,5 +5,5 @@ params_path=$(python set_parameters.py abel)
 export params_path
 cd ..
 
-sbatch --array=52-99 jobscript.sh
+sbatch --array=0-99 jobscript.sh
 #sbatch --array=0 jobscript.sh 

@@ -192,10 +192,10 @@ if network_parameters.create_kernel:
 # n_sims_per_state = 20000
 
 
-# ########################
-# # Part 8: Using pyLGN: #
-# # Make a new test set with g=5.2*0.9
-# ########################
+# # ########################
+# # # Part 8: Using pyLGN: #
+# # # Make a new test set with g=5.2*0.9
+# # ########################
 # ## En sim tar ca 0.712 min
 # Part = "8. Test set from different distribution"
 # simtime = network_parameters.simtime    # simulation time (ms)
@@ -204,7 +204,7 @@ if network_parameters.create_kernel:
 # seq = np.random.choice(10, size=10, replace=False)
 # seq = np.arange(10)
 # #rate = Get_LGN_signal(seq)
-# amplitude = 2
+# amplitude = 3
 # n_sims = 1
 
 # rate_times = np.arange(dt, simtime+dt, dt*10)
@@ -257,7 +257,7 @@ Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
 
 
 # for sim_index in sim_indices:
-
+#     print("LOK")
 #     seq = np.random.choice(10, size=10, replace=False)  # image sequence
 #     seq = np.arange(10)
 #     rates, mean = Get_LGN_signal(seq, amplitude=amplitude)

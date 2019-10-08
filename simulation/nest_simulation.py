@@ -150,7 +150,7 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     nest.Connect(nodes_IN,  spike_detector_IN)
     nest.Connect(nodes_LGN, spike_detector_LGN)
 
-    nest.Connect(volt_check, nodes_EX[0:1])
+    #nest.Connect(volt_check, nodes_EX[0:1])
 
 
     ######################

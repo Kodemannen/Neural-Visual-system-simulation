@@ -157,8 +157,8 @@ def Set_parameters(abelrun):
 
     PS.update(dict(
         N_neurons = PS.NE + PS.NI, # total number of neurons
-        CE = round(PS.NE * PS.epsilon),  # number of excitatory synapses per neuron
-        CI = round(PS.NI * PS.epsilon),  # number of inhibitory synapses per neuron
+        CE = round(PS.NE * PS.epsilon),  # number of excitatory synapses per neuron # C_EX
+        CI = round(PS.NI * PS.epsilon),  # number of inhibitory synapses per neuron # C_IN
         C_LGN = round(PS.N_LGN * PS.epsilon), # number of LGN synapses onto an EX or IN neuron
 
     ).items())
