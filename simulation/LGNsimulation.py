@@ -215,8 +215,8 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
     shape = original_image.shape 
 
     original_signal = np.load("original_signal.npy") /qp.s
-
-    size = 15
+    
+    size = 20
 
     count = 0
     heatmap_matrix = np.zeros((shape[0],shape[1]))
@@ -236,7 +236,7 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
         for j in j_indices:
             
             img = original_image.copy()
-            #img[i:i+size,j:j+size,:] = 0
+            img[i:i+size,j:j+size,:] = 0
 
             im = PIL.Image.fromarray(np.uint8(img*255))
             
@@ -273,10 +273,11 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
 
             diff_vec = signal-original_signal
 
+
             diff = np.linalg.norm(diff_vec)
             
             heatmap_matrix[i+int(size/2),j+int(size/2)] = diff
-
+            print(diff,count)
             count += 1 
 
             del network
