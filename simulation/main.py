@@ -192,189 +192,129 @@ if network_parameters.create_kernel:
 # n_sims_per_state = 20000
 
 
-# # ########################
-# # # Part 8: Using pyLGN: #
-# # # Make a new test set with g=5.2*0.9
-# # ########################
-# ## En sim tar ca 0.712 min
-# Part = "8. Test set from different distribution"
-# simtime = network_parameters.simtime    # simulation time (ms)
-# dt = network_parameters.dt
+# ########################
+# # Part 8: Using pyLGN: #
+# # Make a new test set with g=5.2*0.9
+# ########################
+## En sim tar ca 0.712 min
+Part = "5. Dataset remake"
+simtime = network_parameters.simtime    # simulation time (ms)
+dt = network_parameters.dt
 
-# seq = np.random.choice(10, size=10, replace=False)
-# seq = np.arange(10)
-# #rate = Get_LGN_signal(seq)
-# amplitude = 3
-# n_sims = 1
+#seq = np.random.choice(10, size=10, replace=False)
+#seq = np.arange(10)
+#rate = Get_LGN_signal(seq)
+amplitude = 3
+n_sims = 100000
 
-# rate_times = np.arange(dt, simtime+dt, dt*10)
+rate_times = np.arange(dt, simtime+dt, dt*10)
 
-# def seq_to_string(s):
-#     """"Function for making a compact class label from sequence array"""
-#     string = ""
-#     for t in s:
-#         string+=str(t)
-#     return string
-
-
-########################################
-# Calculating receptive field of pylgn #
-########################################
-## Only need this part:
-from LGNsimulation import Rf_heatmap
-Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
+def seq_to_string(s):
+    """"Function for making a compact class label from sequence array"""
+    string = ""
+    for t in s:
+        string+=str(t)
+    return string
 
 
-
-
-
-# ############################################
-# # Running point neuron simulation in Nest: #
-# ############################################
-# # avg 1.1 min per sim with amplitude=3, mean_eta = 2.3
-# # simtime=1001 ms, 
-# rank = rank    
-# n_jobs = n_jobs
-
-# #n_states = len(states)
-# n_total_sims = n_sims
-
-# sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
-
-# threshold_rate_LGN = network_parameters.theta / (network_parameters.J_LGN* network_parameters.tauMem * network_parameters.C_LGN) * 1000     # * 1000 to get it in Hz
-
-
-# t_start = time.time()
-
-# if rank == 0:
-#     with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
-#         filen.write(Part + "\n")
-#         filen.write("Mean eta: " + str(network_parameters.mean_eta) + " \n") 
-#         filen.write("amplitude="+str(amplitude) + "\n")     
-#         filen.write("n_jobs=" + str(n_jobs) + "\n")
-#         filen.write("n_total_sims="+ str(n_total_sims) + "\n")
-#         #filen.write("states="+str(states) + "\n")
-
-
-# for sim_index in sim_indices:
-#     print("LOK")
-#     seq = np.random.choice(10, size=10, replace=False)  # image sequence
-#     seq = np.arange(10)
-#     rates, mean = Get_LGN_signal(seq, amplitude=amplitude)
-#     seq_label = seq_to_string(seq)
+# ########################################
+# # Calculating receptive field of pylgn #
+# ########################################
+# ## Only need this part:
+# from LGNsimulation import Rf_heatmap
+# Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
 
 
 
 
-#     ax = plt.subplot(111)
-#     ax.plot(rates[250*4:250*5])
-#     #plt.axis("off")
-#         # Hide the right and top spines
-#     ax.spines['right'].set_visible(False)
-#     ax.spines['top'].set_visible(False)
 
-#     #plt.plot(population_rates[0])
-#     #plt.axis("off")
-#     plt.xticks([])
-#     plt.yticks([])
-#     plt.savefig(network_parameters.sim_output_dir+"/LGN_signal.svg")
-#     #exit("ballemos")
+############################################
+# Running point neuron simulation in Nest: #
+############################################
+# avg 1.1 min per sim with amplitude=3, mean_eta = 2.3
+# simtime=1001 ms, 
+rank = rank    
+n_jobs = n_jobs
 
-#     #print(np.mean(rates))
-#     #print(np.var(rates))
+#n_states = len(states)
+n_total_sims = n_sims
+
+sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
+
+threshold_rate_LGN = network_parameters.theta / (network_parameters.J_LGN* network_parameters.tauMem * network_parameters.C_LGN) * 1000     # * 1000 to get it in Hz
+
+
+t_start = time.time()
+
+if rank == 0:
+    with open(network_parameters.sim_output_dir + "/sim_info.txt", "w") as filen:
+        filen.write(Part + "\n")
+        filen.write("Mean eta: " + str(network_parameters.mean_eta) + " \n") 
+        filen.write("amplitude="+str(amplitude) + "\n")     
+        filen.write("n_jobs=" + str(n_jobs) + "\n")
+        filen.write("n_total_sims="+ str(n_total_sims) + "\n")
+        #filen.write("states="+str(states) + "\n")
+
+
+for sim_index in sim_indices:
     
-#     #state_index = sim_index % n_states
-#     #state = states[state_index]
-    
-    
-#     ##################################################
-#     # Setting new eta value to keep the mean to 1.1: #
-#     ##################################################
-#     eta_LGN = float(mean) / threshold_rate_LGN
-#     eta_bg = network_parameters.mean_eta - eta_LGN
+    seq = np.random.choice(10, size=10, replace=False)  # image sequence
+    rates, mean = Get_LGN_signal(seq, amplitude=amplitude)
+    seq_label = seq_to_string(seq)
 
-#     bg_rate = eta_bg*network_parameters.threshold_rate * 1000 # *1000 because nest uses Hz
-    
-#     network_parameters.eta=eta_bg  
-#     network_parameters.background_rate=bg_rate
 
-#     events = Run_simulation(rate_times,
-#                     rates,
-#                     network_parameters,
-#                     simulation_index=sim_index)
-#     LFP, population_rates = Calculate_LFP(events, network_parameters)
-#     Save_LFP(LFP, network_parameters, sim_index, class_label=seq_label)
-#     Save_population_rates(population_rates, network_parameters, sim_index, class_label=seq_label)
+
+
+    # ax = plt.subplot(111)
+    # ax.plot(rates[250*4:250*5])
+    # #plt.axis("off")
+    #     # Hide the right and top spines
+    # ax.spines['right'].set_visible(False)
+    # ax.spines['top'].set_visible(False)
+
+    # #plt.plot(population_rates[0])
+    # #plt.axis("off")
+    # plt.xticks([])
+    # plt.yticks([])
+    # plt.savefig(network_parameters.sim_output_dir+"/LGN_signal.svg")
+    # #exit("ballemos")
+
+    # #print(np.mean(rates))
+    #print(np.var(rates))
+    
+    #state_index = sim_index % n_states
+    #state = states[state_index]
     
     
-#     ########################################################################
-#     # REMEMBER the poprate is in units of kHz, so to get rate per neuron we need to multiply by 1000 (to get Hz) and then divide by population size
-#     #print("mean poprate", np.mean(population_rates[0]) * 1000 /10000 )
-#     #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
-#     ########################################################################
+    ##################################################
+    # Setting new eta value to keep the mean to 1.1: #
+    ##################################################
+    eta_LGN = float(mean) / threshold_rate_LGN
+    eta_bg = network_parameters.mean_eta - eta_LGN
 
-#     plt.clf()
-#     ax = Plot_LFP(LFP[:,250*3:250*4],xlabel=False,space=0.12)
-#     ax.spines['right'].set_visible(False)
-#     ax.spines['top'].set_visible(False)
-
-#     #plt.plot(population_rates[0])
-#     #plt.axis("off")
-#     plt.xticks([])
-#     plt.yticks([])
-#     # plt.show()
-#     #250*3-250*4
-#     plt.savefig(network_parameters.sim_output_dir + "/LFP.svg" )
-#     events_EX, events_IN, events_LGN = events
+    bg_rate = eta_bg*network_parameters.threshold_rate * 1000 # *1000 because nest uses Hz
     
-#     ########
-#     # junk #
-#     LGN_spikes = events_LGN["times"]
-#     EX_spikes = events_EX["times"]
-#     IN_spikes = events_IN["times"]
+    network_parameters.eta=eta_bg  
+    network_parameters.background_rate=bg_rate
 
-#     spikes_LGN = LGN_spikes*(LGN_spikes > 250*4)
-#     spikes_LGN = spikes_LGN*(spikes_LGN<250*5)
-#     indices_LGN = np.argwhere(spikes_LGN==LGN_spikes)
+    events = Run_simulation(rate_times,
+                    rates,
+                    network_parameters,
+                    simulation_index=sim_index)
+    LFP, population_rates = Calculate_LFP(events, network_parameters)
+    Save_LFP(LFP, network_parameters, sim_index, class_label=seq_label)
+    Save_population_rates(population_rates, network_parameters, sim_index, class_label=seq_label)
     
-#     spikes_EX = EX_spikes*(EX_spikes > 250*4)
-#     spikes_EX = spikes_EX*(spikes_EX<250*5)
-#     indices_EX = np.argwhere(spikes_EX==EX_spikes)
+
+    
+    ########################################################################
+    # REMEMBER the poprate is in units of kHz, so to get rate per neuron we need to multiply by 1000 (to get Hz) and then divide by population size
+    #print("mean poprate", np.mean(population_rates[0]) * 1000 /10000 )
+    #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
+    ########################################################################
 
 
-#     spikes_IN = IN_spikes*(IN_spikes > 250*4)
-#     spikes_IN = spikes_IN*(spikes_IN<250*5)
-#     indices_IN = np.argwhere(spikes_IN==IN_spikes)
-
-
-#     s=1
-#     raster =False
-
-#     plt.clf()
-#     ax = plt.subplot(111)
-#     #ax.plot(x, y)
-
-
-
-#     #ax.scatter(events_LGN["times"][indices_LGN], events_LGN["senders"][indices_LGN],color="k",s=s, rasterized=raster)
-#     ax.scatter(events_EX["times"][indices_EX], events_EX["senders"][indices_EX],color="k",s=s, rasterized=raster)
-#     ax.scatter(events_IN["times"][indices_IN], events_IN["senders"][indices_IN],color="k",s=s, rasterized=raster)
-
-#     # Hide the right and top spines
-#     ax.spines['right'].set_visible(False)
-#     ax.spines['top'].set_visible(False)
-
-#     #plt.plot(population_rates[0])
-#     #plt.axis("off")
-#     plt.xticks([])
-#     plt.yticks([])
-#     #plt.xlabel("Time")
-#     plt.savefig(network_parameters.sim_output_dir+ "/scatter.svg")
-#     #plt.show()
-#     exit("egg")
-#     #print("sim_index", sim_index)
-
-# t_stop = time.time() - t_start
-# print(f"sims_per_job = {n_total_sims/n_jobs}" )
-# print(f"Run time = {t_stop/(60**2)} h")
-# print(f"Run time = {t_stop/(60)} min")
+t_stop = time.time() - t_start
+print(f"sims_per_job = {n_total_sims/n_jobs}" )
+print(f"Run time = {t_stop/(60**2)} h")
+print(f"Run time = {t_stop/(60)} min")
