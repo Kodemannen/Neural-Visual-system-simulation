@@ -23,8 +23,8 @@ from plot_LFP import Plot_LFP
 from save_LFP import Save_LFP
 from save_population_rates import Save_population_rates
 from LGNsimulation import Get_LGN_signal
-sys.path.append("/home/samknu/MyRepos/MasterProject/Results_and_analysis/Figure_setup")
-import plot_utils as pu
+# sys.path.append("/home/samknu/MyRepos/MasterProject/Results_and_analysis/Figure_setup")
+# import plot_utils as pu
 ###########
 ### MPI ###
 # from mpi4py import MPI

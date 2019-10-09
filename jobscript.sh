@@ -9,7 +9,7 @@
 # Project: Compfys
 #SBATCH --account=nn2977k
 # Wall clock limit:
-#SBATCH --time=25:00:01     
+#SBATCH --time=15:00:01     
 #
 # Max memory usage:
 #SBATCH --mem-per-cpu=2G
