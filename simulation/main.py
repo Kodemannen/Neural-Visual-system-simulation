@@ -258,7 +258,7 @@ if rank == 0:
 
 
 for sim_index in sim_indices:
-    
+    sim_index += 100000 
     seq = np.random.choice(10, size=10, replace=False)  # image sequence
     rates, mean = Get_LGN_signal(seq, amplitude=amplitude) 
     seq_label = seq_to_string(seq)
