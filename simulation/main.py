@@ -23,7 +23,8 @@ from plot_LFP import Plot_LFP
 from save_LFP import Save_LFP
 from save_population_rates import Save_population_rates
 from LGNsimulation import Get_LGN_signal
-
+sys.path.append("/home/samknu/MyRepos/MasterProject/Results_and_analysis/Figure_setup")
+import plot_utils as pu
 ###########
 ### MPI ###
 # from mpi4py import MPI
@@ -197,7 +198,7 @@ if network_parameters.create_kernel:
 # # Make a new test set with g=5.2*0.9
 # ########################
 ## En sim tar ca 0.712 min
-Part = "5. Dataset remake"
+Part = "6. Making test set with g=5.2*0.9"
 simtime = network_parameters.simtime    # simulation time (ms)
 dt = network_parameters.dt
 
@@ -205,7 +206,7 @@ dt = network_parameters.dt
 #seq = np.arange(10)
 #rate = Get_LGN_signal(seq)
 amplitude = 3
-n_sims = 100000
+n_sims = 10000
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
@@ -259,11 +260,17 @@ if rank == 0:
 for sim_index in sim_indices:
     
     seq = np.random.choice(10, size=10, replace=False)  # image sequence
-    rates, mean = Get_LGN_signal(seq, amplitude=amplitude)
+    rates, mean = Get_LGN_signal(seq, amplitude=amplitude) 
     seq_label = seq_to_string(seq)
 
-
-
+    
+    # #############
+    # # BULLSHIT #
+    # rates = rates**6
+    # rates = rates / np.max(rates)
+    # rates = rates*amplitude
+    # sim_index = 14
+    # image_number = 1
 
     # ax = plt.subplot(111)
     # ax.plot(rates[250*4:250*5])
@@ -291,6 +298,8 @@ for sim_index in sim_indices:
     ##################################################
     eta_LGN = float(mean) / threshold_rate_LGN
     eta_bg = network_parameters.mean_eta - eta_LGN
+    if eta_bg < 0:
+        eta_bg = 0  # cant have negative rates
 
     bg_rate = eta_bg*network_parameters.threshold_rate * 1000 # *1000 because nest uses Hz
     
@@ -306,12 +315,83 @@ for sim_index in sim_indices:
     Save_population_rates(population_rates, network_parameters, sim_index, class_label=seq_label)
     
 
+    # # #######
+    # # # junk #
+    # LGN_spikes = events[2]["times"]
+    # LGN_ids = events[2]["senders"]
+
     
-    ########################################################################
-    # REMEMBER the poprate is in units of kHz, so to get rate per neuron we need to multiply by 1000 (to get Hz) and then divide by population size
-    #print("mean poprate", np.mean(population_rates[0]) * 1000 /10000 )
-    #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
-    ########################################################################
+    # spikes_LGN = LGN_spikes*(LGN_spikes > 250*(image_number+2))
+    # spikes_LGN = spikes_LGN*(spikes_LGN<250*(image_number+3))
+    # indices_LGN = np.argwhere(spikes_LGN==LGN_spikes)
+    
+    # LGN_spikes = LGN_spikes[indices_LGN]
+    # LGN_ids = LGN_ids[indices_LGN]
+    
+    # LGN_spikes = LGN_spikes.reshape(-1)
+    # LGN_ids = LGN_ids.reshape(-1)
+
+    # print(LGN_ids.shape)
+
+    # inds = np.argwhere(LGN_ids==LGN_ids[0])
+    # inds = inds.reshape(-1)
+    
+
+    # def Plot_action_potentials(spike_times__, ax):
+    #     dt = 0.01
+    #     N = 1000
+    #     amp = 0.1
+    #     spike_times = spike_times__ - 250*(image_number+2)
+    #     t = [0]
+    #     done = False
+    #     inds__ = [0]
+    #     for s in spike_times:
+
+    #         t.append(s-dt*200); inds__.append(0)            
+    #         t.append(s-dt); inds__.append(amp/3)
+    #         t.append(s); inds__.append(amp)
+    #         t.append(s+dt); inds__.append(0)
+
+    #     ax.plot(t, inds__, color="k")
+    #     #plt.show()
+    #     #exit("hoe")
+    
+
+
+    # pu.figure_setup()
+    # fig, axes = plt.subplots(2,1, sharex=True, gridspec_kw = {'height_ratios':[1,2.5]})
+    # fig_size = pu.get_fig_size(14,6.5)
+    # fig.set_size_inches(fig_size)
+    # #axes[0].scatter(LGN_spikes[inds], LGN_ids[inds], s=0.1, color="k")
+    # Plot_action_potentials(LGN_spikes[inds],axes[0])
+
+    # axes[1].plot(rates[250*(image_number+2):250*(image_number+3)])
+    # #axes[1].axis("off")
+    # axes[1].set_xticks([])
+    # axes[1].set_yticks([])
+    # #axes[0].axis("off")
+    # axes[0].set_xticks([])
+    # axes[0].set_yticks([])
+    # axes[0].set_ylabel("Membrane\n potential (V)", va="bottom")
+    # axes[1].set_xlabel("Time (ms)")
+    # #axes[0].set_title("Spike train")
+    # #axes[1].set_title("Rate profile")
+    # axes[1].set_ylabel("Fire rate (Hz)")
+    # #axes[1].set_ylabel("$\lambda_{LGN}(t)$")
+    # axes[0].spines["top"].set_visible(False)
+    # axes[0].spines["right"].set_visible(False)
+    # axes[1].spines["top"].set_visible(False)
+    # axes[1].spines["right"].set_visible(False)
+    # #plt.savefig("LGN_spikes.svg")
+    # plt.tight_layout()
+    # plt.savefig("/home/samknu/MyRepos/MasterProject/Thesis/Figurer/LGN_spikes.pdf")
+    # #plt.show()
+    # exit("hore")
+    # # ########################################################################
+    # # REMEMBER the poprate is in units of kHz, so to get rate per neuron we need to multiply by 1000 (to get Hz) and then divide by population size
+    # #print("mean poprate", np.mean(population_rates[0]) * 1000 /10000 )
+    # #print("mean poprate", np.mean(population_rates[1]) * 1000 /2500 )
+    # ########################################################################
 
 
 t_stop = time.time() - t_start
