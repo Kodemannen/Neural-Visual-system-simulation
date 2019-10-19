@@ -13,10 +13,10 @@ import h5py
 import neuron
 from mpi4py import MPI
 import sys
-from .example_plotting import *
+from example_plotting import *
 #exit("ballemos")
 
-def Create_LFP_from_simultaneous_firings(network_parameters):
+def Full_hybridLFPy(network_parameters):
     #!/usr/bin/env python
     '''
     Uses hybridLFPy to generate the LFP from a point neuron network consisting
@@ -48,7 +48,7 @@ def Create_LFP_from_simultaneous_firings(network_parameters):
     #parameter_set_file = sys.argv[-1]
 
     PS = network_parameters
-    spike_path = PS.fake_spikes_path
+    spike_path = PS.nest_output_path
 
     #set some seed values
     SEED = PS.numpy_seed_hybrid
@@ -96,7 +96,7 @@ def Create_LFP_from_simultaneous_firings(network_parameters):
         simtime = PS.create_kernel_simtime,
         dt = PS.dt,
         #spike_output_path = PS.spike_output_path,
-        spike_output_path = PS.fake_spikes_path, #
+        spike_output_path = spike_path, #
         label = PS['label'],
         ext = 'gdf',
         GIDs = {'EX'  : [1, PS.NE],

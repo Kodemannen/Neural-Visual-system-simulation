@@ -24,6 +24,7 @@ def Calculate_LFP(events, network_parameters):
         IN_kernel = file["IN"][:] * g / 4.5         # kernel was created with g=4.5
         LGN_kernel = file["LGN"][:] * J_EX / 0.1      # kernel was created with J_EX=0.1
 
+
     #########################################
     # Binning and calculating firing rates: #
     #########################################
