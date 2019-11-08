@@ -42,6 +42,9 @@ def Run_simulation(rate_times, poisson_rates, network_parameters, simulation_ind
     delay = PS.delay     # synaptic delay
     background_rate = PS.background_rate
 
+
+    # print(background_rate/(np.mean(poisson_rates)*C_LGN))
+
     simtime = PS.simtime
     J_background = PS.J_background
 

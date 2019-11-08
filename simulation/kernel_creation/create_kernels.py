@@ -14,7 +14,7 @@ def Create_fake_spikes(network_parameters):
 
     PS = network_parameters
     dir = PS.fake_spikes_path
-
+    
     #########################################
     # CLEARING FOLDER (deleting old files): #
     #########################################
@@ -69,10 +69,11 @@ def Create_kernels(network_parameters):
     LFP signals.
     The kernels have units mV.
     """
-
+   
     Create_fake_spikes(network_parameters)
+    
     Create_LFP_from_simultaneous_firings(network_parameters)
-
+    
     PS = network_parameters     # just for faster typing
     data_folder = PS.hybrid_output_path + "/populations/"
     kernel_path = PS.kernel_path

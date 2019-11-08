@@ -10,6 +10,7 @@ import time
 import os
 import sys
 from scipy import signal
+import quantities as qp
 
 # ############################
 # # Importing local scripts: #
@@ -63,6 +64,7 @@ network_parameters = ps.ParameterSet(params_path)
 
 network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
 if network_parameters.create_kernel:
+    
     Create_kernels(network_parameters)
 #Plot_kernels(network_parameters)
 
@@ -207,7 +209,7 @@ dt = network_parameters.dt
 #seq = np.arange(10)
 #rate = Get_LGN_signal(seq)
 amplitude = 3
-n_sims = 10000
+n_sims = 1
 
 rate_times = np.arange(dt, simtime+dt, dt*10)
 
@@ -308,6 +310,7 @@ for sim_index in sim_indices:
     network_parameters.eta=eta_bg  
     network_parameters.background_rate=bg_rate
     
+
     
     #rate_times = rate_times[:network_parameters.simtime] # already true
     rates = rates[:network_parameters.simtime] 
@@ -316,6 +319,7 @@ for sim_index in sim_indices:
                     rates,
                     network_parameters,
                     simulation_index=sim_index)
+    print("Pikk")
     Full_hybridLFPy(network_parameters)
     
     LFP, population_rates = Calculate_LFP(events, network_parameters)

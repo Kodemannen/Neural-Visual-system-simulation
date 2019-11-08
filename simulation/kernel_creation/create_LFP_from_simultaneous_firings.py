@@ -34,7 +34,7 @@ def Create_LFP_from_simultaneous_firings(network_parameters):
     plt.close('all')
     plt.rcParams.update({'figure.figsize': [10.0, 8.0]})
 
-
+    
     ################# Initialization of MPI stuff ##################################
     COMM = MPI.COMM_WORLD
     SIZE = COMM.Get_size()
@@ -88,10 +88,11 @@ def Create_LFP_from_simultaneous_firings(network_parameters):
 
 
 
-
     #Create an object representation containing the spiking activity of the network
     #simulation output that uses sqlite3. Again, kwargs are derived from the brunel
     #network instance.
+    
+
     networkSim = CachedNetwork(
         simtime = PS.create_kernel_simtime,
         dt = PS.dt,
@@ -107,7 +108,8 @@ def Create_LFP_from_simultaneous_firings(network_parameters):
         X = PS.X,
         cmap='rainbow_r',
     )
-
+    print("eegggemann")
+    exit("funket")
     ####### Set up populations #####################################################
 
     if properrun:

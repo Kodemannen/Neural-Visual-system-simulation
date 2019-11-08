@@ -302,9 +302,12 @@ if __name__=="__main__":
 
     #Rf_heatmap(rank=0,n_jobs=1)
 
-    #order = np.random.choice(10, size=10, replace=False)
-    #nr2=Get_LGN_signal(order,3,show_anim=True)
-    
+    order = np.arange(10)
+    sig, mean = Get_LGN_signal(order,3,show_anim=False)
+    plt.plot(sig)
+    print(np.max(sig))
+    print(mean)
+    plt.show()
     
     #LGN_classification_test()
 

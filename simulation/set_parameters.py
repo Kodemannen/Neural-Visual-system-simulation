@@ -16,7 +16,7 @@ def Set_parameters(abelrun):
     ###############################################################
     # Deciding if kernel will be created or if its already there: #
     ###############################################################
-    create_kernel = False       # whether to create kernel or not
+    create_kernel = True       # whether to create kernel or not
     
     ###########################################
     # Setting paths (sim_dir = absolute path) #
@@ -101,7 +101,7 @@ def Set_parameters(abelrun):
         #simtime = 1001.,    # Simulation time in ms
         #simtime = 250.*12,
         simtime = 100,
-        create_kernel_simtime = 600,    # simtime for when creating kernel
+        create_kernel_simtime = 4,    # simtime for when creating kernel
 
         #nest_seed=int(time.time()), # base for seeds, will be updated for each individual parameterset
         #numpy_seed_nest=int(time.time()/2),
@@ -140,7 +140,7 @@ def Set_parameters(abelrun):
         n_channels = 6, # number of LFP recording channels
         fixed_connectome=False, # use fixed connectome from file
 
-        order=5     # network scaling factor
+        order=25     # network scaling factor
     ).items())
 
     ################################################
