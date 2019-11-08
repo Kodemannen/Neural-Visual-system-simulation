@@ -101,7 +101,7 @@ def Set_parameters(abelrun):
         #simtime = 1001.,    # Simulation time in ms
         #simtime = 250.*12,
         simtime = 100,
-        create_kernel_simtime = 4,    # simtime for when creating kernel
+        create_kernel_simtime = 600,    # simtime for when creating kernel
 
         #nest_seed=int(time.time()), # base for seeds, will be updated for each individual parameterset
         #numpy_seed_nest=int(time.time()/2),

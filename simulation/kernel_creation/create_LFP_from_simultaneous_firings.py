@@ -108,8 +108,7 @@ def Create_LFP_from_simultaneous_firings(network_parameters):
         X = PS.X,
         cmap='rainbow_r',
     )
-    print("eegggemann")
-    exit("funket")
+
     ####### Set up populations #####################################################
 
     if properrun:
