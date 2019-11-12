@@ -207,44 +207,145 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
     B_r = 0.85
     b_r = 1.26*pq.deg
     
-    
-    #########
-    # alskd :#
-    image_path = stimulus_image_paths[2]
-    original_image = plt.imread(image_path)#*255
-    shape = original_image.shape 
+    paths_imgs = stimulus_image_paths[:-1]
+    import h5py
+    original_signals = []
+    with h5py.File("all_original_signals.h5", "r") as f:
+        for i in range(10):
+            si = f[f"img_{i}"]
+            original_signals.append(np.array(si))
 
-    original_signal = np.load("original_signal.npy") /qp.s
-    
-    size = 50
-
-    count = 0
-    heatmap_matrix = np.zeros((shape[0],shape[1]))
-    stride = 1
-
-
-    n = (918-size)
-    m = (1174-size)
-    
-
-    i_indices = np.arange(0,n,1)
-    j_indices = np.arange(rank,m,n_jobs)
-
-    
-    for i in i_indices:
+    for img_index in range(10):
+        #########
+        # alskd :#
+        original_signal = original_signals[img_index]
+        image_path = paths_imgs[img_index]
         
-        for j in j_indices:
-            
-            img = original_image.copy()
-            img[i:i+size,j:j+size,:] = 0
+        original_image = plt.imread(image_path)#*255
+        shape = original_image.shape 
 
-            im = PIL.Image.fromarray(np.uint8(img*255))
-            
-            #im.save("/work/users/samuelkk/img.jpg")
-            im.save(network_parameters.pyLGNimgs + f"/img{rank}.jpg")
+        
+        size = 50
 
+        count = 0
+        heatmap_matrix = np.zeros((shape[0],shape[1]))
+        stride = 1
+
+
+        n = (shape[0]-size)
+        m = (shape[1]-size)
+        
+
+        i_indices = np.arange(0,n,1)
+
+        j_indices = np.arange(rank,m,n_jobs)
+
+        
+        for i in i_indices:
+
+            for j in j_indices:
+                
+                img = original_image.copy()
+                img[i:i+size,j:j+size,:] = 0
+
+                im = PIL.Image.fromarray(np.uint8(img*255))
+                
+                #im.save("/work/users/samuelkk/img.jpg")
+                im.save(network_parameters.pyLGNimgs + f"/img_{img_index}_{rank}.jpg")
+
+                
+                ######################## Setting up pyLGN network ########################
+                network = pylgn.Network()
+                integrator = network.create_integrator(nt, nr, dt, dr)
+
+                # Ganglion Kernels
+                Wg_r = spl.create_dog_ft(A_g, a_g, B_g, b_g)
+                Wg_t = tpl.create_biphasic_ft()
+                #Wg_t = tpl.create_delta_ft()
+
+                # Relay kernels
+                Wr_r = spl.create_dog_ft(A_r, a_r, B_r, b_r)
+                Wr_t = tpl.create_biphasic_ft()
+                #Wr_t = tpl.create_delta_ft()
+
+                ganglion = network.create_ganglion_cell()
+                relay = network.create_relay_cell()
+
+                network.connect(ganglion, relay, kernel=(Wr_r, Wr_t), weight=weights)
+
+                stimulus = pylgn.stimulus.create_natural_image(filenames=network_parameters.pyLGNimgs + f"/img_{img_index}_{rank}.jpg", delay=delay, duration=image_duration)
+        
+                network.set_stimulus(stimulus, compute_fft=True)
+                
+                network.compute_response(relay)
             
-            ######################## Setting up pyLGN network ########################
+                signal = relay.center_response * qp.s               
+            
+                diff_vec = signal-original_signal
+
+                diff = np.linalg.norm(diff_vec)
+                
+                heatmap_matrix[i+int(size/2),j+int(size/2)] = diff
+                count += 1 
+
+                del network
+                del integrator
+                del stimulus
+            
+        
+        np.save(network_parameters.heatmap_matrices+f"/heatmap_matrix_{img_index}_{rank}.npy", heatmap_matrix)
+    
+    return 0
+
+
+def Create_original_signals():
+    import matplotlib.pyplot as plt
+    import PIL
+    import numpy as np
+    
+    #path = "/work/users/samuelkk/"
+    #path = "/home/samknu/junk/"
+
+    ######################## Simulation parameters: ########################
+
+    #im.save("/home/samknu/junk/test.jpg")
+    #scipy.misc.toimage("/home/samknu/junk/test.jpg", image)
+    # image dimension = (918, 1174, 3)
+
+
+    # Network resolution parameters:
+    nt=8       # 2**nt is the number of time steps in the simulation
+    nr=5
+    dt=1*pq.ms
+    dr=0.1*pq.deg
+
+
+    # Stimuli parameters:
+    image_duration = 50 * pq.ms      # duration of each individual stimulus image
+    delay = 0*pq.ms                 # delay between images (?)
+    total_simulation_time = N*image_duration + N*delay
+
+
+    # Ganglion DOG parameters:
+    A_g = 1             # center strength
+    a_g = 0.62*pq.deg   # center width
+    B_g = 0.85          # surround strength
+    b_g = 1.26*pq.deg   # surround width
+
+    # Ganglion weights:
+    weights = 1 
+
+    # Relay DOG parameters:
+    A_r = 1
+    a_r = 0.62*pq.deg
+    B_r = 0.85
+    b_r = 1.26*pq.deg
+    paths_imgs2 = stimulus_image_paths[:-1]
+
+    import h5py
+    
+    with h5py.File("all_original_signals.h5", "w") as f:
+        for i in range(10):
             network = pylgn.Network()
             integrator = network.create_integrator(nt, nr, dt, dr)
 
@@ -263,34 +364,18 @@ def Rf_heatmap(network_parameters, rank, n_jobs):
 
             network.connect(ganglion, relay, kernel=(Wr_r, Wr_t), weight=weights)
 
-            stimulus = pylgn.stimulus.create_natural_image(filenames=network_parameters.pyLGNimgs + f"/img{rank}.jpg", delay=delay, duration=image_duration)
-    
+            stimulus = pylgn.stimulus.create_natural_image(filenames=paths_imgs2[i], delay=delay, duration=image_duration)
+
             network.set_stimulus(stimulus, compute_fft=True)
             
             network.compute_response(relay)
         
             signal = relay.center_response
 
-            diff_vec = signal-original_signal
-
-
-            diff = np.linalg.norm(diff_vec)
-            
-            heatmap_matrix[i+int(size/2),j+int(size/2)] = diff
-            print(diff,count)
-            count += 1 
-
+            f[f"img_{i}"] = signal
             del network
             del integrator
-            del stimulus
-    
-
-    np.save(network_parameters.heatmap_matrices+f"/heatmap_matrix{rank}.npy", heatmap_matrix)
-    
-    return 0
-
-
-
+            del stimulus            
 
 if __name__=="__main__":
     #from scipy.misc import imread 
@@ -299,15 +384,22 @@ if __name__=="__main__":
     # for i in range(1):
     #     rate = Get_LGN_signal(np.random.choice(10, size=10, replace=False))
     #     print(np.shape(rate))
-
+    # import h5py 
+    # asd  =[]
+    # with h5py.File("all_original_signals.h5", "r") as f:
+    #     for i in range(10):
+    #         s = f[f"img_{i}"]
+    #         plt.plot(s)
+        
+    # plt.show()
     #Rf_heatmap(rank=0,n_jobs=1)
-
-    order = np.arange(10)
-    sig, mean = Get_LGN_signal(order,3,show_anim=False)
-    plt.plot(sig)
-    print(np.max(sig))
-    print(mean)
-    plt.show()
+    #Create_original_signals()
+    # order = np.arange(10)
+    # sig, mean = Get_LGN_signal(order,3,show_anim=False)
+    # plt.plot(sig)
+    # print(np.max(sig))
+    # print(mean)
+    # plt.show()
     
     #LGN_classification_test()
 

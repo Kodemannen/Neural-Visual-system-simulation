@@ -16,7 +16,7 @@ def Set_parameters(abelrun):
     ###############################################################
     # Deciding if kernel will be created or if its already there: #
     ###############################################################
-    create_kernel = True       # whether to create kernel or not
+    create_kernel = False       # whether to create kernel or not
     
     ###########################################
     # Setting paths (sim_dir = absolute path) #

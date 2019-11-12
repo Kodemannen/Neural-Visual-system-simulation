@@ -33,7 +33,7 @@ from full_hybridLFPy import Full_hybridLFPy
 # comm = MPI.COMM_WORLD
 # rank = comm.Get_rank()
 # size = comm.Get_size()
-# # run using: mpiexec -n 4 python script.py  for 4 nodes
+# run using: mpiexec -n 4 python script.py  for 4 nodes
 
 
 #################################
@@ -196,42 +196,40 @@ if network_parameters.create_kernel:
 # n_sims_per_state = 20000
 
 
-# ########################
-# # Part 8: Using pyLGN: #
-# # Make a new test set with g=5.2*0.9
-# ########################
-## En sim tar ca 0.712 min
-Part = "6. Making test set with g=5.2*0.9"
-simtime = network_parameters.simtime    # simulation time (ms)
-dt = network_parameters.dt
+# # ########################
+# # # Part 8: Using pyLGN: #
+# # # Make a new test set with g=5.2*0.9
+# # ########################
+# ## En sim tar ca 0.712 min
+# Part = "6. Making test set with g=5.2*0.9"
+# simtime = network_parameters.simtime    # simulation time (ms)
+# dt = network_parameters.dt
 
-#seq = np.random.choice(10, size=10, replace=False)
-#seq = np.arange(10)
-#rate = Get_LGN_signal(seq)
-amplitude = 3
-n_sims = 1
+# #seq = np.random.choice(10, size=10, replace=False)
+# #seq = np.arange(10)
+# #rate = Get_LGN_signal(seq)
+# amplitude = 3
+# n_sims = 1
 
-rate_times = np.arange(dt, simtime+dt, dt*10)
+# rate_times = np.arange(dt, simtime+dt, dt*10)
 
-def seq_to_string(s):
-    """"Function for making a compact class label from sequence array"""
-    string = ""
-    for t in s:
-        string+=str(t)
-    return string
-
-
-# ########################################
-# # Calculating receptive field of pylgn #
-# ########################################
-# ## Only need this part:
-# from LGNsimulation import Rf_heatmap
-# Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
+# def seq_to_string(s):
+#     """"Function for making a compact class label from sequence array"""
+#     string = ""
+#     for t in s:
+#         string+=str(t)
+#     return string
 
 
+########################################
+# Calculating receptive field of pylgn #
+########################################
+## Only need this part:
+from LGNsimulation import Rf_heatmap
+Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
 
 
-
+exit("done making RFs")
 ############################################
 # Running point neuron simulation in Nest: #
 ############################################

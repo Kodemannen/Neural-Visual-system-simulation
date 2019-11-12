@@ -70,7 +70,6 @@ def Create_LFP_from_simultaneous_firings(network_parameters):
             os.system('nrnivmodl')
         COMM.Barrier()
         neuron.load_mechanisms('.')
-        exit("fitte1")
     if RANK == 0:
         if not os.path.isdir(cell_path):
             os.mkdir(cell_path)
@@ -78,7 +77,6 @@ def Create_LFP_from_simultaneous_firings(network_parameters):
             os.mkdir(population_path)
         if not os.path.isdir(figure_path):
             os.mkdir(figure_path)
-        exit("fitte2")
 
     ################################################################################
     # MAIN simulation procedure                                                    #
