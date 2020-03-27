@@ -10,4 +10,4 @@ The activity of the cortical populations are driven by incomming spike trains th
 
 The cortical LFP signals are estimated from the firing activity of the LGN and cortical neurons using hybridLFPy, see https://academic.oup.com/cercor/article/26/12/4461/2333943.
 
-Summary: This Python package essentially simulates an eye that receives optical stimulus and sends the information to the visual cortex where an electrode is recording the electric field generated from the resulting neural activity.
+Summary: This Python package essentially simulates an eye that receives optical stimulus and sends the information to the visual cortex where an electrode is recording the electric field generated from the resulting neural activity. For a full description of the model, see master_thesis.pdf.
