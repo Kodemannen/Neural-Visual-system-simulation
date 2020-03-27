@@ -10,12 +10,13 @@ import time
 import os
 import sys
 from scipy import signal
+import quantities as qp
 
 # ############################
 # # Importing local scripts: #
 # ############################
 from set_parameters import Set_parameters
-#from kernel_creation.create_kernels import Create_kernels
+from kernel_creation.create_kernels import Create_kernels
 from plot_kernels import Plot_kernels
 from nest_simulation import Run_simulation
 from calculate_LFP import Calculate_LFP
@@ -23,6 +24,7 @@ from plot_LFP import Plot_LFP
 from save_LFP import Save_LFP
 from save_population_rates import Save_population_rates
 from LGNsimulation import Get_LGN_signal
+from full_hybridLFPy import Full_hybridLFPy
 # sys.path.append("/home/samknu/MyRepos/MasterProject/Results_and_analysis/Figure_setup")
 # import plot_utils as pu
 ###########
@@ -31,7 +33,7 @@ from LGNsimulation import Get_LGN_signal
 # comm = MPI.COMM_WORLD
 # rank = comm.Get_rank()
 # size = comm.Get_size()
-# # run using: mpiexec -n 4 python script.py  for 4 nodes
+# run using: mpiexec -n 4 python script.py  for 4 nodes
 
 
 #################################
@@ -62,6 +64,7 @@ network_parameters = ps.ParameterSet(params_path)
 
 network_parameters["plots"] = False ## PLOTS CURRENTLY GIVING ERROR
 if network_parameters.create_kernel:
+    
     Create_kernels(network_parameters)
 #Plot_kernels(network_parameters)
 
@@ -193,42 +196,40 @@ if network_parameters.create_kernel:
 # n_sims_per_state = 20000
 
 
-# ########################
-# # Part 8: Using pyLGN: #
-# # Make a new test set with g=5.2*0.9
-# ########################
-## En sim tar ca 0.712 min
-Part = "6. Making test set with g=5.2*0.9"
-simtime = network_parameters.simtime    # simulation time (ms)
-dt = network_parameters.dt
+# # ########################
+# # # Part 8: Using pyLGN: #
+# # # Make a new test set with g=5.2*0.9
+# # ########################
+# ## En sim tar ca 0.712 min
+# Part = "6. Making test set with g=5.2*0.9"
+# simtime = network_parameters.simtime    # simulation time (ms)
+# dt = network_parameters.dt
 
-#seq = np.random.choice(10, size=10, replace=False)
-#seq = np.arange(10)
-#rate = Get_LGN_signal(seq)
-amplitude = 3
-n_sims = 10000
+# #seq = np.random.choice(10, size=10, replace=False)
+# #seq = np.arange(10)
+# #rate = Get_LGN_signal(seq)
+# amplitude = 3
+# n_sims = 1
 
-rate_times = np.arange(dt, simtime+dt, dt*10)
+# rate_times = np.arange(dt, simtime+dt, dt*10)
 
-def seq_to_string(s):
-    """"Function for making a compact class label from sequence array"""
-    string = ""
-    for t in s:
-        string+=str(t)
-    return string
-
-
-# ########################################
-# # Calculating receptive field of pylgn #
-# ########################################
-# ## Only need this part:
-# from LGNsimulation import Rf_heatmap
-# Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
+# def seq_to_string(s):
+#     """"Function for making a compact class label from sequence array"""
+#     string = ""
+#     for t in s:
+#         string+=str(t)
+#     return string
 
 
+########################################
+# Calculating receptive field of pylgn #
+########################################
+## Only need this part:
+from LGNsimulation import Rf_heatmap
+Rf_heatmap(network_parameters, rank=rank, n_jobs=n_jobs)
 
 
-
+exit("done making RFs")
 ############################################
 # Running point neuron simulation in Nest: #
 ############################################
@@ -242,8 +243,9 @@ n_total_sims = n_sims
 
 sim_indices = np.arange(rank, n_total_sims, step=n_jobs)
 
-threshold_rate_LGN = network_parameters.theta / (network_parameters.J_LGN* network_parameters.tauMem * network_parameters.C_LGN) * 1000     # * 1000 to get it in Hz
 
+#threshold_rate_LGN = network_parameters.theta / (network_parameters.J_LGN* network_parameters.tauMem * network_parameters.C_LGN) * 1000     # * 1000 to get it in Hz
+threshold_rate_LGN = 1000.
 
 t_start = time.time()
 
@@ -258,7 +260,7 @@ if rank == 0:
 
 
 for sim_index in sim_indices:
-    sim_index += 100000 
+    #sim_index += 100000 
     seq = np.random.choice(10, size=10, replace=False)  # image sequence
     rates, mean = Get_LGN_signal(seq, amplitude=amplitude) 
     seq_label = seq_to_string(seq)
@@ -305,15 +307,26 @@ for sim_index in sim_indices:
     
     network_parameters.eta=eta_bg  
     network_parameters.background_rate=bg_rate
+    
 
+    
+    #rate_times = rate_times[:network_parameters.simtime] # already true
+    rates = rates[:network_parameters.simtime] 
+    
     events = Run_simulation(rate_times,
                     rates,
                     network_parameters,
                     simulation_index=sim_index)
+    print("Pikk")
+    Full_hybridLFPy(network_parameters)
+    
     LFP, population_rates = Calculate_LFP(events, network_parameters)
     Save_LFP(LFP, network_parameters, sim_index, class_label=seq_label)
-    Save_population_rates(population_rates, network_parameters, sim_index, class_label=seq_label)
-    
+    #Save_population_rates(population_rates, network_parameters, sim_index, class_label=seq_label)
+    t_stop = time.time() - t_start
+    print(f"Run time = {t_stop/(60**2)} h")
+    print(f"Run time = {t_stop/(60)} min")
+    exit("done")
 
     # # #######
     # # # junk #

@@ -99,7 +99,8 @@ def Set_parameters(abelrun):
         dt=0.1,             # (ms) Simulation time resolution 
 
         #simtime = 1001.,    # Simulation time in ms
-        simtime = 250.*12,
+        #simtime = 250.*12,
+        simtime = 100,
         create_kernel_simtime = 600,    # simtime for when creating kernel
 
         #nest_seed=int(time.time()), # base for seeds, will be updated for each individual parameterset
@@ -116,7 +117,7 @@ def Set_parameters(abelrun):
         # Neuron and synapse parameters: #
         ##################################
         J_EX = .1,     # excitatory weight, unit: nS ?
-        g=5.2*1.1,         # ratio inhibitory weight/excitatory weight (before: 5.0)
+        g=5.2,#*1.1,         # ratio inhibitory weight/excitatory weight (before: 5.0)
         eta=0.0,        # external rate relative to threshold rate
         mean_eta=1.1,    # effective eta
         #ean_eta=0.85,
@@ -139,7 +140,7 @@ def Set_parameters(abelrun):
         n_channels = 6, # number of LFP recording channels
         fixed_connectome=False, # use fixed connectome from file
 
-        order=2500     # network scaling factor
+        order=25     # network scaling factor
     ).items())
 
     ################################################
